@@ -1,0 +1,38 @@
+{
+  "extends": ["google", "eslint:recommended", "plugin:react/recommended"],
+  "parser": "babel-eslint",
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "env": {
+    "browser": true,
+    "amd": true,
+    "es2020": true,
+    "node": true,
+    "mocha": true
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+  "plugins": ["babel", "react"],
+  "rules": {
+    "require-jsdoc": "off",
+    "no-eval": "error",
+    "indent": ["error", 2, { "MemberExpression": 1 }],
+    "object-curly-spacing": ["error", "always"],
+    "no-console": "off",
+    "operator-linebreak": "off",
+    "no-invalid-this": "off",
+    "babel/no-invalid-this": "error"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
+}

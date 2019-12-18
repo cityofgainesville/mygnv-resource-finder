@@ -1,0 +1,11 @@
+@import '../index.scss';
+
+.navbar-link {
+  color: $black-100;
+  text-decoration: none;
+  padding-right: 0.5em;
+}
+
+.navbar-active {
+  font-weight: bold;
+}

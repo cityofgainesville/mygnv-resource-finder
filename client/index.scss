@@ -1,0 +1,67 @@
+// Font and colors from design document
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+
+$white-0: #ffffff;
+$mint-cool-30v: #1dc2ae;
+$blue-cool-70v: #074b69;
+$black-100: #000000;
+$blue-cool-30v: #59b9de;
+$indigo-50: #676cc8;
+$red-50v: #e52207;
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 100%;
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.white-0 {
+  color: $white-0;
+}
+.white-0-bg {
+  background-color: $white-0;
+}
+
+.mint-cool-30v {
+  color: $mint-cool-30v;
+}
+.mint-cool-30v-bg {
+  background-color: $mint-cool-30v;
+}
+
+.blue-cool-70v {
+  color: $blue-cool-70v;
+}
+.blue-cool-70v-bg {
+  background-color: $blue-cool-70v;
+}
+
+.black-100 {
+  color: $black-100;
+}
+.black-100-bg {
+  background-color: $black-100;
+}
+
+.blue-cool-30v {
+  color: $blue-cool-30v;
+}
+.blue-cool-30v-bg {
+  background-color: $blue-cool-30v;
+}
+
+.indigo-50 {
+  color: $indigo-50;
+}
+.indigo-50-bg {
+  background-color: $indigo-50;
+}
+
+.red-50v {
+  color: $red-50v;
+}
+.red-50v-bg {
+  background-color: $red-50v;
+}

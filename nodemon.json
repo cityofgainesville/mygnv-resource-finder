@@ -1,0 +1,9 @@
+{
+  "watch": [
+    "server/",
+    "webpack.common.js",
+    "webpack.dev.js",
+    "webpack.prod.js"
+  ],
+  "ext": "js"
+}

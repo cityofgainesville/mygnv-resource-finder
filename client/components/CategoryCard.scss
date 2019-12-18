@@ -1,0 +1,11 @@
+@import "../index.scss";
+
+.cat-card-border {
+  border: 0.3em solid $blue-cool-30v;
+  border-radius: 2em;
+}
+
+.cat-card-border-active {
+  border: 0.3em solid $indigo-50;
+  border-radius: 2em;
+}
