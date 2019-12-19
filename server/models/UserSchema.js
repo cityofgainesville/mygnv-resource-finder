@@ -23,18 +23,13 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  authorizations: [
-    {
-      action: {
-        type: String,
-        required: true,
-      },
-      context: {
-        type: String,
-        required: true,
-      },
-    },
-  ],
+  role: {
+    type: String,
+    enum: ['Provider', 'Editor', 'Owner'],
+    required: true,
+  },
+  provider_can_edit: [{ type: Schema.Types.ObjectId, ref: 'Provider' }],
+  cat_can_edit_in: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
 });
 
 userSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
