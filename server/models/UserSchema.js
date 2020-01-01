@@ -19,17 +19,45 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  organization: {
-    type: String,
-    required: true,
-  },
   role: {
     type: String,
     enum: ['Provider', 'Editor', 'Owner'],
     required: true,
   },
-  provider_can_edit: [{ type: Schema.Types.ObjectId, ref: 'Provider' }],
-  cat_can_edit_in: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
+  assigned_provider: {
+    type: String,
+    required: () => {
+      // eslint-disable-next-line babel/no-invalid-this
+      return this.role == 'Provider';
+    },
+  },
+  can_edit_assigned_provider: {
+    type: Boolean,
+    required: () => {
+      // eslint-disable-next-line babel/no-invalid-this
+      return this.role == 'Provider';
+    },
+  },
+  provider_can_edit: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Provider',
+      required: () => {
+        // eslint-disable-next-line babel/no-invalid-this
+        return this.role == 'Editor';
+      },
+    },
+  ],
+  cat_can_edit_in: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Category',
+      required: () => {
+        // eslint-disable-next-line babel/no-invalid-this
+        return this.role == 'Editor';
+      },
+    },
+  ],
 });
 
 userSchema.plugin(passportLocalMongoose, { usernameField: 'email' });

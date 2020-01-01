@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const { ObjectId } = require('mongodb');
+// const { ObjectId } = require('mongodb');
 
 // A schema for holding provider information
 const providerSchema = new Schema({
@@ -65,7 +65,6 @@ const providerSchema = new Schema({
   translation_available: String,
   united_way_approval: Boolean,
   additional_information: String,
-  categories: [{ type: ObjectId, ref: 'Category' }],
 });
 
 // Add updated_at and created_at fields
