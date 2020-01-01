@@ -9,7 +9,7 @@ const generateCategoryPath = (category, endPath = '') => {
   if (category.subcategory_of.length > 0) {
     return generateCategoryPath(
       category.subcategory_of[0],
-      cleanPath(category.name),
+      cleanPath(category.name)
     );
   } else {
     return (

@@ -146,8 +146,8 @@ class IndivProvider extends React.Component {
                   {currProv.hours.wednesday !== undefined &&
                   currProv.hours.wednesday !== ''
                     ? this.addBreakToEnd(
-                      'Wednesday: ' + currProv.hours.wednesday,
-                    )
+                        'Wednesday: ' + currProv.hours.wednesday
+                      )
                     : ''}
                   {currProv.hours.thursday !== undefined &&
                   currProv.hours.thursday !== ''
@@ -176,10 +176,10 @@ class IndivProvider extends React.Component {
                 <Card.Text>
                   {currProv.appointment !== undefined
                     ? (currProv.appointment.is_required !== undefined
-                      ? currProv.appointment.is_required
-                        ? 'Appointment is required.'
-                        : 'Appointment is not required.'
-                      : '') +
+                        ? currProv.appointment.is_required
+                          ? 'Appointment is required.'
+                          : 'Appointment is not required.'
+                        : '') +
                       '\n' +
                       (currProv.appointment.phone !== undefined
                         ? currProv.appointment.phone !== ''
@@ -210,10 +210,10 @@ class IndivProvider extends React.Component {
                 <Card.Text>
                   {currProv.application !== undefined
                     ? (currProv.application.is_required !== undefined
-                      ? currProv.application.is_required
-                        ? 'Application is required.'
-                        : ''
-                      : '') +
+                        ? currProv.application.is_required
+                          ? 'Application is required.'
+                          : ''
+                        : '') +
                       '\n' +
                       (currProv.application.apply_online !== undefined
                         ? currProv.application.apply_online

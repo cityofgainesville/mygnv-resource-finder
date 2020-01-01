@@ -105,23 +105,23 @@ const topLevelCategories = {
 const elderServices = makeSubcategory(
   ['Elder Services'],
   topLevelCategories['Child & Families']._id,
-  topLevelCategories['Health & Wellness']._id,
+  topLevelCategories['Health & Wellness']._id
 );
 
 const domesticViolence = makeSubcategory(
   ['Domestic Violence/ Abuse'],
   topLevelCategories['Child & Families']._id,
-  topLevelCategories['Crisis Events']._id,
+  topLevelCategories['Crisis Events']._id
 );
 
 const childAndFamilies = makeSubcategory(
   ['Adoption', 'Women & Infants'],
-  topLevelCategories['Child & Families']._id,
+  topLevelCategories['Child & Families']._id
 );
 
 const financial = makeSubcategory(
   ['Eviction/ Foreclosure', 'Social Security', 'Utilities'],
-  topLevelCategories['Financial']._id,
+  topLevelCategories['Financial']._id
 );
 
 const healthAndWellness = makeSubcategory(
@@ -140,9 +140,9 @@ const healthAndWellness = makeSubcategory(
     'Physical Therapy',
     'Substance Abuse',
     'Vision Care',
-    'Women\'s Health',
+    "Women's Health",
   ],
-  topLevelCategories['Health & Wellness']._id,
+  topLevelCategories['Health & Wellness']._id
 );
 
 const legal = makeSubcategory(
@@ -153,17 +153,17 @@ const legal = makeSubcategory(
     'Photo Identification',
     'Voter Registration',
   ],
-  topLevelCategories['Legal']._id,
+  topLevelCategories['Legal']._id
 );
 
 const crisisEvents = makeSubcategory(
   ['Crisis Counseling', 'Disaster', 'Shelters', 'Victim Services'],
-  topLevelCategories['Crisis Events']._id,
+  topLevelCategories['Crisis Events']._id
 );
 
 const basicNeeds = makeSubcategory(
   ['Clothing', 'Food Assistance', 'Housing'],
-  topLevelCategories['Basic Needs']._id,
+  topLevelCategories['Basic Needs']._id
 );
 
 const other = makeSubcategory(
@@ -175,7 +175,7 @@ const other = makeSubcategory(
     'Veterinary / Animal Services',
     'Miscellaneous',
   ],
-  topLevelCategories['Other']._id,
+  topLevelCategories['Other']._id
 );
 
 const dbPopulate = async () => {

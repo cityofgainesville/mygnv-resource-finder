@@ -39,7 +39,7 @@ class SubCategoryFormElement extends React.Component {
     this.props.handleSubCategoryOfChange(
       [...set].map((category) => {
         return category._id;
-      }),
+      })
     );
   };
 

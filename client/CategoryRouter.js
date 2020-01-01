@@ -33,7 +33,7 @@ class CategoryRouter extends React.Component {
                 return parent._id == subCategory._id;
               }).length
             );
-          },
+          }
         );
         return (
           <Route

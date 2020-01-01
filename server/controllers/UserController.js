@@ -15,7 +15,7 @@ exports.register = (req, res) => {
       } else {
         res.json({ success: true, message: 'Registration successful' });
       }
-    },
+    }
   );
 };
 
