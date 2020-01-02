@@ -33,7 +33,7 @@ class Search extends React.Component {
   };
 
   doRedirect = (providerId) => {
-    this.props.history.push(`${paths.individualProviderPath}/${providerId}`);
+    this.props.history.push(`${paths.providerPath}/${providerId}`);
   };
 
   render() {

@@ -18,7 +18,7 @@ exports.create = (req, res) => {
 // Get all the categories
 exports.list = (req, res) => {
   Category.find({})
-    .populate('subcategory_of')
+    .populate('children')
     .exec((err, categories) => {
       if (err) {
         console.log(err);
@@ -31,19 +31,7 @@ exports.list = (req, res) => {
 
 // Get the top level categories
 exports.listTopLevel = (req, res) => {
-  Category.find({ subcategory_of: { $size: 0 } }).exec((err, categories) => {
-    if (err) {
-      console.log(err);
-      res.status(400).send(err);
-    } else {
-      res.json(categories);
-    }
-  });
-};
-
-// Get the subcategories
-exports.listSubCategory = (req, res) => {
-  Category.find({ 'subcategory_of.0': req.id }).exec((err, categories) => {
+  Category.find({ isSubcategory: false }).exec((err, categories) => {
     if (err) {
       console.log(err);
       res.status(400).send(err);
@@ -91,9 +79,22 @@ exports.delete = (req, res) => {
 };
 
 // Middleware to get a category from database by ID, save in req.category
+/* 
+  Accepts query parameters in this format
+  children=true // or false
+  providers=true // or false
+  True will populate the array, false will leave it as an array of ObjectIDs.
+*/
 exports.categoryById = (req, res, next, id) => {
+  let populateOptions = [];
+  console.log(req.query);
+  if (req.query.children === 'true')
+    populateOptions = [...populateOptions, 'children'];
+  if (req.query.providers === 'true')
+    populateOptions = [...populateOptions, 'providers'];
+  console.log(populateOptions);
   Category.findById(id)
-    .populate('subcategory_of')
+    .populate(...populateOptions)
     .exec((err, category) => {
       if (err) {
         res.status(400).send(err);

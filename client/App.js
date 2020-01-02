@@ -3,7 +3,8 @@ import React from 'reactn';
 import { Route, Switch } from 'react-router-dom';
 import axios from 'axios';
 import paths from './RouterPaths';
-import CategoryRouter from './CategoryRouter';
+
+import Category from './components/category';
 
 import NavBar from './components/NavBar';
 import MainPage from './components/MainPage';
@@ -39,19 +40,19 @@ class App extends React.Component {
         console.log(err);
       });
 
-    axios
-      .get('/api/category')
-      .then((res) => {
-        this.setState({
-          categories: Object.values(res.data).map((category) => {
-            category.path = paths.generateCategoryPath(category);
-            return category;
-          }),
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // axios
+    //   .get('/api/category')
+    //   .then((res) => {
+    //     this.setState({
+    //       categories: Object.values(res.data).map((category) => {
+    //         category.path = paths.generateCategoryPath(category);
+    //         return category;
+    //       }),
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   }
 
   updateFilterText = (value) => {
@@ -81,10 +82,14 @@ class App extends React.Component {
           <Route exact path={paths.searchPath} component={Search} />
           <Route
             exact
-            path={paths.individualPath + '/:id'}
+            path={paths.providerPath + '/:id'}
             render={(props) => <IndivProvider id={props.match.params.id} />}
           />
-          <CategoryRouter categories={this.state.categories} />
+          <Route
+            exact
+            path={paths.categoryPath + '/:id?'}
+            render={(props) => <Category id={props.match.params.id} />}
+          />
         </Switch>
       </React.Fragment>
     );

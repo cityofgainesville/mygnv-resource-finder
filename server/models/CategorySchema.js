@@ -10,22 +10,32 @@ const categorySchema = new Schema({
     required: true,
     type: String,
   },
-  providers: [{ type: Schema.Types.ObjectId, ref: 'Provider' }],
-  children: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
+  providers: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Provider',
+    },
+  ],
+  children: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Category',
+    },
+  ],
   icon_name: {
     required: true,
     type: String,
   },
+  isSubcategory: { required: true, type: String },
 });
 
 // Add updated_at and created_at
-categorySchema.pre('save', function(next) {
+categorySchema.pre('save', (next) => {
   const currDate = new Date();
   // Update the updated_at property
   /* eslint-disable babel/no-invalid-this */
   this.updated_at = currDate;
   // If created_at is not present then create it
-  /* eslint-disable babel/no-invalid-this */
   if (!this.created_at) this.created_at = currDate;
   next();
 });

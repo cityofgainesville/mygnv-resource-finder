@@ -20,7 +20,7 @@ class MainPage extends React.Component {
               md='auto'
               style={{ textAlign: 'center', paddingBottom: '1em' }}
             >
-              <RedirectButton path={paths.topLevelCategoriesPath}>
+              <RedirectButton path={paths.categoryPath}>
                 Find a resource by category.
               </RedirectButton>
             </Col>

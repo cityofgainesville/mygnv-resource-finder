@@ -2,7 +2,6 @@ import React from 'reactn';
 import { Route, Switch } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
 import RedirectButton from './RedirectButton';
-import PropTypes from 'prop-types';
 
 import Login from './auth/Login';
 import Register from './auth/Register';

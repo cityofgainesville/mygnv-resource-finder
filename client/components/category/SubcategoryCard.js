@@ -2,11 +2,10 @@ import React from 'reactn';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
-import RedirectButton from './RedirectButton';
-
+import RedirectButton from '../RedirectButton';
 // Redirect component for subcategory
 
-class SubCategoryCard extends React.Component {
+class SubcategoryCard extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -20,10 +19,10 @@ class SubCategoryCard extends React.Component {
   }
 }
 
-SubCategoryCard.propTypes = {
+SubcategoryCard.propTypes = {
   categoryName: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
   history: PropTypes.instanceOf(Object).isRequired,
 };
 
-export default withRouter(SubCategoryCard);
+export default withRouter(SubcategoryCard);

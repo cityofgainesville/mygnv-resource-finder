@@ -24,6 +24,7 @@ const makeSubcategories = (names, parentNames, parentCategories) => {
       _id: new mongoose.Types.ObjectId(),
       name: currentName,
       icon_name: 'null',
+      isSubcategory: true,
     });
     parentNames.forEach((parentName) => {
       parentCategories[parentName].children.push(
@@ -39,51 +40,61 @@ const topLevelCategories = {
     _id: new mongoose.Types.ObjectId(),
     name: 'Child & Families',
     icon_name: 'child',
+    isSubcategory: false,
   }),
   'Education': new Category({
     _id: new mongoose.Types.ObjectId(),
     name: 'Education',
     icon_name: 'book',
+    isSubcategory: false,
   }),
   'Financial': new Category({
     _id: new mongoose.Types.ObjectId(),
     name: 'Financial',
     icon_name: 'money-check-edit-alt',
+    isSubcategory: false,
   }),
   'Health & Wellness': new Category({
     _id: new mongoose.Types.ObjectId(),
     name: 'Health & Wellness',
     icon_name: 'medkit',
+    isSubcategory: false,
   }),
   'Job': new Category({
     _id: new mongoose.Types.ObjectId(),
     name: 'Job',
     icon_name: 'clipboard',
+    isSubcategory: false,
   }),
   'Legal': new Category({
     _id: new mongoose.Types.ObjectId(),
     name: 'Legal',
     icon_name: 'balance-scale-right',
+    isSubcategory: false,
   }),
   'Crisis Events': new Category({
     _id: new mongoose.Types.ObjectId(),
     name: 'Crisis Events',
     icon_name: 'hands-helping',
+    isSubcategory: false,
   }),
   'Transportation': new Category({
     _id: new mongoose.Types.ObjectId(),
     name: 'Transportation',
     icon_name: 'bus-alt',
+    isSubcategory: false,
   }),
   'Basic Needs': new Category({
     _id: new mongoose.Types.ObjectId(),
     name: 'Basic Needs',
     icon_name: 'utensils-alt',
+    isSubcategory: false,
   }),
   'Other': new Category({
     _id: new mongoose.Types.ObjectId(),
     name: 'Other',
     icon_name: 'ellipsis-v',
+    isSubcategory: false,
   }),
 };
 
