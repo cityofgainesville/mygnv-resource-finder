@@ -16,12 +16,22 @@ exports.create = (req, res) => {
 };
 
 // Get all the categories
+/* 
+  Accepts query parameters in this format
+  children=true // or false
+  providers=true // or false
+  True will populate the array, false will leave it as an array of ObjectIDs.
+*/
 exports.list = (req, res) => {
+  let populateOptions = [];
+  if (req.query.children === 'true')
+    populateOptions = [...populateOptions, 'children'];
+  if (req.query.providers === 'true')
+    populateOptions = [...populateOptions, 'providers'];
   Category.find({})
-    .populate('children')
+    .populate(...populateOptions)
     .exec((err, categories) => {
       if (err) {
-        console.log(err);
         res.status(400).send(err);
       } else {
         res.json(categories);
@@ -30,15 +40,28 @@ exports.list = (req, res) => {
 };
 
 // Get the top level categories
+/* 
+  Accepts query parameters in this format
+  children=true // or false
+  providers=true // or false
+  True will populate the array, false will leave it as an array of ObjectIDs.
+*/
 exports.listTopLevel = (req, res) => {
-  Category.find({ isSubcategory: false }).exec((err, categories) => {
-    if (err) {
-      console.log(err);
-      res.status(400).send(err);
-    } else {
-      res.json(categories);
-    }
-  });
+  let populateOptions = [];
+  if (req.query.children === 'true')
+    populateOptions = [...populateOptions, 'children'];
+  if (req.query.providers === 'true')
+    populateOptions = [...populateOptions, 'providers'];
+  Category.find({ isSubcategory: false })
+    .populate(...populateOptions)
+    .exec((err, categories) => {
+      if (err) {
+        console.log(err);
+        res.status(400).send(err);
+      } else {
+        res.json(categories);
+      }
+    });
 };
 
 // Get the current category
