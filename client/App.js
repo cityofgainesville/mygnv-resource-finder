@@ -39,20 +39,6 @@ class App extends React.Component {
       .catch((err) => {
         console.log(err);
       });
-
-    // axios
-    //   .get('/api/category')
-    //   .then((res) => {
-    //     this.setState({
-    //       categories: Object.values(res.data).map((category) => {
-    //         category.path = paths.generateCategoryPath(category);
-    //         return category;
-    //       }),
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
   }
 
   updateFilterText = (value) => {

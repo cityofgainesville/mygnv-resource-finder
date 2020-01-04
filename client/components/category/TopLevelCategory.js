@@ -2,25 +2,12 @@ import React from 'reactn';
 import PropTypes from 'prop-types';
 import { Container, Row, Col } from 'react-bootstrap';
 import paths from '../../RouterPaths';
+import './TopLevelCategory.scss';
 
 import CategoryCard from './CategoryCard';
 
 const TopLevelCategory = (props) => {
   const iconSize = 3;
-
-  const containerStyle = {
-    maxWidth: '30em',
-    margin: 'auto auto',
-    alignItems: 'center',
-    justifyContent: 'center',
-  };
-
-  const rowStyle = {
-    margin: 'auto',
-    justifyContent: 'center',
-  };
-
-  const colStyle = { padding: '0 0' };
 
   const categoryRowList = [];
   let categoryCol = <React.Fragment></React.Fragment>;
@@ -33,7 +20,7 @@ const TopLevelCategory = (props) => {
     categoryCol = (
       <React.Fragment>
         {categoryCol}
-        <Col style={colStyle}>
+        <Col className='toplevel-col'>
           <CategoryCard
             iconName={category.icon_name}
             iconSize={iconSize}
@@ -48,17 +35,17 @@ const TopLevelCategory = (props) => {
     }
   });
   let categoryGrid = <React.Fragment></React.Fragment>;
-  categoryRowList.forEach((row, i) => {
+  categoryRowList.forEach((row) => {
     categoryGrid = (
       <React.Fragment>
         {categoryGrid}
-        <Row style={rowStyle}>{row}</Row>
+        <Row className='toplevel-row'>{row}</Row>
       </React.Fragment>
     );
   });
   return (
     <React.Fragment>
-      <Container style={containerStyle}>{categoryGrid}</Container>
+      <Container className='toplevel-container'>{categoryGrid}</Container>
     </React.Fragment>
   );
 };
