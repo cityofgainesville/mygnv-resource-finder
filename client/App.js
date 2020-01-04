@@ -14,7 +14,7 @@ import Search from './components/Search';
 
 import AuthState from './components/auth/AuthState';
 
-const App = () => {
+const App = (props) => {
   // Handles routing admin portal, main page, search, category & provider list
   // and individual provider
   return (
