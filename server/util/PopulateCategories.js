@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const Category = require('../models/CategorySchema');
-const config = require('../config/config');
+
+// Populate process.env
+require('dotenv').config({ path: '../../.env' });
 
 // This script populates categories for mongoDB, and links them initially
 // Category names must match names in JSON (./data.json)
@@ -10,23 +12,27 @@ const config = require('../config/config');
 // REPOPULATE MONGODB. DANGER, WARNING, CAUTION!!
 // BE ABSOLUTELY SURE THAT YOU WANT TO DO THIS!!
 
-mongoose.connect(config.db.uri, {
+mongoose.connect(process.env.DB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
-const makeSubcategory = (names, ...linkId) => {
-  const subcategory = {};
+const makeSubcategories = (names, parentNames, parentCategories) => {
+  const subcategories = {};
   names.forEach((currentName) => {
-    subcategory[currentName] = new Category({
+    subcategories[currentName] = new Category({
       _id: new mongoose.Types.ObjectId(),
       name: currentName,
       icon_name: 'null',
-      subcategory_of: [...linkId],
-      is_lowest_level: true,
+      isSubcategory: true,
+    });
+    parentNames.forEach((parentName) => {
+      parentCategories[parentName].children.push(
+        subcategories[currentName]._id
+      );
     });
   });
-  return subcategory;
+  return subcategories;
 };
 
 const topLevelCategories = {
@@ -34,97 +40,89 @@ const topLevelCategories = {
     _id: new mongoose.Types.ObjectId(),
     name: 'Child & Families',
     icon_name: 'child',
-    subcategory_of: [],
-    is_lowest_level: false,
+    isSubcategory: false,
   }),
   'Education': new Category({
     _id: new mongoose.Types.ObjectId(),
     name: 'Education',
     icon_name: 'book',
-    subcategory_of: [],
-    is_lowest_level: true,
+    isSubcategory: false,
   }),
   'Financial': new Category({
     _id: new mongoose.Types.ObjectId(),
     name: 'Financial',
     icon_name: 'money-check-edit-alt',
-    subcategory_of: [],
-    is_lowest_level: false,
+    isSubcategory: false,
   }),
   'Health & Wellness': new Category({
     _id: new mongoose.Types.ObjectId(),
     name: 'Health & Wellness',
     icon_name: 'medkit',
-    subcategory_of: [],
-    is_lowest_level: false,
+    isSubcategory: false,
   }),
   'Job': new Category({
     _id: new mongoose.Types.ObjectId(),
     name: 'Job',
     icon_name: 'clipboard',
-    subcategory_of: [],
-    is_lowest_level: true,
+    isSubcategory: false,
   }),
   'Legal': new Category({
     _id: new mongoose.Types.ObjectId(),
     name: 'Legal',
     icon_name: 'balance-scale-right',
-    subcategory_of: [],
-    is_lowest_level: false,
+    isSubcategory: false,
   }),
   'Crisis Events': new Category({
     _id: new mongoose.Types.ObjectId(),
     name: 'Crisis Events',
     icon_name: 'hands-helping',
-    subcategory_of: [],
-    is_lowest_level: false,
+    isSubcategory: false,
   }),
   'Transportation': new Category({
     _id: new mongoose.Types.ObjectId(),
     name: 'Transportation',
     icon_name: 'bus-alt',
-    subcategory_of: [],
-    is_lowest_level: true,
+    isSubcategory: false,
   }),
   'Basic Needs': new Category({
     _id: new mongoose.Types.ObjectId(),
     name: 'Basic Needs',
     icon_name: 'utensils-alt',
-    subcategory_of: [],
-    is_lowest_level: false,
+    isSubcategory: false,
   }),
   'Other': new Category({
     _id: new mongoose.Types.ObjectId(),
     name: 'Other',
     icon_name: 'ellipsis-v',
-    subcategory_of: [],
-    is_lowest_level: false,
+    isSubcategory: false,
   }),
 };
 
-const elderServices = makeSubcategory(
+const elderServices = makeSubcategories(
   ['Elder Services'],
-  topLevelCategories['Child & Families']._id,
-  topLevelCategories['Health & Wellness']._id,
+  ['Child & Families', 'Health & Wellness'],
+  topLevelCategories
 );
 
-const domesticViolence = makeSubcategory(
+const domesticViolence = makeSubcategories(
   ['Domestic Violence/ Abuse'],
-  topLevelCategories['Child & Families']._id,
-  topLevelCategories['Crisis Events']._id,
+  ['Child & Families', 'Crisis Events'],
+  topLevelCategories
 );
 
-const childAndFamilies = makeSubcategory(
+const childAndFamilies = makeSubcategories(
   ['Adoption', 'Women & Infants'],
-  topLevelCategories['Child & Families']._id,
+  ['Child & Families'],
+  topLevelCategories
 );
 
-const financial = makeSubcategory(
+const financial = makeSubcategories(
   ['Eviction/ Foreclosure', 'Social Security', 'Utilities'],
-  topLevelCategories['Financial']._id,
+  ['Financial'],
+  topLevelCategories
 );
 
-const healthAndWellness = makeSubcategory(
+const healthAndWellness = makeSubcategories(
   [
     'Acupuncture',
     'Cancer-Related',
@@ -140,12 +138,13 @@ const healthAndWellness = makeSubcategory(
     'Physical Therapy',
     'Substance Abuse',
     'Vision Care',
-    'Women\'s Health',
+    "Women's Health",
   ],
-  topLevelCategories['Health & Wellness']._id,
+  ['Health & Wellness'],
+  topLevelCategories
 );
 
-const legal = makeSubcategory(
+const legal = makeSubcategories(
   [
     'Civil Liberties/ Social Justice',
     'Immigration',
@@ -153,20 +152,23 @@ const legal = makeSubcategory(
     'Photo Identification',
     'Voter Registration',
   ],
-  topLevelCategories['Legal']._id,
+  ['Legal'],
+  topLevelCategories
 );
 
-const crisisEvents = makeSubcategory(
+const crisisEvents = makeSubcategories(
   ['Crisis Counseling', 'Disaster', 'Shelters', 'Victim Services'],
-  topLevelCategories['Crisis Events']._id,
+  ['Crisis Events'],
+  topLevelCategories
 );
 
-const basicNeeds = makeSubcategory(
+const basicNeeds = makeSubcategories(
   ['Clothing', 'Food Assistance', 'Housing'],
-  topLevelCategories['Basic Needs']._id,
+  ['Basic Needs'],
+  topLevelCategories
 );
 
-const other = makeSubcategory(
+const other = makeSubcategories(
   [
     'Burial',
     'Computer',
@@ -175,7 +177,8 @@ const other = makeSubcategory(
     'Veterinary / Animal Services',
     'Miscellaneous',
   ],
-  topLevelCategories['Other']._id,
+  ['Other'],
+  topLevelCategories
 );
 
 const dbPopulate = async () => {

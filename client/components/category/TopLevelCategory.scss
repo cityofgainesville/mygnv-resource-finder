@@ -1,0 +1,18 @@
+@import '../../index.scss';
+
+.toplevel-container {
+  max-width: 30em;
+  margin: auto auto;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.toplevel-row {
+  margin: auto;
+  justify-content: center;
+}
+
+.toplevel-col {
+  padding: 0 0;
+}

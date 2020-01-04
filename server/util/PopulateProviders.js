@@ -3,7 +3,9 @@ const util = require('util');
 const mongoose = require('mongoose');
 const Category = require('../models/CategorySchema');
 const Provider = require('../models/ProviderSchema');
-const config = require('../config/config');
+
+// Populate process.env
+require('dotenv').config({ path: '../../.env' });
 
 // Populate mongoDB with providers from ./data.json
 // Category names must match names used in PopulateCategories
@@ -14,7 +16,7 @@ const config = require('../config/config');
 // REPOPULATE MONGODB. DANGER, WARNING, CAUTION!!
 // BE ABSOLUTELY SURE THAT YOU WANT TO DO THIS!!
 
-mongoose.connect(config.db.uri, {
+mongoose.connect(process.env.DB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -37,7 +39,7 @@ const dbPopulate = async () => {
     throw errStr;
   }
 
-  const categories = await Category.find({}).populate('subcategory_of');
+  const categories = await Category.find({}).populate('children');
   const categoryList = Object.values(categories);
   for (const providerIndex in parsedJSON) {
     if (Object.prototype.hasOwnProperty.call(parsedJSON, providerIndex)) {
@@ -152,15 +154,10 @@ const dbPopulate = async () => {
               currProperty !== ''
             );
           });
-          if (
-            filteredCategory.length > 0 &&
-            newProvider.categories.filter((category) => {
-              return category._id === filteredCategory[0]._id;
-            }).length === 0
-          ) {
-            newProvider.categories.push(filteredCategory[0]._id);
-            console.log(filteredCategory[0]);
-          }
+          filteredCategory.forEach((category) => {
+            category.providers.push(newProvider._id);
+            category.save();
+          });
         }
       }
 

@@ -49,48 +49,25 @@ exports.delete = (req, res) => {
 
 // Get all the providers
 exports.list = (req, res) => {
-  Provider.find({})
-    .populate('categories')
-    .exec((err, providers) => {
-      if (err) {
-        console.log(err);
-        res.status(400).send(err);
-      } else {
-        res.json(providers);
-      }
-    });
-};
-
-// Get all the providers in a given subcategory
-exports.listSubCategory = (req, res) => {
-  res.json(req.inSubcategory);
+  Provider.find({}).exec((err, providers) => {
+    if (err) {
+      console.log(err);
+      res.status(400).send(err);
+    } else {
+      res.json(providers);
+    }
+  });
 };
 
 // Middleware to get a provider from database by ID, save in req.provider
 exports.providerById = (req, res, next, id) => {
-  Provider.findById(id)
-    .populate('categories')
-    .exec((err, provider) => {
-      if (err) {
-        res.status(400).send(err);
-      } else {
-        req.provider = provider;
-        req.id = id;
-        next();
-      }
-    });
-};
-
-// Middleware to get providers in subcategory, save in req.inSubcategory
-exports.getSubCategory = (req, res, next, id) => {
-  Provider.find({ categories: id })
-    .populate('categories')
-    .exec((err, providers) => {
-      if (err) {
-        res.status(400).send(err);
-      } else {
-        req.inSubcategory = providers;
-        next();
-      }
-    });
+  Provider.findById(id).exec((err, provider) => {
+    if (err) {
+      res.status(400).send(err);
+    } else {
+      req.provider = provider;
+      req.id = id;
+      next();
+    }
+  });
 };
