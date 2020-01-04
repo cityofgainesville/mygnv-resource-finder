@@ -22,4 +22,19 @@ router
   .route('/register')
   .post(userController.isAuthenticated, userController.register);
 
+// Path is /api/user/update
+// Update user that is logged in
+router
+  .route('/update')
+  .post(userController.isAuthenticated, userController.update);
+
+// Path is /api/user/ownerUpdate/:userId
+// For use by Owner to edit user
+router
+  .route('/ownerUpdate/:userId')
+  .post(userController.isAuthenticated, userController.ownerUpdate);
+
+// Middleware to get user by id from mongoDB
+router.param('userId', userController.userById);
+
 module.exports = router;

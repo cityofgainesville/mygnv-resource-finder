@@ -1,7 +1,6 @@
 import { hot } from 'react-hot-loader/root';
 import React from 'reactn';
 import { Route, Switch } from 'react-router-dom';
-import axios from 'axios';
 import paths from './RouterPaths';
 
 import Category from './components/category';
@@ -15,71 +14,31 @@ import Search from './components/Search';
 
 import AuthState from './components/auth/AuthState';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    // this.global.auth.login('taco', 'cat');
-    this.state = {
-      providers: [],
-      categories: [],
-      filterText: '',
-      selectedProvider: '',
-    };
-  }
-
-  // On start populate all providers and categories
-  // Generate a path for each category based on category and parent name
-
-  componentDidMount() {
-    axios
-      .get('/api/provider')
-      .then((res) => {
-        this.setState({ providers: Object.values(res.data) });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  updateFilterText = (value) => {
-    this.setState({ filterText: value });
-  };
-
-  updateSelected = (id) => {
-    this.setState({ selectedProvider: id });
-    console.log(id);
-  };
-
+const App = () => {
   // Handles routing admin portal, main page, search, category & provider list
   // and individual provider
-
-  render() {
-    return (
-      <React.Fragment>
-        <AuthState />
-        <NavBar />
-        <Title />
-        <Switch>
-          <Route
-            path={paths.adminPath}
-            render={() => <AdminPortal providers={this.state.providers} />}
-          />
-          <Route exact path={paths.mainPath} component={MainPage} />
-          <Route exact path={paths.searchPath} component={Search} />
-          <Route
-            exact
-            path={paths.providerPath + '/:id'}
-            render={(props) => <IndivProvider id={props.match.params.id} />}
-          />
-          <Route
-            exact
-            path={paths.categoryPath + '/:id?'}
-            render={(props) => <Category id={props.match.params.id} />}
-          />
-        </Switch>
-      </React.Fragment>
-    );
-  }
-}
+  return (
+    <React.Fragment>
+      <AuthState />
+      <NavBar />
+      <Title />
+      <Switch>
+        <Route path={paths.adminPath} render={() => <AdminPortal />} />
+        <Route exact path={paths.mainPath} component={MainPage} />
+        <Route exact path={paths.searchPath} component={Search} />
+        <Route
+          exact
+          path={paths.providerPath + '/:id'}
+          render={(props) => <IndivProvider id={props.match.params.id} />}
+        />
+        <Route
+          exact
+          path={paths.categoryPath + '/:id?'}
+          render={(props) => <Category id={props.match.params.id} />}
+        />
+      </Switch>
+    </React.Fragment>
+  );
+};
 
 export default hot(App);

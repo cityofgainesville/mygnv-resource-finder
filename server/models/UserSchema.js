@@ -24,40 +24,38 @@ const userSchema = new Schema({
     enum: ['Provider', 'Editor', 'Owner'],
     required: true,
   },
+  // For Provider
   assigned_provider: {
     type: String,
-    required: () => {
-      // eslint-disable-next-line babel/no-invalid-this
-      return this.role == 'Provider';
-    },
   },
   can_edit_assigned_provider: {
     type: Boolean,
-    required: () => {
-      // eslint-disable-next-line babel/no-invalid-this
-      return this.role == 'Provider';
-    },
   },
+  // For Editor
   provider_can_edit: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Provider',
-      required: () => {
-        // eslint-disable-next-line babel/no-invalid-this
-        return this.role == 'Editor';
-      },
     },
   ],
-  cat_can_edit_in: [
+  // For Editor
+  cat_can_edit_provider_in: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Category',
-      required: () => {
-        // eslint-disable-next-line babel/no-invalid-this
-        return this.role == 'Editor';
-      },
     },
   ],
+});
+
+// If a user's role is changed to a more restrictive role, ensure that the old user data is also deleted
+// eg. If role changes from Editor to Provider then clear out the provider_can_edit and cat_can_edit_provider
+userSchema.pre('validate', (next, data) => {
+  /* eslint-disable babel/no-invalid-this */
+  if (this.role === 'Provider') {
+    this.provider_can_edit = [];
+    this.cat_can_edit_provider_in = [];
+  }
+  next();
 });
 
 userSchema.plugin(passportLocalMongoose, { usernameField: 'email' });

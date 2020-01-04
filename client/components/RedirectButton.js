@@ -8,30 +8,28 @@ import { withRouter } from 'react-router-dom';
 // Using the html5 history API and react router
 // this allows back, forward buttons to work in the browser
 
-class RedirectButton extends React.Component {
-  doRedirect = () => {
-    this.props.history.push(this.props.path);
+const RedirectButton = (props) => {
+  const doRedirect = () => {
+    props.history.push(props.path);
   };
 
-  render() {
-    return (
-      <React.Fragment>
-        <Button
-          onClick={this.doRedirect}
-          className={this.props.className}
-          variant={this.props.variant}
-        >
-          {this.props.children}
-        </Button>
-      </React.Fragment>
-    );
-  }
-}
+  return (
+    <React.Fragment>
+      <Button
+        onClick={doRedirect}
+        className={props.className}
+        variant={props.variant}
+      >
+        {props.children}
+      </Button>
+    </React.Fragment>
+  );
+};
 
 RedirectButton.propTypes = {
   path: PropTypes.string.isRequired,
   history: PropTypes.instanceOf(Object).isRequired,
-  children: PropTypes.instanceOf(Object),
+  children: PropTypes.any,
   className: PropTypes.string,
   variant: PropTypes.string,
 };

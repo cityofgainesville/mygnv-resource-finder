@@ -3,20 +3,29 @@ const User = require('../models/UserSchema');
 
 // Register a new user, using email and password fields from body
 exports.register = (req, res) => {
-  User.register(
-    new User({ email: req.body.email }),
-    req.body.password,
-    (err, user) => {
-      if (err) {
-        res.json({
-          success: false,
-          message: err,
-        });
-      } else {
-        res.json({ success: true, message: 'Registration successful' });
-      }
+  User.register(new User(req.body), req.body.password, (err, user) => {
+    if (err) {
+      res.json({
+        success: false,
+        message: err,
+      });
+    } else {
+      res.json({ success: true, message: 'Registration successful' });
     }
-  );
+  });
+};
+
+// Checks if user is currently logged in, ie. if they have a session started
+exports.isLoggedIn = (req, res) => {
+  if (req.isAuthenticated()) {
+    res.json({
+      success: true,
+      message: 'User is logged in',
+      user: req.user,
+    });
+  } else {
+    res.json({ success: false, message: 'User is not logged in' });
+  }
 };
 
 // Login a user, makes a session on success
@@ -38,7 +47,7 @@ exports.login = (req, res) => {
         res.json({
           success: true,
           message: 'Authentication successful',
-          email: req.user.email,
+          user: req.user,
         });
       });
     }
@@ -51,17 +60,83 @@ exports.logout = (req, res) => {
   res.json({ success: true, message: 'Logout successful' });
 };
 
-// Checks if user is currently logged in, ie. if they have a session started
-exports.isLoggedIn = (req, res) => {
-  if (req.isAuthenticated()) {
-    res.json({
-      success: true,
-      message: 'User is logged in',
-      email: req.user.email,
-    });
-  } else {
-    res.json({ success: false, message: 'User is not logged in' });
+// Update a user
+exports.update = async (req, res) => {
+  try {
+    const currentUser = req.user;
+    const infoToUpdate = req.body;
+    if (currentUser.role === 'Provider' || currentUser.role === 'Editor') {
+      if (currentUser.assigned_provider !== infoToUpdate.assigned_provider) {
+        currentUser.assigned_provider = infoToUpdate.assigned_provider;
+        currentUser.can_edit_assigned_provider = false;
+      }
+    } else if (currentUser.role === 'Owner') {
+      for (const key in infoToUpdate) {
+        if (
+          Object.prototype.hasOwnProperty.call(infoToUpdate, key) &&
+          key !== 'password' &&
+          key !== 'old_password' &&
+          currentUser[key] !== infoToUpdate[key]
+        ) {
+          currentUser[key] = infoToUpdate[key];
+        }
+      }
+    }
+    if (infoToUpdate.password !== undefined && infoToUpdate.password !== '') {
+      await currentUser.changePassword(
+        infoToUpdate.old_password,
+        infoToUpdate.password
+      );
+    }
+    await currentUser.save();
+  } catch (err) {
+    console.log(err);
+    return res.status(500).end();
   }
+};
+
+// Allow owners to update other users
+exports.ownerUpdate = async (req, res) => {
+  try {
+    const currentUser = req.user;
+    const infoToUpdate = req.body;
+    const userToUpdate = req.userToUpdate;
+
+    if (!userToUpdate) return res.status(404).end();
+
+    if (currentUser.role !== 'Owner') return res.status(403).end();
+
+    for (const key in infoToUpdate) {
+      if (
+        Object.prototype.hasOwnProperty.call(infoToUpdate, key) &&
+        key !== 'password' &&
+        key !== 'old_password' &&
+        userToUpdate[key] !== infoToUpdate[key]
+      ) {
+        userToUpdate[key] = infoToUpdate[key];
+      }
+    }
+    if (infoToUpdate.password !== undefined && infoToUpdate.password !== '') {
+      await userToUpdate.setPassword(infoToUpdate.password);
+    }
+    await userToUpdate.save();
+  } catch (err) {
+    console.log(err);
+    return res.status(500).end();
+  }
+};
+
+// Middleware to get a user from database by ID, save in req.userToUpdate
+exports.userById = (req, res, next, id) => {
+  User.findById(id).exec((err, user) => {
+    if (err) {
+      res.status(400).send(err);
+    } else {
+      req.userToUpdate = user;
+      req.id = id;
+      next();
+    }
+  });
 };
 
 // Middleware for checking if authenticated
@@ -70,5 +145,5 @@ exports.isAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect('/login');
+  res.status(403).end();
 };

@@ -1,4 +1,4 @@
-import React from 'reactn';
+import React, { useGlobal } from 'reactn';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
@@ -8,33 +8,27 @@ import axios from 'axios';
 // Logout button that communicates with backend to end session
 // Will redirect to app home page
 
-class AuthButton extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+const AuthButton = (props) => {
+  const [currentUser, setCurrentUser] = useGlobal('currentUser');
 
-  logout = () => {
+  const logout = () => {
     axios
       .post('/api/user/logout')
       .then((res) => {
-        this.setGlobal({ isAuthenticated: false });
+        setCurrentUser(null);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  handleLogout = () => {
-    this.logout();
-    this.props.history.push('/');
+  const handleLogout = () => {
+    logout();
+    props.history.push('/');
   };
 
-  render() {
-    return this.global.isAuthenticated ? (
-      <Button onClick={this.handleLogout}>Log Out</Button>
-    ) : null;
-  }
-}
+  return currentUser ? <Button onClick={handleLogout}>Log Out</Button> : null;
+};
 
 AuthButton.propTypes = {
   history: PropTypes.instanceOf(Object).isRequired,
