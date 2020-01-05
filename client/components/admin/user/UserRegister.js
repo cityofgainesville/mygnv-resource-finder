@@ -8,7 +8,7 @@ import axios from 'axios';
 // Modal style register component
 // Communicates with backend, see backend comments for api docs
 
-const Register = (props) => {
+const UserRegister = (props) => {
   const [modalIsDisplayed, setModalIsDisplayed] = useState(false);
 
   const [providers, setProviders] = useState([]);
@@ -21,11 +21,12 @@ const Register = (props) => {
   ];
 
   const boolOptions = [
-    { value: true, label: 'True' },
     { value: false, label: 'False' },
+    { value: true, label: 'True' },
   ];
 
   const [hadError, setHadError] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -34,12 +35,15 @@ const Register = (props) => {
 
   const [role, setRole] = useState(roleOptions[0]);
   const [assignedProvider, setAssignedProvider] = useState('');
-  const [canEditAssignedProvider, setCanEditAssignedProvider] = useState(false);
+  const [canEditAssignedProvider, setCanEditAssignedProvider] = useState(
+    boolOptions[0]
+  );
   const [providerCanEdit, setProviderCanEdit] = useState([]);
   const [catCanEditProviderIn, setCatCanEditProviderIn] = useState([]);
 
   const clearState = () => {
     setHadError(false);
+    setSuccess(false);
 
     setEmail('');
     setPassword('');
@@ -48,7 +52,7 @@ const Register = (props) => {
 
     setRole(roleOptions[0]);
     setAssignedProvider('');
-    setCanEditAssignedProvider(false);
+    setCanEditAssignedProvider(boolOptions[0]);
     setProviderCanEdit([]);
     setCatCanEditProviderIn([]);
   };
@@ -83,21 +87,43 @@ const Register = (props) => {
   };
 
   // TODO- FINISH REGISTER
-  const login = (event) => {
+  const doRegister = async (event) => {
     event.preventDefault();
-    axios
-      .post('/api/user/register', {
-        email: email,
-        password: password,
-      })
-      .then((res) => {
-        if (res.data.success) closeModal();
-        else setHadError(true);
-      })
-      .catch((err) => {
-        console.log(err);
-        setHadError(true);
-      });
+
+    const processMaybeArray = (maybeArray) => {
+      if (!Array.isArray(maybeArray)) maybeArray = [maybeArray];
+      return maybeArray.map((element) => element.value);
+    };
+
+    let postContent = {
+      email: email,
+      password: password, // this is NOT stored in plaintext, passport-local-mongoose hashes and salts it, and only then stores it
+      first_name: firstName,
+      last_name: lastName,
+      role: role.value,
+      assigned_provider: assignedProvider.value,
+      can_edit_assigned_provider: canEditAssignedProvider.value,
+      provider_can_edit: processMaybeArray(providerCanEdit),
+      cat_can_edit_provider_in: processMaybeArray(catCanEditProviderIn),
+    };
+
+    console.log(postContent);
+
+    const sleep = (milliseconds) => {
+      return new Promise((resolve) => setTimeout(resolve, milliseconds));
+    };
+
+    try {
+      const res = await axios.post('/api/user/register', postContent);
+      if (res.data.success) {
+        setHadError(false);
+        setSuccess(true);
+        await sleep(500);
+        closeModal();
+      } else setHadError(true);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const openModal = () => {
@@ -199,6 +225,57 @@ const Register = (props) => {
     } else return null;
   };
 
+  const renderStatus = () => {
+    if (success && !hadError) {
+      return (
+        <Alert
+          variant='success'
+          style={{
+            marginTop: '1em',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
+        >
+          Successfully registered user.
+        </Alert>
+      );
+    } else if (hadError) {
+      return (
+        <Alert
+          variant='danger'
+          style={{
+            marginTop: '1em',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
+        >
+          An error has occurred. Please try again.
+        </Alert>
+      );
+    } else return null;
+  };
+
+  const renderRegisterButton = () => {
+    if (success)
+      return (
+        <Button onClick={doRegister} variant='success' type='submit'>
+          Success
+        </Button>
+      );
+    else if (hadError) {
+      return (
+        <Button onClick={doRegister} variant='warning' type='submit'>
+          Try Again
+        </Button>
+      );
+    } else
+      return (
+        <Button onClick={doRegister} variant='primary' type='submit'>
+          Register
+        </Button>
+      );
+  };
+
   return (
     <React.Fragment>
       <Button variant='primary' onClick={openModal}>
@@ -209,18 +286,7 @@ const Register = (props) => {
           <Modal.Title>Register</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {hadError ? (
-            <Alert
-              variant='danger'
-              style={{
-                marginTop: '1em',
-                marginLeft: 'auto',
-                marginRight: 'auto',
-              }}
-            >
-              An error has occurred. Please try again.
-            </Alert>
-          ) : null}
+          {renderStatus()}
           <Form>
             <Form.Group controlId='formBasicEmail'>
               <Form.Label>Email</Form.Label>
@@ -282,18 +348,16 @@ const Register = (props) => {
           <Button variant='secondary' onClick={closeModal}>
             Close
           </Button>
-          <Button onClick={login} variant='primary' type='submit'>
-            Register
-          </Button>
+          {renderRegisterButton()}
         </Modal.Footer>
       </Modal>
     </React.Fragment>
   );
 };
 
-Register.propTypes = {
+UserRegister.propTypes = {
   history: PropTypes.instanceOf(Object).isRequired,
   location: PropTypes.instanceOf(Object).isRequired,
 };
 
-export default Register;
+export default UserRegister;

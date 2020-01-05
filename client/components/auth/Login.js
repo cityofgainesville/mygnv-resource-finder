@@ -31,7 +31,7 @@ const Login = (props) => {
     setModalIsDisplayed(false);
   };
 
-  const login = (event) => {
+  const doLogin = (event) => {
     event.preventDefault();
     axios
       .post('/api/user/login', {
@@ -59,6 +59,27 @@ const Login = (props) => {
           </span>
           <LogoutButton />
         </React.Fragment>
+      );
+  };
+
+  const renderLoginButton = () => {
+    if (success)
+      return (
+        <Button onClick={doLogin} variant='success' type='submit'>
+          Success
+        </Button>
+      );
+    else if (hadError) {
+      return (
+        <Button onClick={doLogin} variant='warning' type='submit'>
+          Try Again
+        </Button>
+      );
+    } else
+      return (
+        <Button onClick={doLogin} variant='primary' type='submit'>
+          Login
+        </Button>
       );
   };
 
@@ -112,7 +133,7 @@ const Login = (props) => {
           <Button variant='secondary' onClick={closeModal}>
             Close
           </Button>
-          <Button onClick={login} variant='primary' type='submit'>
+          <Button onClick={doLogin} variant='primary' type='submit'>
             Log In
           </Button>
         </Modal.Footer>

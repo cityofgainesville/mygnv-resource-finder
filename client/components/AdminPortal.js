@@ -4,8 +4,8 @@ import { Container, Row, Col } from 'react-bootstrap';
 import RedirectButton from './RedirectButton';
 
 import Login from './auth/Login';
-import Register from './auth/Register';
-import CategoryAdmin from './admin/CategoryAdmin';
+import UserRegister from './admin/user/UserRegister';
+import CategoryAdmin from './admin/category/CategoryAdmin';
 
 import paths from '../RouterPaths';
 
@@ -67,7 +67,7 @@ const AdminPortal = (props) => {
               className='justify-content-md-center'
               style={{ margin: 'auto', marginBottom: '1em' }}
             >
-              <Register />
+              <UserRegister />
             </Row>
           )}
         />
