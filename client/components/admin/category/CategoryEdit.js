@@ -23,7 +23,7 @@ class CategoryEdit extends React.Component {
 
   componentDidMount() {
     axios
-      .get(`/api/category/${this.props.id}`)
+      .get(`/api/categories/${this.props.id}`)
       .then((res) => {
         this.setState({ category: res.data });
       })
@@ -86,7 +86,7 @@ class CategoryEdit extends React.Component {
     event.preventDefault();
     if (this.props.id !== undefined && this.props.id !== '') {
       axios
-        .post(`/api/category/${this.props.id}`, this.state.category)
+        .post(`/api/update/categories/${this.props.id}`, this.state.category)
         .then((res) => {
           this.closeModal();
           this.props.handleRefreshData();
@@ -97,7 +97,7 @@ class CategoryEdit extends React.Component {
         });
     } else {
       axios
-        .post(`/api/category/`, this.state.category)
+        .post(`/api/categories/create`, this.state.category)
         .then((res) => {
           this.closeModal();
           this.props.handleRefreshData();

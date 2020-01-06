@@ -18,7 +18,7 @@ class CategoryAdmin extends React.Component {
 
   getData = () => {
     axios
-      .get('/api/category')
+      .get('/api/categories/list')
       .then((res) => {
         this.setState({
           categories: Object.values(res.data),

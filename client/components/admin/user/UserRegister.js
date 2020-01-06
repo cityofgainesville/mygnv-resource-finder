@@ -114,7 +114,7 @@ const UserRegister = (props) => {
     };
 
     try {
-      const res = await axios.post('/api/user/register', postContent);
+      const res = await axios.post('/api/users/register', postContent);
       if (res.data.success) {
         setHadError(false);
         setSuccess(true);
@@ -137,7 +137,7 @@ const UserRegister = (props) => {
 
   useEffect(() => {
     axios
-      .get('/api/provider')
+      .get('/api/providers/list')
       .then((res) => {
         setProviders(Object.values(res.data));
       })
@@ -146,7 +146,7 @@ const UserRegister = (props) => {
       });
 
     axios
-      .get('/api/category', {})
+      .get('/api/categories/list', {})
       .then((res) => {
         setCategories(Object.values(res.data));
       })

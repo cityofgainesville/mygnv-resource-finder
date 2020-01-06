@@ -11,7 +11,7 @@ const AuthState = (props) => {
 
   const checkIfAuthenticated = () => {
     axios
-      .post('/api/user/isLoggedIn')
+      .post('/api/users/isLoggedIn')
       .then((res) => {
         if (res.data.success) setCurrentUser(res.data.user);
       })

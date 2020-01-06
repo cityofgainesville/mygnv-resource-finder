@@ -34,7 +34,7 @@ const Login = (props) => {
   const doLogin = (event) => {
     event.preventDefault();
     axios
-      .post('/api/user/login', {
+      .post('/api/users/login', {
         email: email,
         password: password,
       })

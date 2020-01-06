@@ -27,7 +27,7 @@ const CategoryView = (props) => {
   const getData = () => {
     if (!props.id) {
       axios
-        .get('/api/category/topLevelCategory')
+        .get('/api/categories/listTopLevel')
         .then((res) => {
           setCategories(Object.values(res.data));
           setLoadingComplete(true);
@@ -37,14 +37,14 @@ const CategoryView = (props) => {
         });
     } else {
       axios
-        .get(`/api/category/${props.id}`)
+        .get(`/api/categories/${props.id}`)
         .then((res) => {
           const queryParam = shouldRenderProviders(res.data)
             ? 'providers'
             : 'children';
           console.log(queryParam);
           axios
-            .get(`/api/category/${props.id}`, {
+            .get(`/api/categories/${props.id}`, {
               params: { [queryParam]: true },
             })
             .then((res) => {

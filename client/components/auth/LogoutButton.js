@@ -13,7 +13,7 @@ const AuthButton = (props) => {
 
   const logout = () => {
     axios
-      .post('/api/user/logout')
+      .post('/api/users/logout')
       .then((res) => {
         setCurrentUser(null);
       })

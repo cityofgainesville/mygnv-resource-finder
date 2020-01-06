@@ -62,6 +62,13 @@ exports.logout = (req, res) => {
 
 // Update a user
 exports.update = async (req, res) => {
+  if (req.userToUpdate && req.user.role === 'Owner')
+    await adminUpdate(req, res);
+  else await currentUserUpdate(req, res);
+};
+
+// Update the currently logged in user
+exports.currentUserUpdate = async (req, res) => {
   try {
     const currentUser = req.user;
     const infoToUpdate = req.body;
@@ -95,8 +102,8 @@ exports.update = async (req, res) => {
   }
 };
 
-// Allow owners to update other users
-exports.ownerUpdate = async (req, res) => {
+// Allow admins to update other users
+exports.adminUpdate = async (req, res) => {
   try {
     const currentUser = req.user;
     const infoToUpdate = req.body;
@@ -124,6 +131,22 @@ exports.ownerUpdate = async (req, res) => {
     console.log(err);
     return res.status(500).end();
   }
+};
+
+exports.read = (req, res) => {
+  if (res.user.role === 'Owner') res.json(req.userToUpdate);
+  else res.status(403).end();
+};
+
+// Delete a user
+exports.delete = (req, res) => {
+  const user = req.userToUpdate;
+  User.deleteOne(user, (err) => {
+    if (err) {
+      console.log(err);
+      res.status(400).send(err);
+    } else res.status(200).end();
+  });
 };
 
 // Middleware to get a user from database by ID, save in req.userToUpdate

@@ -13,7 +13,7 @@ const IndivProvider = (props) => {
   // Get provider from backend based on id passed in
   useEffect(() => {
     axios
-      .get(`/api/provider/${props.id}`)
+      .get(`/api/providers/${props.id}`)
       .then((res) => {
         setProvider(res.data);
       })

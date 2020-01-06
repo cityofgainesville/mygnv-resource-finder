@@ -26,7 +26,7 @@ class SubCategoryEdit extends React.Component {
     const id = this.props.id;
     if (id !== undefined && id !== null && id !== '') {
       axios
-        .get(`/api/category/${id}`)
+        .get(`/api/categories/${id}`)
         .then((res) => {
           this.setState({ category: res.data });
         })
@@ -77,7 +77,7 @@ class SubCategoryEdit extends React.Component {
     event.preventDefault();
     if (this.props.id !== undefined && this.props.id !== '') {
       axios
-        .post(`/api/category/${this.props.id}`, this.state.category)
+        .post(`/api/categories/update/${this.props.id}`, this.state.category)
         .then((res) => {
           this.closeModal();
           this.props.handleRefreshData();
@@ -88,7 +88,7 @@ class SubCategoryEdit extends React.Component {
         });
     } else {
       axios
-        .post(`/api/category/`, this.state.category)
+        .post(`/api/categories/create`, this.state.category)
         .then((res) => {
           this.closeModal();
           this.props.handleRefreshData();

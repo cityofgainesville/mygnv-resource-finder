@@ -19,7 +19,7 @@ class SubCategoryFormElement extends React.Component {
     this.setState({ currentSubCategoryOf: [...this.props.subCategoryOf] });
 
     axios
-      .get('/api/category')
+      .get('/api/categories/list')
       .then((res) => {
         this.setState({
           categories: Object.values(res.data),

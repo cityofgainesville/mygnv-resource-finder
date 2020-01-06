@@ -16,7 +16,7 @@ const Search = (props) => {
   // Loads in all providers for filtering through
   useEffect(() => {
     axios
-      .get(`/api/provider`)
+      .get(`/api/providers/list`)
       .then((res) => {
         setProviders(res.data);
       })

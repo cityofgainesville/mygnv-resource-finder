@@ -56,9 +56,9 @@ module.exports.start = () => {
   app.use(passport.session());
 
   // Routes
-  app.use('/api/provider', providerRouter);
-  app.use('/api/category', categoryRouter);
-  app.use('/api/user', userRouter);
+  app.use('/api/providers', providerRouter);
+  app.use('/api/categories', categoryRouter);
+  app.use('/api/users', userRouter);
 
   // Register all routes before registering webpack middleware
 
