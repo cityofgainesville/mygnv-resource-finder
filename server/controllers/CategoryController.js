@@ -1,20 +1,5 @@
 const Category = require('../models/CategorySchema');
 
-// Create a category
-exports.create = (req, res) => {
-  const category = new Category(req.body);
-
-  category.save((err) => {
-    if (err) {
-      console.log(err);
-      res.status(400).send(err);
-    } else {
-      res.json(category);
-      console.log(category);
-    }
-  });
-};
-
 // Get all the categories
 /* 
   Accepts query parameters in this format
@@ -52,7 +37,7 @@ exports.listTopLevel = (req, res) => {
     populateOptions = [...populateOptions, 'children'];
   if (req.query.providers === 'true')
     populateOptions = [...populateOptions, 'providers'];
-  Category.find({ isSubcategory: false })
+  Category.find({ is_subcategory: false })
     .populate(...populateOptions)
     .exec((err, categories) => {
       if (err) {
@@ -67,6 +52,21 @@ exports.listTopLevel = (req, res) => {
 // Get the current category
 exports.read = (req, res) => {
   res.json(req.category);
+};
+
+// Create a category
+exports.create = (req, res) => {
+  const category = new Category(req.body);
+
+  category.save((err) => {
+    if (err) {
+      console.log(err);
+      res.status(400).send(err);
+    } else {
+      res.json({ success: true, category: category });
+      console.log(category);
+    }
+  });
 };
 
 // Update a category
@@ -85,7 +85,7 @@ exports.update = (req, res) => {
       console.log(err);
       res.status(400).send(err);
     } else {
-      res.json(category);
+      res.json({ success: true, category: category });
       console.log(category);
     }
   });

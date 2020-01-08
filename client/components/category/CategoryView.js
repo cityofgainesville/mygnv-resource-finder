@@ -12,7 +12,7 @@ const CategoryView = (props) => {
   const [loadingComplete, setLoadingComplete] = useState(false);
 
   const shouldRenderProviders = (category) => {
-    return category.isSubcategory == 'true' || category.children.length === 0;
+    return category.is_subcategory || category.children.length === 0;
   };
 
   // Runs when props.id changes (including on initial mount)

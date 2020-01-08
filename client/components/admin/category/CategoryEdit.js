@@ -1,204 +1,344 @@
-import React from 'reactn';
+import React, { useState, useGlobal, useEffect } from 'reactn';
 import { Button, Form, Modal, Alert, Row, Col } from 'react-bootstrap';
+import Select from 'react-select';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
 // Category edit modal form, uses custom multiselect form element
 // Used for category admin portal
 
-class CategoryEdit extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      category: {
-        name: '',
-        subcategory_of: [],
-        icon_name: 'null',
-        is_lowest_level: false,
-      },
-      hadError: false,
-      modalIsDisplayed: false,
-    };
-  }
+const CategoryEdit = (props) => {
+  const [currentUser] = useGlobal('currentUser');
 
-  componentDidMount() {
-    axios
-      .get(`/api/categories/${this.props.id}`)
-      .then((res) => {
-        this.setState({ category: res.data });
+  const categoryToEdit = props.id
+    ? props.categories.filter((category) => {
+        return category._id === props.id;
+      })[0]
+    : null;
+
+  const providerOptions = props.providers.map((provider) => {
+    return { value: provider._id, label: provider.name };
+  });
+
+  const categoryOptions = props.categories.map((category) => {
+    return { value: category._id, label: category.name };
+  });
+
+  const subcategoryOptions = props.categories
+    .filter((category) => {
+      return category.is_subcategory;
+    })
+    .map((category) => {
+      return { value: category._id, label: category.name };
+    });
+
+  const boolOptions = [
+    { value: false, label: 'False' },
+    { value: true, label: 'True' },
+  ];
+
+  const [success, setSuccess] = useState(false);
+  const [hadError, setHadError] = useState(false);
+  const [modalIsDisplayed, setModalIsDisplayed] = useState(false);
+  const [showProviders, setShowProviders] = useState(boolOptions[0]);
+
+  const [name, setName] = useState('');
+  const [providers, setProviders] = useState([]);
+  const [children, setChildren] = useState([]);
+  const [iconName, setIconName] = useState('null');
+  const [isSubcategory, setIsSubcategory] = useState(boolOptions[0]);
+
+  const populateExistingCategory = () => {
+    setName(categoryToEdit.name);
+    const providerIds = new Set(categoryToEdit.providers);
+    setProviders(
+      providerOptions.filter((option) => {
+        return providerIds.has(option.value);
       })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  handleNameChange = (event) => {
-    this.setState({
-      category: Object.assign({}, this.state.category, {
-        name: event.target.value,
-      }),
-    });
+    );
+    const categoryIds = new Set(categoryToEdit.children);
+    setChildren(
+      categoryOptions.filter((option) => {
+        return categoryIds.has(option.value);
+      })
+    );
+    setIconName(categoryToEdit.icon_name);
+    setIsSubcategory(
+      categoryToEdit.is_subcategory ? boolOptions[1] : boolOptions[0]
+    );
   };
 
-  handleIconNameChange = (event) => {
-    this.setState({
-      category: Object.assign({}, this.state.category, {
-        icon_name: event.target.value,
-      }),
-    });
+  useEffect(() => {
+    if (props.id) populateExistingCategory();
+  }, [props]);
+
+  const handleNameChange = (event) => {
+    setName(event.target.value);
   };
 
-  handleIsLowestLevelChange = (event) => {
-    this.setState({
-      category: Object.assign({}, this.state.category, {
-        is_lowest_level: !this.state.category.is_lowest_level,
-      }),
-    });
+  const handleProvidersChange = (value) => {
+    setProviders(value);
   };
 
-  handleSubcategoryOfChange = (event) => {
-    console.log(event.target.value);
-    this.setState({
-      category: Object.assign({}, this.state.category, {
-        subcategory_of: event.target.value,
-      }),
-    });
+  const handleChildrenChange = (value) => {
+    setChildren(value);
   };
 
-  handlePasswordChange = (event) => {
-    this.setState({ password: event.target.value });
+  const handleIconNameChange = (event) => {
+    setIconName(event.target.value);
   };
 
-  openModal = () => {
-    this.setState({
-      modalIsDisplayed: true,
-    });
+  const handleIsSubcategoryChange = (value) => {
+    setIsSubcategory(value);
   };
 
-  closeModal = () => {
-    this.setState({
-      modalIsDisplayed: false,
-      hadError: false,
-    });
+  const handleShowProvidersChange = (value) => {
+    setShowProviders(value);
   };
 
-  submit = (event) => {
+  const openModal = () => {
+    setModalIsDisplayed(true);
+  };
+
+  const closeModal = () => {
+    setModalIsDisplayed(false);
+    setHadError(false);
+  };
+
+  const doSubmit = async (event) => {
     event.preventDefault();
-    if (this.props.id !== undefined && this.props.id !== '') {
-      axios
-        .post(`/api/update/categories/${this.props.id}`, this.state.category)
-        .then((res) => {
-          this.closeModal();
-          this.props.handleRefreshData();
-        })
-        .catch((err) => {
-          console.log(err);
-          this.setState({ hadError: true });
-        });
-    } else {
-      axios
-        .post(`/api/categories/create`, this.state.category)
-        .then((res) => {
-          this.closeModal();
-          this.props.handleRefreshData();
-        })
-        .catch((err) => {
-          console.log(err);
-          this.setState({ hadError: true });
-        });
+
+    const processMaybeArray = (maybeArray) => {
+      if (maybeArray === null) return [];
+      return Array.isArray(maybeArray)
+        ? maybeArray.map((e) => e.value)
+        : [maybeArray.value];
+    };
+
+    let postContent = {
+      name: name,
+      providers: processMaybeArray(providers), // this is NOT stored in plaintext, passport-local-mongoose hashes and salts it, and only then stores it
+      children: processMaybeArray(children),
+      icon_name: iconName !== '' ? iconName : 'null',
+      is_subcategory: processMaybeArray(isSubcategory)[0],
+    };
+
+    const sleep = (milliseconds) => {
+      return new Promise((resolve) => setTimeout(resolve, milliseconds));
+    };
+
+    const postURL =
+      props.id !== undefined && props.id !== ''
+        ? `/api/categories/update/${props.id}`
+        : `/api/categories/create`;
+
+    try {
+      const res = await axios.post(postURL, postContent);
+      if (res.data.success) {
+        setHadError(false);
+        setSuccess(true);
+        await sleep(500);
+        closeModal();
+        props.refreshDataCallback();
+      } else setHadError(true);
+    } catch (err) {
+      console.log(err);
+      setHadError(true);
     }
   };
 
-  render() {
+  const renderIconName = () => {
     return (
-      <React.Fragment>
-        <Button variant='primary' onClick={this.openModal}>
-          {this.props.buttonName}
-        </Button>
-        <Modal show={this.state.modalIsDisplayed} onHide={this.closeModal}>
-          <Modal.Header closeButton>
-            <Modal.Title>
-              {this.props.id !== undefined && this.props.id !== ''
-                ? `Edit ${this.state.category.name}`
-                : 'Add Category'}
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {this.state.hadError ? (
-              <Alert
-                variant='danger'
-                style={{
-                  marginTop: '1em',
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
-                }}
-              >
-                An error has occurred. Please try again.
-              </Alert>
-            ) : null}
-            <Form>
-              <Form.Group controlId='formName'>
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  value={this.state.category.name}
-                  onChange={this.handleNameChange}
-                  placeholder='Name'
-                />
-              </Form.Group>
-
-              <Row>
-                <Col>
-                  <Form.Group controlId='formIconName'>
-                    <Form.Label>Icon Name</Form.Label>
-                    <Form.Control
-                      value={this.state.category.icon_name}
-                      onChange={this.handleIconNameChange}
-                      placeholder='Fontawesome Icon Name'
-                    />
-                  </Form.Group>
-                </Col>
-                <Col sm='auto'>
-                  <Form.Label>Icon Preview</Form.Label>
-                  <i
-                    className={`fal fa-${
-                      this.state.category.icon_name
-                    } fa-${3}x`}
-                    style={{
-                      margin: 'auto',
-                      display: 'block',
-                    }}
-                  ></i>
-                </Col>
-              </Row>
-
-              <Form.Group controlId='formLowestLevelCategoryCheckbox'>
-                <Form.Switch
-                  checked={this.state.category.is_lowest_level}
-                  onChange={this.handleIsLowestLevelChange}
-                  type='checkbox'
-                  label='Lowest Level Category'
-                />
-              </Form.Group>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant='secondary' onClick={this.closeModal}>
-              Close
-            </Button>
-            <Button onClick={this.submit} variant='primary' type='submit'>
-              Submit Edits
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </React.Fragment>
+      <Row>
+        <Col>
+          <Form.Group controlId='formIconName'>
+            <Form.Label>Icon Name</Form.Label>
+            <Form.Control
+              value={iconName}
+              onChange={handleIconNameChange}
+              placeholder='Fontawesome Icon Name'
+            />
+          </Form.Group>
+        </Col>
+        <Col sm='auto'>
+          <Form.Label>Icon Preview</Form.Label>
+          <i
+            className={`fal fa-${iconName} fa-${3}x`}
+            style={{
+              margin: 'auto',
+              display: 'block',
+            }}
+          ></i>
+        </Col>
+      </Row>
     );
-  }
-}
+  };
+
+  const renderProviders = () => {
+    const showProvidersForm = (
+      <Form.Group>
+        <Form.Label>Show Providers (False For Readability)</Form.Label>
+        <Select
+          isSearchable
+          isClearable={false}
+          value={showProviders}
+          onChange={handleShowProvidersChange}
+          options={boolOptions}
+        />
+      </Form.Group>
+    );
+
+    const providersEdit = (
+      <Form.Group>
+        <Form.Label>Providers</Form.Label>
+        <Select
+          isMulti
+          isSearchable
+          isClearable={false}
+          value={providers}
+          onChange={handleProvidersChange}
+          options={providerOptions}
+        />
+      </Form.Group>
+    );
+
+    return (
+      <>
+        {!isSubcategory.value ? showProvidersForm : null}
+        {showProviders.value || isSubcategory.value ? providersEdit : null}
+      </>
+    );
+  };
+
+  const renderChildren = () => {
+    if (!isSubcategory.value) {
+      return (
+        <Form.Group>
+          <Form.Label>Children</Form.Label>
+          <Select
+            isMulti
+            isSearchable
+            isClearable={false}
+            value={children}
+            onChange={handleChildrenChange}
+            options={subcategoryOptions}
+          />
+        </Form.Group>
+      );
+    } else return null;
+  };
+
+  const renderStatus = () => {
+    if (success && !hadError) {
+      return (
+        <Alert
+          variant='success'
+          style={{
+            marginTop: '1em',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
+        >
+          Successfully registered user.
+        </Alert>
+      );
+    } else if (hadError) {
+      return (
+        <Alert
+          variant='danger'
+          style={{
+            marginTop: '1em',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
+        >
+          An error has occurred. Please try again.
+        </Alert>
+      );
+    } else return null;
+  };
+
+  const renderSubmitButton = () => {
+    if (success)
+      return (
+        <Button onClick={doSubmit} variant='success' type='submit'>
+          Success
+        </Button>
+      );
+    else if (hadError) {
+      return (
+        <Button onClick={doSubmit} variant='warning' type='submit'>
+          Try Again
+        </Button>
+      );
+    } else
+      return (
+        <Button onClick={doSubmit} variant='primary' type='submit'>
+          Submit
+        </Button>
+      );
+  };
+
+  return (
+    <React.Fragment>
+      <Button variant='primary' onClick={openModal} style={props.style}>
+        {props.buttonName}
+      </Button>
+      <Modal show={modalIsDisplayed} onHide={closeModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            {props.id !== undefined && props.id !== ''
+              ? `Edit ${name}`
+              : 'Add Category'}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {renderStatus()}
+          <Form>
+            <Form.Group controlId='formName'>
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                value={name}
+                onChange={handleNameChange}
+                placeholder='Name'
+              />
+            </Form.Group>
+
+            {renderIconName()}
+
+            <Form.Group>
+              <Form.Label>Is Subcategory</Form.Label>
+              <Select
+                isSearchable
+                isClearable={false}
+                value={isSubcategory}
+                onChange={handleIsSubcategoryChange}
+                options={boolOptions}
+              />
+            </Form.Group>
+            {renderChildren()}
+
+            {renderProviders()}
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant='secondary' onClick={closeModal}>
+            Close
+          </Button>
+          {renderSubmitButton()}
+        </Modal.Footer>
+      </Modal>
+    </React.Fragment>
+  );
+};
 
 CategoryEdit.propTypes = {
   id: PropTypes.string,
+  style: PropTypes.object,
   buttonName: PropTypes.string.isRequired,
-  handleRefreshData: PropTypes.func.isRequired,
+  refreshDataCallback: PropTypes.func.isRequired,
+  providers: PropTypes.array.isRequired,
+  categories: PropTypes.array.isRequired,
 };
 
 export default CategoryEdit;

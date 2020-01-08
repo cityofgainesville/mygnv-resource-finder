@@ -1,177 +1,164 @@
-import React from 'reactn';
+import React, { useState, useEffect } from 'reactn';
 import { ListGroup, Container, Row, Col, Form } from 'react-bootstrap';
 import axios from 'axios';
 
 import CategoryEdit from './CategoryEdit';
-import SubCategoryEdit from './SubCategoryEdit';
 import CategoryDelete from './CategoryDelete';
 
 // This component creates an admin view
 // With filtering for adding, modifying, and
 // deleting categories and subcategories
 
-class CategoryAdmin extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { categories: [], filterText: '' };
-  }
+const CategoryAdmin = (props) => {
+  const [categories, setCategories] = useState([]);
+  const [providers, setProviders] = useState([]);
+  const [filterText, setFilterText] = useState('');
 
-  getData = () => {
+  const getData = () => {
     axios
       .get('/api/categories/list')
       .then((res) => {
-        this.setState({
-          categories: Object.values(res.data),
-        });
+        console.log(res.data);
+        setCategories(Object.values(res.data));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    axios
+      .get('/api/providers/list')
+      .then((res) => {
+        setProviders(Object.values(res.data));
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  componentDidMount() {
-    this.getData();
-  }
+  useEffect(() => {
+    getData();
+  }, []);
 
-  handleRefreshData = () => {
-    this.getData();
+  const handleFilterTextChange = (event) => {
+    setFilterText(event.target.value);
   };
 
-  handleFilterChange = (event) => {
-    this.setState({ filterText: event.target.value });
+  const handleRefreshData = () => {
+    getData();
   };
 
-  render() {
-    const topLevelCategories = this.state.categories
-      .filter((category) => {
-        return (
-          category.subcategory_of.length == 0 &&
-          category.name
-            .toLowerCase()
-            .includes(this.state.filterText.toLowerCase())
-        );
-      })
-      .map((category) => {
-        return (
-          <ListGroup.Item key={category._id}>
+  const mapCategories = (categoriesToMap) => {
+    return categoriesToMap.map((category) => {
+      return (
+        <ListGroup.Item key={category._id}>
+          <CategoryEdit
+            refreshDataCallback={handleRefreshData}
+            categories={categories}
+            providers={providers}
+            buttonName='Edit'
+            id={category._id}
+          />{' '}
+          <CategoryDelete
+            categories={categories}
+            refreshDataCallback={handleRefreshData}
+            id={category._id}
+          />
+          <h5
+            style={{
+              color: 'black',
+              fontWeight: 'bold',
+              display: 'inline',
+              paddingLeft: '2em',
+            }}
+          >
+            {category.name}
+          </h5>
+        </ListGroup.Item>
+      );
+    });
+  };
+
+  const topLevelCategories = mapCategories(
+    categories.filter((category) => {
+      return (
+        !category.is_subcategory &&
+        category.name.toLowerCase().includes(filterText.toLowerCase())
+      );
+    })
+  );
+
+  console.log(topLevelCategories);
+
+  const subcategories = mapCategories(
+    categories.filter((category) => {
+      return (
+        category.is_subcategory &&
+        category.name.toLowerCase().includes(filterText.toLowerCase())
+      );
+    })
+  );
+
+  // Center the two columns of top level categories and subcategories
+  return (
+    <Container>
+      <Row style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <Col>
+          <Form style={{ width: '100%' }}>
             <CategoryEdit
-              handleRefreshData={this.handleRefreshData}
-              buttonName='Edit'
-              id={category._id}
-            />{' '}
-            <CategoryDelete
-              handleRefreshData={this.handleRefreshData}
-              id={category._id}
+              refreshDataCallback={handleRefreshData}
+              categories={categories}
+              providers={providers}
+              buttonName='Add Category'
+              style={{ marginBottom: '1em' }}
             />
-            <h5
-              style={{
-                color: 'black',
-                fontWeight: 'bold',
-                display: 'inline',
-                paddingLeft: '2em',
-              }}
-            >
-              {category.name}
-            </h5>
-          </ListGroup.Item>
-        );
-      });
-
-    const subCategories = this.state.categories
-      .filter((category) => {
-        return (
-          category.subcategory_of.length > 0 &&
-          category.name
-            .toLowerCase()
-            .includes(this.state.filterText.toLowerCase())
-        );
-      })
-      .map((category) => {
-        return (
-          <ListGroup.Item key={category._id}>
-            <SubCategoryEdit
-              handleRefreshData={this.handleRefreshData}
-              buttonName='Edit'
-              id={category._id}
-            />{' '}
-            <CategoryDelete
-              handleRefreshData={this.handleRefreshData}
-              id={category._id}
-            />
-            <h5
-              style={{
-                color: 'black',
-                fontWeight: 'bold',
-                display: 'inline',
-                paddingLeft: '2em',
-              }}
-            >
-              {category.name}
-            </h5>
-          </ListGroup.Item>
-        );
-      });
-
-    // Center the two columns of top level categories and subcategories
-    return (
-      <Container>
-        <Row style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <Col>
-            <Form style={{ width: '100%' }}>
-              <Form.Group controlId='formFilterText'>
-                <Form.Label>
-                  <strong>Filter categories</strong>
-                </Form.Label>
-                <Form.Control
-                  value={this.state.filterText}
-                  onChange={this.handleFilterChange}
-                  placeholder='Filter categories'
-                />
-              </Form.Group>
-            </Form>
-          </Col>
-          <Col sm='auto'>
-            <Row style={{ marginBottom: '0.5em' }}>
-              <CategoryEdit
-                handleRefreshData={this.handleRefreshData}
-                buttonName='Add Category'
-                style={{ margins: 'auto auto' }}
-              />
-            </Row>
-            <Row>
-              <SubCategoryEdit
-                handleRefreshData={this.handleRefreshData}
-                buttonName='Add SubCategory'
-                style={{ margins: 'auto auto' }}
-              />
-            </Row>
-          </Col>
-        </Row>
-        <Row>
-          <ListGroup
-            style={{
-              display: 'inline-block',
-              margin: '0 auto',
-              alignSelf: 'flex-start',
-            }}
-          >
-            <strong>Top Level Categories</strong>
-            {topLevelCategories}
-          </ListGroup>
-          <ListGroup
-            style={{
-              display: 'inline-block',
-              margin: '0 auto',
-              alignSelf: 'flex-start',
-            }}
-          >
-            <strong>SubCategories</strong>
-            {subCategories}
-          </ListGroup>
-        </Row>
-      </Container>
-    );
-  }
-}
+            <Form.Group controlId='formFilterText'>
+              <Form.Label>
+                <strong>Filter categories</strong>
+              </Form.Label>
+              <Row>
+                <Col>
+                  <Form.Control
+                    value={filterText}
+                    onChange={handleFilterTextChange}
+                    placeholder='Filter categories'
+                  />
+                </Col>
+                <Col sm='auto'>
+                  <Row
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  ></Row>
+                </Col>
+              </Row>
+            </Form.Group>
+          </Form>
+        </Col>
+      </Row>
+      <Row>
+        <ListGroup
+          style={{
+            display: 'inline-block',
+            margin: '0 auto',
+            alignSelf: 'flex-start',
+          }}
+        >
+          <strong>Top Level Categories</strong>
+          {topLevelCategories}
+        </ListGroup>
+        <ListGroup
+          style={{
+            display: 'inline-block',
+            margin: '0 auto',
+            alignSelf: 'flex-start',
+          }}
+        >
+          <strong>Subcategories</strong>
+          {subcategories}
+        </ListGroup>
+      </Row>
+    </Container>
+  );
+};
 
 export default CategoryAdmin;

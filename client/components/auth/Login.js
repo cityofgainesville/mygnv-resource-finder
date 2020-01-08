@@ -143,8 +143,12 @@ const Login = (props) => {
 
   return (
     <Row
-      className='justify-content-md-center'
-      style={{ margin: 'auto', marginBottom: '1em' }}
+      style={{
+        margin: 'auto',
+        marginBottom: '1em',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
     >
       {currentUser ? alreadyLoggedIn() : needsLogin}
     </Row>

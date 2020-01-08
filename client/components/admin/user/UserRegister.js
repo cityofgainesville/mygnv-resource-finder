@@ -107,8 +107,6 @@ const UserRegister = (props) => {
       cat_can_edit_provider_in: processMaybeArray(catCanEditProviderIn),
     };
 
-    console.log(postContent);
-
     const sleep = (milliseconds) => {
       return new Promise((resolve) => setTimeout(resolve, milliseconds));
     };
@@ -123,6 +121,7 @@ const UserRegister = (props) => {
       } else setHadError(true);
     } catch (err) {
       console.log(err);
+      setHadError(true);
     }
   };
 
@@ -278,7 +277,7 @@ const UserRegister = (props) => {
 
   return (
     <React.Fragment>
-      <Button variant='primary' onClick={openModal}>
+      <Button variant='primary' onClick={openModal} style={props.style}>
         Register
       </Button>
       <Modal show={modalIsDisplayed} onHide={closeModal}>

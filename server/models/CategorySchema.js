@@ -26,7 +26,7 @@ const categorySchema = new Schema({
     required: true,
     type: String,
   },
-  isSubcategory: { required: true, type: String },
+  is_subcategory: { required: true, type: Boolean },
 });
 
 // Add updated_at and created_at

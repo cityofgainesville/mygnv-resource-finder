@@ -140,6 +140,7 @@ const UserEdit = (props) => {
       } else setHadError(true);
     } catch (err) {
       console.log(err);
+      setHadError(true);
     }
   };
 
@@ -295,7 +296,7 @@ const UserEdit = (props) => {
 
   return (
     <React.Fragment>
-      <Button variant='primary' onClick={openModal}>
+      <Button variant='primary' onClick={openModal} style={props.style}>
         Register
       </Button>
       <Modal show={modalIsDisplayed} onHide={closeModal}>
