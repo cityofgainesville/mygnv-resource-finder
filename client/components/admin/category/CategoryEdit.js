@@ -10,28 +10,48 @@ import axios from 'axios';
 const CategoryEdit = (props) => {
   const [currentUser] = useGlobal('currentUser');
 
-  const categoryToEdit = props.id
-    ? props.categories.filter((category) => {
-        return category._id === props.id;
-      })[0]
-    : null;
+  const getCategoryToEditFromProps = () => {
+    return props.id
+      ? props.categories.filter((category) => {
+          return category._id === props.id;
+        })[0]
+      : null;
+  };
 
-  const providerOptions = props.providers.map((provider) => {
-    return { value: provider._id, label: provider.name };
-  });
+  const generateProviderOptions = () => {
+    return props.providers.map((provider) => {
+      return { value: provider._id, label: provider.name };
+    });
+  };
 
-  const categoryOptions = props.categories.map((category) => {
-    return { value: category._id, label: category.name };
-  });
-
-  const subcategoryOptions = props.categories
-    .filter((category) => {
-      return category.is_subcategory;
-    })
-    .map((category) => {
+  const generateCategoryOptions = () => {
+    return props.categories.map((category) => {
       return { value: category._id, label: category.name };
     });
+  };
 
+  const generateSubcategoryOptions = () => {
+    return props.categories
+      .filter((category) => {
+        return category.is_subcategory;
+      })
+      .map((category) => {
+        return { value: category._id, label: category.name };
+      });
+  };
+
+  const [categoryToEdit, setCategoryToEdit] = useState(
+    getCategoryToEditFromProps()
+  );
+  const [providerOptions, setProviderOptions] = useState(
+    generateProviderOptions()
+  );
+  const [categoryOptions, setCategoryOptions] = useState(
+    generateCategoryOptions()
+  );
+  const [subcategoryOptions, setSubcategoryOptions] = useState(
+    generateSubcategoryOptions()
+  );
   const boolOptions = [
     { value: false, label: 'False' },
     { value: true, label: 'True' },
@@ -51,6 +71,12 @@ const CategoryEdit = (props) => {
   const populateExistingCategory = () => {
     setName(categoryToEdit.name);
     const providerIds = new Set(categoryToEdit.providers);
+    console.log(providerIds);
+    console.log(
+      providerOptions.filter((option) => {
+        return providerIds.has(option.value);
+      })
+    );
     setProviders(
       providerOptions.filter((option) => {
         return providerIds.has(option.value);
@@ -69,8 +95,17 @@ const CategoryEdit = (props) => {
   };
 
   useEffect(() => {
-    if (props.id) populateExistingCategory();
+    setCategoryToEdit(getCategoryToEditFromProps());
+    setProviderOptions(generateProviderOptions());
+    setCategoryOptions(generateCategoryOptions());
+    setSubcategoryOptions(generateSubcategoryOptions());
   }, [props]);
+
+  useEffect(() => {
+    if (props.id && categoryToEdit) {
+      populateExistingCategory();
+    }
+  }, [categoryToEdit, providerOptions, categoryOptions, subcategoryOptions]);
 
   const handleNameChange = (event) => {
     setName(event.target.value);
@@ -284,7 +319,7 @@ const CategoryEdit = (props) => {
       <Button variant='primary' onClick={openModal} style={props.style}>
         {props.buttonName}
       </Button>
-      <Modal show={modalIsDisplayed} onHide={closeModal}>
+      <Modal show={modalIsDisplayed} onHide={closeModal} size='lg'>
         <Modal.Header closeButton>
           <Modal.Title>
             {props.id !== undefined && props.id !== ''

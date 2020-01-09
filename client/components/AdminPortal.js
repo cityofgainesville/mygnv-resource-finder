@@ -4,7 +4,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import RedirectButton from './RedirectButton';
 
 import Login from './auth/Login';
-import UserRegister from './admin/user/UserRegister';
+import UserAdmin from './admin/user/UserAdmin';
 import CategoryAdmin from './admin/category';
 import { withRouter } from 'react-router-dom';
 
@@ -83,18 +83,7 @@ const AdminPortal = (props) => {
           path={paths.categoriesAdminPath}
           render={() => <CategoryAdmin />}
         />
-        <Route
-          exact
-          path={paths.usersAdminPath}
-          render={() => (
-            <Row
-              className='justify-content-md-center'
-              style={{ margin: 'auto', marginBottom: '1em' }}
-            >
-              <UserRegister />
-            </Row>
-          )}
-        />
+        <Route exact path={paths.usersAdminPath} render={() => <UserAdmin />} />
       </Switch>
     </React.Fragment>
   );

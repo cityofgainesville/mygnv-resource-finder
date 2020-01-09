@@ -18,7 +18,6 @@ const CategoryAdmin = (props) => {
     axios
       .get('/api/categories/list')
       .then((res) => {
-        console.log(res.data);
         setCategories(Object.values(res.data));
       })
       .catch((err) => {
@@ -85,8 +84,6 @@ const CategoryAdmin = (props) => {
       );
     })
   );
-
-  console.log(topLevelCategories);
 
   const subcategories = mapCategories(
     categories.filter((category) => {

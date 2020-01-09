@@ -47,7 +47,7 @@ const UserEdit = (props) => {
     axios
       .get(`/api/users/${id}`)
       .then((res) => {
-        setUserToEdit(res.data)
+        setUserToEdit(res.data);
         this.setState({ category: res.data });
       })
       .catch((err) => {
@@ -56,7 +56,7 @@ const UserEdit = (props) => {
   };
 
   // if props.id is passed in then we are editing another user, make sure currentUser is owner
-  useEffect(() => {if (props.id)}, []);
+  // useEffect(() => {if (props.id)}, []);
 
   const clearState = () => {
     setHadError(false);
@@ -373,9 +373,9 @@ const UserEdit = (props) => {
   );
 };
 
-UserRegister.propTypes = {
+UserEdit.propTypes = {
   history: PropTypes.instanceOf(Object).isRequired,
   location: PropTypes.instanceOf(Object).isRequired,
 };
 
-export default UserRegister;
+export default UserEdit;

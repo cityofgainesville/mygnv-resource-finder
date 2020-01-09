@@ -133,8 +133,33 @@ exports.adminUpdate = async (req, res) => {
   }
 };
 
+// Get all the users
+/* 
+  Accepts query parameters in this format
+  categories=true // or false
+  providers=true // or false
+  True will populate the array, false will leave it as an array of ObjectIDs.
+*/
+exports.list = (req, res) => {
+  if (req.user.role !== 'Owner') res.status(403).end();
+  let populateOptions = [];
+  if (req.query.categories === 'true')
+    populateOptions = [...populateOptions, 'cat_can_edit_provider_in'];
+  if (req.query.providers === 'true')
+    populateOptions = [...populateOptions, 'provider_can_edit'];
+  User.find({})
+    .populate(...populateOptions)
+    .exec((err, users) => {
+      if (err) {
+        res.status(400).send(err);
+      } else {
+        res.json(users);
+      }
+    });
+};
+
 exports.read = (req, res) => {
-  if (res.user.role === 'Owner') res.json(req.userToUpdate);
+  if (req.user.role === 'Owner') res.json(req.userToUpdate);
   else res.status(403).end();
 };
 

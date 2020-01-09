@@ -15,6 +15,11 @@ router.route('/logout').post(userController.logout);
 // POST will return status: true in JSON if logged in
 router.route('/isLoggedIn').post(userController.isLoggedIn);
 
+// Path is /api/users/list
+// GET to list users
+// Only user with role === 'Owner' can do this
+router.route('/list').get(userController.isAuthenticated, userController.list);
+
 // Path is /api/users/:userId
 // GET to read user by id
 router
