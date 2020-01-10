@@ -8,14 +8,18 @@ import axios from 'axios';
 const CategoryDelete = (props) => {
   const [currentUser] = useGlobal('currentUser');
 
-  const [category, setCategory] = useState(
-    props.id
+  const getCategoryToEditFromProps = () => {
+    return props.id
       ? props.categories.filter((category) => {
-          return category._id === props.id;
-        })[0]
-      : null
-  );
+        return category._id === props.id;
+      })[0]
+      : null;
+  };
 
+  const [categoryToEdit, setCategoryToEdit] = useState(
+    getCategoryToEditFromProps()
+  );
+  const [success, setSuccess] = useState(false);
   const [hadError, setHadError] = useState(false);
   const [modalIsDisplayed, setModalIsDisplayed] = useState(false);
 
@@ -28,17 +32,56 @@ const CategoryDelete = (props) => {
     setHadError(false);
   };
 
-  const submit = (event) => {
+  const doSubmit = async (event) => {
     event.preventDefault();
-    axios
-      .delete(`/api/categories/delete/${props.id}`)
-      .then((res) => {
+
+    const sleep = (milliseconds) => {
+      return new Promise((resolve) => setTimeout(resolve, milliseconds));
+    };
+
+    try {
+      const res = await axios.delete(`/api/categories/delete/${props.id}`);
+      if (res.data.success) {
+        setHadError(false);
+        setSuccess(true);
+        await sleep(500);
         closeModal();
         props.refreshDataCallback();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      } else setHadError(true);
+    } catch (err) {
+      console.log(err);
+      setHadError(true);
+    }
+  };
+
+  const renderStatus = () => {
+    if (success && !hadError) {
+      return (
+        <Alert
+          variant='success'
+          style={{
+            marginTop: '1em',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
+        >
+          Successfully deleted category.
+        </Alert>
+      );
+    } else if (hadError) {
+      return (
+        <Alert
+          variant='danger'
+          style={{
+            marginTop: '1em',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
+        >
+          An error has occurred. Please try again.
+        </Alert>
+      );
+    } else return null;
   };
 
   return (
@@ -48,9 +91,10 @@ const CategoryDelete = (props) => {
       </Button>
       <Modal show={modalIsDisplayed} onHide={closeModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Delete {category.name}</Modal.Title>
+          <Modal.Title>Delete {categoryToEdit.name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          {renderStatus()}
           <Alert
             variant='danger'
             style={{
@@ -68,7 +112,7 @@ const CategoryDelete = (props) => {
           <Button variant='secondary' onClick={closeModal}>
             Close
           </Button>
-          <Button onClick={submit} variant='danger' type='submit'>
+          <Button onClick={doSubmit} variant='danger' type='submit'>
             Delete Category
           </Button>
         </Modal.Footer>

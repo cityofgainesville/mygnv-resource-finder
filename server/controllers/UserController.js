@@ -96,6 +96,7 @@ exports.currentUserUpdate = async (req, res) => {
       );
     }
     await currentUser.save();
+    res.json({ success: true, user: currentUser });
   } catch (err) {
     console.log(err);
     return res.status(500).end();
@@ -127,6 +128,7 @@ exports.adminUpdate = async (req, res) => {
       await userToUpdate.setPassword(infoToUpdate.password);
     }
     await userToUpdate.save();
+    res.json({ success: true, user: userToUpdate });
   } catch (err) {
     console.log(err);
     return res.status(500).end();
@@ -170,7 +172,7 @@ exports.delete = (req, res) => {
     if (err) {
       console.log(err);
       res.status(400).send(err);
-    } else res.status(200).end();
+    } else res.json({ success: true });
   });
 };
 

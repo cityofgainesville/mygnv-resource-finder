@@ -64,7 +64,6 @@ exports.create = (req, res) => {
       res.status(400).send(err);
     } else {
       res.json({ success: true, category: category });
-      console.log(category);
     }
   });
 };
@@ -86,7 +85,6 @@ exports.update = (req, res) => {
       res.status(400).send(err);
     } else {
       res.json({ success: true, category: category });
-      console.log(category);
     }
   });
 };
@@ -97,7 +95,7 @@ exports.delete = (req, res) => {
     if (err) {
       console.log(err);
       res.status(400).send(err);
-    } else res.status(200).end();
+    } else res.json({ success: true });
   });
 };
 

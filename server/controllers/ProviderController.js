@@ -9,8 +9,7 @@ exports.create = (req, res) => {
       console.log(err);
       res.status(400).send(err);
     } else {
-      res.json(provider);
-      console.log(provider);
+      res.json({ success: true, provider: provider });
     }
   });
 };
@@ -30,8 +29,7 @@ exports.update = (req, res) => {
       console.log(err);
       res.status(400).send(err);
     } else {
-      res.json(provider);
-      console.log(provider);
+      res.json({ success: true, provider: provider });
     }
   });
 };
@@ -43,7 +41,7 @@ exports.delete = (req, res) => {
     if (err) {
       console.log(err);
       res.status(400).send(err);
-    } else res.status(200).end();
+    } else res.json({ success: true });
   });
 };
 

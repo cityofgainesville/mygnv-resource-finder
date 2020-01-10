@@ -4,7 +4,6 @@ import axios from 'axios';
 
 import UserEdit from './UserEdit';
 import UserDelete from './UserDelete';
-import UserRegister from './UserRegister';
 
 const UserAdmin = (props) => {
   const [categories, setCategories] = useState([]);
@@ -52,31 +51,55 @@ const UserAdmin = (props) => {
   };
 
   const mapUsers = () => {
-    return users.map((user) => {
+    return users.filter(user => {
+      return (user.email && user.email.toLowerCase().includes(filterText.toLowerCase())) ||
+        (user.first_name && user.first_name.toLowerCase().includes(filterText.toLowerCase())) ||
+        (user.last_name && user.last_name.toLowerCase().includes(filterText.toLowerCase()))
+    }).map((user) => {
       return (
         <ListGroup.Item key={user._id}>
-          <UserEdit
-            refreshDataCallback={handleRefreshData}
-            categories={categories}
-            providers={providers}
-            buttonName='Edit'
-            id={user._id}
-          />{' '}
-          <UserDelete
-            categories={user}
-            refreshDataCallback={handleRefreshData}
-            id={user._id}
-          />
-          <h5
-            style={{
-              color: 'black',
-              fontWeight: 'bold',
-              display: 'inline',
-              paddingLeft: '2em',
-            }}
-          >
-            {`${user.email}`}
-          </h5>
+          <Row>
+            <Col md="auto">
+              <UserEdit
+                refreshDataCallback={handleRefreshData}
+                categories={categories}
+                providers={providers}
+                users={users}
+                buttonName='Edit'
+                id={user._id}
+              />{' '}
+              <UserDelete
+                categories={categories}
+                providers={providers}
+                users={users}
+                refreshDataCallback={handleRefreshData}
+                id={user._id}
+              />
+            </Col>
+            <Col md="auto">
+              <Row>
+                <h6
+                  style={{
+                    color: 'black',
+                    display: 'inline',
+                    paddingLeft: '2em',
+                  }}
+                >
+                  <strong>Email: </strong>{user.email}
+                </h6></Row>
+              <Row>
+                <h6
+                  style={{
+                    color: 'black',
+                    display: 'inline',
+                    paddingLeft: '2em',
+                  }}
+                >
+                  <strong>Name: </strong>{`${user.first_name} ${user.last_name}`}
+                </h6>
+              </Row>
+            </Col>
+          </Row>
         </ListGroup.Item>
       );
     });
@@ -88,10 +111,11 @@ const UserAdmin = (props) => {
       <Row style={{ alignItems: 'center', justifyContent: 'center' }}>
         <Col>
           <Form style={{ width: '100%' }}>
-            <UserRegister
+            <UserEdit
               refreshDataCallback={handleRefreshData}
               categories={categories}
               providers={providers}
+              users={users}
               buttonName='Add User'
               style={{ marginBottom: '1em' }}
             />

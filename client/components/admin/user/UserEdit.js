@@ -8,24 +8,50 @@ import Select from 'react-select';
 // Communicates with backend, see backend comments for api docs
 
 const UserEdit = (props) => {
-  const [modalIsDisplayed, setModalIsDisplayed] = useState(false);
+  const [currentUser] = useGlobal('currentUser');
 
-  const [providers, setProviders] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const getUserToEditFromProps = () => {
+    return props.id
+      ? props.users.filter((user) => {
+        return user._id === props.id;
+      })[0]
+      : null;
+  };
 
+  const generateProviderOptions = () => {
+    return props.providers.map((provider) => {
+      return { value: provider._id, label: provider.name };
+    });
+  };
+
+  const generateCategoryOptions = () => {
+    return props.categories.map((category) => {
+      return { value: category._id, label: category.name };
+    });
+  };
+
+  const [userToEdit, setUserToEdit] = useState(
+    getUserToEditFromProps()
+  );
+  const [providerOptions, setProviderOptions] = useState(
+    generateProviderOptions()
+  );
+  const [categoryOptions, setCategoryOptions] = useState(
+    generateCategoryOptions()
+  );
   const roleOptions = [
     { value: 'Provider', label: 'Provider' },
     { value: 'Editor', label: 'Editor' },
     { value: 'Owner', label: 'Owner' },
   ];
-
   const boolOptions = [
     { value: false, label: 'False' },
     { value: true, label: 'True' },
   ];
 
-  const [hadError, setHadError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [hadError, setHadError] = useState(false);
+  const [modalIsDisplayed, setModalIsDisplayed] = useState(false);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -40,20 +66,30 @@ const UserEdit = (props) => {
   const [providerCanEdit, setProviderCanEdit] = useState([]);
   const [catCanEditProviderIn, setCatCanEditProviderIn] = useState([]);
 
-  const [userToEdit, setUserToEdit] = useState(null);
-  const [currentUser] = useGlobal('currentUser');
+  const populateExistingUser = () => {
+    setEmail(userToEdit.email);
+    setFirstName(userToEdit.first_name);
+    setLastName(userToEdit.last_name);
+    console.log(roleOptions.filter((option) => { return option.value === userToEdit.role }));
+    // setRole(roleOptions.filter((option) => { return option.value === userToEdit.role })[0]);
+    setCanEditAssignedProvider(userToEdit.can_edit_assigned_provider ? boolOptions[1] : boolOptions[0]);
+    const providerIds = new Set(userToEdit.provider_can_edit);
+    setProviderCanEdit(providerOptions.filter((option) => { return providerIds.has(option.value); }));
+    const categoryIds = new Set(userToEdit.cat_can_edit_provider_in);
+    setCatCanEditProviderIn(categoryOptions.filter((option) => { return categoryIds.has(option.value) }));
+  }
 
-  const loadUserById = (id) => {
-    axios
-      .get(`/api/users/${id}`)
-      .then((res) => {
-        setUserToEdit(res.data);
-        this.setState({ category: res.data });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  useEffect(() => {
+    setUserToEdit(getUserToEditFromProps());
+    setProviderOptions(generateProviderOptions());
+    setCategoryOptions(generateCategoryOptions());
+  }, [props]);
+
+  useEffect(() => {
+    if (props.id && userToEdit) {
+      populateExistingUser();
+    }
+  }, [userToEdit, providerOptions, categoryOptions]);
 
   // if props.id is passed in then we are editing another user, make sure currentUser is owner
   // useEffect(() => {if (props.id)}, []);
@@ -104,7 +140,7 @@ const UserEdit = (props) => {
   };
 
   // TODO- FINISH REGISTER
-  const doRegister = async (event) => {
+  const doSubmit = async (event) => {
     event.preventDefault();
 
     const processMaybeArray = (maybeArray) => {
@@ -152,34 +188,6 @@ const UserEdit = (props) => {
     setModalIsDisplayed(false);
     clearState();
   };
-
-  useEffect(() => {
-    axios
-      .get('/api/providers/list')
-      .then((res) => {
-        setProviders(Object.values(res.data));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    axios
-      .get('/api/categories/list', {})
-      .then((res) => {
-        setCategories(Object.values(res.data));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
-  const providerOptions = providers.map((provider) => {
-    return { value: provider._id, label: provider.name };
-  });
-
-  const categoryOptions = categories.map((category) => {
-    return { value: category._id, label: category.name };
-  });
 
   const renderAssignedProvider = () => {
     if (role.value === 'Provider' || role.value === 'Editor') {
@@ -254,7 +262,7 @@ const UserEdit = (props) => {
             marginRight: 'auto',
           }}
         >
-          Successfully registered user.
+          Successfully edited user.
         </Alert>
       );
     } else if (hadError) {
@@ -273,23 +281,23 @@ const UserEdit = (props) => {
     } else return null;
   };
 
-  const renderRegisterButton = () => {
+  const renderSubmitButton = () => {
     if (success)
       return (
-        <Button onClick={doRegister} variant='success' type='submit'>
+        <Button onClick={doSubmit} variant='success' type='submit'>
           Success
         </Button>
       );
     else if (hadError) {
       return (
-        <Button onClick={doRegister} variant='warning' type='submit'>
+        <Button onClick={doSubmit} variant='warning' type='submit'>
           Try Again
         </Button>
       );
     } else
       return (
-        <Button onClick={doRegister} variant='primary' type='submit'>
-          Register
+        <Button onClick={doSubmit} variant='primary' type='submit'>
+          Submit
         </Button>
       );
   };
@@ -297,11 +305,14 @@ const UserEdit = (props) => {
   return (
     <React.Fragment>
       <Button variant='primary' onClick={openModal} style={props.style}>
-        Register
+        {props.buttonName}
       </Button>
-      <Modal show={modalIsDisplayed} onHide={closeModal}>
+      <Modal show={modalIsDisplayed} onHide={closeModal} size='lg'>
         <Modal.Header closeButton>
-          <Modal.Title>Register</Modal.Title>
+          <Modal.Title>
+            {props.id !== undefined && props.id !== ''
+              ? `Edit ${userToEdit.email}`
+              : 'Register User'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {renderStatus()}
@@ -366,7 +377,7 @@ const UserEdit = (props) => {
           <Button variant='secondary' onClick={closeModal}>
             Close
           </Button>
-          {renderRegisterButton()}
+          {renderSubmitButton()}
         </Modal.Footer>
       </Modal>
     </React.Fragment>

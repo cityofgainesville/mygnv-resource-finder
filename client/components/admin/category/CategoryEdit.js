@@ -13,8 +13,8 @@ const CategoryEdit = (props) => {
   const getCategoryToEditFromProps = () => {
     return props.id
       ? props.categories.filter((category) => {
-          return category._id === props.id;
-        })[0]
+        return category._id === props.id;
+      })[0]
       : null;
   };
 
@@ -274,7 +274,7 @@ const CategoryEdit = (props) => {
             marginRight: 'auto',
           }}
         >
-          Successfully registered user.
+          Successfully edited category.
         </Alert>
       );
     } else if (hadError) {
