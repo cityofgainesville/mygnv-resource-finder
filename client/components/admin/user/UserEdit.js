@@ -59,19 +59,40 @@ const UserEdit = (props) => {
   const [lastName, setLastName] = useState('');
 
   const [role, setRole] = useState(roleOptions[0]);
-  const [assignedProvider, setAssignedProvider] = useState('');
+  const [assignedProvider, setAssignedProvider] = useState({});
   const [canEditAssignedProvider, setCanEditAssignedProvider] = useState(
     boolOptions[0]
   );
   const [providerCanEdit, setProviderCanEdit] = useState([]);
   const [catCanEditProviderIn, setCatCanEditProviderIn] = useState([]);
 
+  /**
+ * Reset success/fail flags
+ */
+  const resetFlags = () => {
+    setHadError(false);
+    setSuccess(false);
+  };
+
+  const clearState = () => {
+    setEmail('');
+    setPassword('');
+    setFirstName('');
+    setLastName('');
+
+    setRole(roleOptions[0]);
+    setAssignedProvider('');
+    setCanEditAssignedProvider(boolOptions[0]);
+    setProviderCanEdit([]);
+    setCatCanEditProviderIn([]);
+  };
+
   const populateExistingUser = () => {
     setEmail(userToEdit.email);
     setFirstName(userToEdit.first_name);
     setLastName(userToEdit.last_name);
-    console.log(roleOptions.filter((option) => { return option.value === userToEdit.role }));
-    // setRole(roleOptions.filter((option) => { return option.value === userToEdit.role })[0]);
+    setRole(roleOptions.filter((option) => { return option.value === userToEdit.role })[0]);
+    setAssignedProvider(userToEdit.assigned_provider ? providerOptions.filter(option => { return option.value === userToEdit.assigned_provider })[0] : {})
     setCanEditAssignedProvider(userToEdit.can_edit_assigned_provider ? boolOptions[1] : boolOptions[0]);
     const providerIds = new Set(userToEdit.provider_can_edit);
     setProviderCanEdit(providerOptions.filter((option) => { return providerIds.has(option.value); }));
@@ -90,25 +111,6 @@ const UserEdit = (props) => {
       populateExistingUser();
     }
   }, [userToEdit, providerOptions, categoryOptions]);
-
-  // if props.id is passed in then we are editing another user, make sure currentUser is owner
-  // useEffect(() => {if (props.id)}, []);
-
-  const clearState = () => {
-    setHadError(false);
-    setSuccess(false);
-
-    setEmail('');
-    setPassword('');
-    setFirstName('');
-    setLastName('');
-
-    setRole(roleOptions[0]);
-    setAssignedProvider('');
-    setCanEditAssignedProvider(boolOptions[0]);
-    setProviderCanEdit([]);
-    setCatCanEditProviderIn([]);
-  };
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -154,7 +156,7 @@ const UserEdit = (props) => {
       first_name: firstName,
       last_name: lastName,
       role: role.value,
-      assigned_provider: assignedProvider.value,
+      assigned_provider: assignedProvider.value ? assignedProvider.value : '',
       can_edit_assigned_provider: canEditAssignedProvider.value,
       provider_can_edit: processMaybeArray(providerCanEdit),
       cat_can_edit_provider_in: processMaybeArray(catCanEditProviderIn),
@@ -166,13 +168,16 @@ const UserEdit = (props) => {
       return new Promise((resolve) => setTimeout(resolve, milliseconds));
     };
 
+    const postURL = props.id !== undefined && props.id !== '' ? `/api/users/update/${props.id}` : `/api/users/register`;
+
     try {
-      const res = await axios.post('/api/users/register', postContent);
+      const res = await axios.post(postURL, postContent);
       if (res.data.success) {
         setHadError(false);
         setSuccess(true);
         await sleep(500);
         closeModal();
+        props.refreshDataCallback();
       } else setHadError(true);
     } catch (err) {
       console.log(err);
@@ -186,7 +191,9 @@ const UserEdit = (props) => {
 
   const closeModal = () => {
     setModalIsDisplayed(false);
-    clearState();
+    resetFlags();
+    if (!props.id)
+      clearState();
   };
 
   const renderAssignedProvider = () => {

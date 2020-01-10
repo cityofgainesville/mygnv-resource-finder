@@ -65,8 +65,24 @@ const CategoryEdit = (props) => {
   const [name, setName] = useState('');
   const [providers, setProviders] = useState([]);
   const [children, setChildren] = useState([]);
-  const [iconName, setIconName] = useState('null');
+  const [iconName, setIconName] = useState('');
   const [isSubcategory, setIsSubcategory] = useState(boolOptions[0]);
+
+  /**
+ * Reset success/fail flags
+ */
+  const resetFlags = () => {
+    setHadError(false);
+    setSuccess(false);
+  };
+
+  const clearState = () => {
+    setName('');
+    setProviders([]);
+    setChildren([]);
+    setIconName('');
+    setIsSubcategory(boolOptions[0])
+  };
 
   const populateExistingCategory = () => {
     setName(categoryToEdit.name);
@@ -88,7 +104,7 @@ const CategoryEdit = (props) => {
         return categoryIds.has(option.value);
       })
     );
-    setIconName(categoryToEdit.icon_name);
+    setIconName(categoryToEdit.icon_name === 'null' ? '' : categoryToEdit.icon_name);
     setIsSubcategory(
       categoryToEdit.is_subcategory ? boolOptions[1] : boolOptions[0]
     );
@@ -137,7 +153,9 @@ const CategoryEdit = (props) => {
 
   const closeModal = () => {
     setModalIsDisplayed(false);
-    setHadError(false);
+    resetFlags();
+    if (!props.id)
+      clearState();
   };
 
   const doSubmit = async (event) => {

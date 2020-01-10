@@ -60,15 +60,8 @@ exports.logout = (req, res) => {
   res.json({ success: true, message: 'Logout successful' });
 };
 
-// Update a user
-exports.update = async (req, res) => {
-  if (req.userToUpdate && req.user.role === 'Owner')
-    await adminUpdate(req, res);
-  else await currentUserUpdate(req, res);
-};
-
 // Update the currently logged in user
-exports.currentUserUpdate = async (req, res) => {
+const currentUserUpdate = async (req, res) => {
   try {
     const currentUser = req.user;
     const infoToUpdate = req.body;
@@ -103,8 +96,7 @@ exports.currentUserUpdate = async (req, res) => {
   }
 };
 
-// Allow admins to update other users
-exports.adminUpdate = async (req, res) => {
+const adminUpdate = async (req, res) => {
   try {
     const currentUser = req.user;
     const infoToUpdate = req.body;
@@ -134,6 +126,14 @@ exports.adminUpdate = async (req, res) => {
     return res.status(500).end();
   }
 };
+
+// Update a user
+exports.update = async (req, res) => {
+  if (req.userToUpdate && req.user.role === 'Owner')
+    await adminUpdate(req, res);
+  else await currentUserUpdate(req, res);
+};
+
 
 // Get all the users
 /* 

@@ -30,6 +30,7 @@ const CategoryDelete = (props) => {
   const closeModal = () => {
     setModalIsDisplayed(false);
     setHadError(false);
+    setSuccess(false);
   };
 
   const doSubmit = async (event) => {
