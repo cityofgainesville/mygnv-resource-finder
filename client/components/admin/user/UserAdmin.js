@@ -50,59 +50,63 @@ const UserAdmin = (props) => {
     getData();
   };
 
-  const mapUsers = () => {
-    return users.filter(user => {
-      return (user.email && user.email.toLowerCase().includes(filterText.toLowerCase())) ||
-        (user.first_name && user.first_name.toLowerCase().includes(filterText.toLowerCase())) ||
-        (user.last_name && user.last_name.toLowerCase().includes(filterText.toLowerCase()))
-    }).map((user) => {
-      return (
-        <ListGroup.Item key={user._id}>
-          <Row>
-            <Col md="auto">
-              <UserEdit
-                refreshDataCallback={handleRefreshData}
-                categories={categories}
-                providers={providers}
-                users={users}
-                buttonName='Edit'
-                id={user._id}
-              />{' '}
-              <UserDelete
-                categories={categories}
-                providers={providers}
-                users={users}
-                refreshDataCallback={handleRefreshData}
-                id={user._id}
-              />
-            </Col>
-            <Col md="auto">
-              <Row>
-                <h6
-                  style={{
-                    color: 'black',
-                    display: 'inline',
-                    paddingLeft: '2em',
-                  }}
-                >
-                  <strong>Email: </strong>{user.email}
-                </h6></Row>
-              <Row>
-                <h6
-                  style={{
-                    color: 'black',
-                    display: 'inline',
-                    paddingLeft: '2em',
-                  }}
-                >
-                  <strong>Name: </strong>{`${user.first_name} ${user.last_name}`}
-                </h6>
-              </Row>
-            </Col>
-          </Row>
-        </ListGroup.Item>
-      );
-    });
+  const mapUsers = (users) => {
+    return users
+      .filter((user) => {
+        return (
+          (user.email &&
+            user.email.toLowerCase().includes(filterText.toLowerCase())) ||
+          (user.first_name &&
+            user.first_name.toLowerCase().includes(filterText.toLowerCase())) ||
+          (user.last_name &&
+            user.last_name.toLowerCase().includes(filterText.toLowerCase()))
+        );
+      })
+      .map((user) => {
+        return (
+          <ListGroup.Item key={user._id}>
+            <Row>
+              <Col md='auto'>
+                <UserEdit
+                  refreshDataCallback={handleRefreshData}
+                  categories={categories}
+                  providers={providers}
+                  users={users}
+                  buttonName='Edit'
+                  id={user._id}
+                />{' '}
+                <UserDelete
+                  categories={categories}
+                  providers={providers}
+                  users={users}
+                  refreshDataCallback={handleRefreshData}
+                  id={user._id}
+                />
+              </Col>
+              <Col>
+                <Row>
+                  <h6>
+                    <strong>Email: </strong>
+                    {user.email}
+                  </h6>
+                </Row>
+                <Row>
+                  <h6>
+                    <strong>Name: </strong>
+                    {`${user.first_name} ${user.last_name}`}
+                  </h6>
+                </Row>
+                <Row>
+                  <h6>
+                    <strong>Role: </strong>
+                    {user.role}
+                  </h6>
+                </Row>
+              </Col>
+            </Row>
+          </ListGroup.Item>
+        );
+      });
   };
 
   // Center the two columns of top level categories and subcategories
@@ -153,8 +157,27 @@ const UserAdmin = (props) => {
           }}
         >
           <strong>Users</strong>
-          {mapUsers()}
+          <Row>
+            <Col xs='auto'>
+              {mapUsers(users.slice(0, Math.floor(users.length / 2)))}
+            </Col>
+            <Col xs='auto'>
+              {mapUsers(
+                users.slice(Math.floor(users.length / 2), users.length)
+              )}
+            </Col>
+          </Row>
         </ListGroup>
+        {/* <ListGroup
+          style={{
+            display: 'inline-block',
+            margin: '0 auto',
+            alignSelf: 'flex-start',
+          }}
+        >
+          <br></br>
+          {mapUsers(users.slice(Math.floor(users.length / 2), users.length))}
+        </ListGroup> */}
       </Row>
     </Container>
   );

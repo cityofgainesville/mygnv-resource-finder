@@ -66,7 +66,7 @@ const CategoryAdmin = (props) => {
               color: 'black',
               fontWeight: 'bold',
               display: 'inline',
-              paddingLeft: '2em',
+              paddingLeft: '1em',
             }}
           >
             {category.name}

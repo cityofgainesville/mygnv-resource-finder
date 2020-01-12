@@ -27,6 +27,38 @@ const AdminPortal = (props) => {
 
   console.log(props.history);
 
+  const renderCategoriesButton = () => {
+    if (currentUser && currentUser.role === 'Owner')
+      return (
+        <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
+          <RedirectButton
+            exact
+            path={paths.categoriesAdminPath}
+            variant={buttonColorIfMatchPath(paths.categoriesAdminPath)}
+          >
+            Edit Categories
+          </RedirectButton>
+        </Col>
+      );
+    else return null;
+  };
+
+  const renderUsersButton = () => {
+    if (currentUser && currentUser.role === 'Owner')
+      return (
+        <Col md='auto' style={{ textAlign: 'center' }}>
+          <RedirectButton
+            exact
+            path={paths.usersAdminPath}
+            variant={buttonColorIfMatchPath(paths.usersAdminPath)}
+          >
+            Edit Users
+          </RedirectButton>
+        </Col>
+      );
+    else return null;
+  };
+
   const renderLoggedIn = (
     <Container
       style={{
@@ -35,33 +67,17 @@ const AdminPortal = (props) => {
       }}
     >
       <Row className='justify-content-md-center' style={{ margin: 'auto' }}>
-        <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
-          <RedirectButton
-            exact
-            path={paths.categoriesAdminPath}
-            variant={buttonColorIfMatchPath(paths.categoriesAdminPath)}
-          >
-            Add/Remove/Edit Categories
-          </RedirectButton>
-        </Col>
+        {renderCategoriesButton()}
         <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
           <RedirectButton
             exact
             path={paths.providersAdminPath}
             variant={buttonColorIfMatchPath(paths.providersAdminPath)}
           >
-            Add Providers
+            Edit Providers
           </RedirectButton>
         </Col>
-        <Col md='auto' style={{ textAlign: 'center' }}>
-          <RedirectButton
-            exact
-            path={paths.usersAdminPath}
-            variant={buttonColorIfMatchPath(paths.usersAdminPath)}
-          >
-            Add Users
-          </RedirectButton>
-        </Col>
+        {renderUsersButton()}
       </Row>
     </Container>
   );

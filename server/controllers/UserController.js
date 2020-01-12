@@ -3,7 +3,11 @@ const User = require('../models/UserSchema');
 
 // Register a new user, using email and password fields from body
 exports.register = (req, res) => {
-  User.register(new User(req.body), req.body.password, (err, user) => {
+  const password =
+    req.body.password && req.body.password !== ''
+      ? req.body.password
+      : 'Password1';
+  User.register(new User(req.body), password, (err, user) => {
     if (err) {
       res.json({
         success: false,
@@ -133,7 +137,6 @@ exports.update = async (req, res) => {
     await adminUpdate(req, res);
   else await currentUserUpdate(req, res);
 };
-
 
 // Get all the users
 /* 

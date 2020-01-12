@@ -1,6 +1,6 @@
 import React, { useState, useGlobal, useEffect } from 'reactn';
 import { Button, Form, Modal, Alert } from 'react-bootstrap';
-import PropTypes from 'prop-types';
+import PropTypes, { bool } from 'prop-types';
 import axios from 'axios';
 import Select from 'react-select';
 
@@ -13,8 +13,8 @@ const UserEdit = (props) => {
   const getUserToEditFromProps = () => {
     return props.id
       ? props.users.filter((user) => {
-        return user._id === props.id;
-      })[0]
+          return user._id === props.id;
+        })[0]
       : null;
   };
 
@@ -30,9 +30,7 @@ const UserEdit = (props) => {
     });
   };
 
-  const [userToEdit, setUserToEdit] = useState(
-    getUserToEditFromProps()
-  );
+  const [userToEdit, setUserToEdit] = useState(getUserToEditFromProps());
   const [providerOptions, setProviderOptions] = useState(
     generateProviderOptions()
   );
@@ -54,6 +52,7 @@ const UserEdit = (props) => {
   const [modalIsDisplayed, setModalIsDisplayed] = useState(false);
 
   const [email, setEmail] = useState('');
+  const [willSetNewPassword, setWillSetNewPassword] = useState(boolOptions[0]);
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -67,8 +66,8 @@ const UserEdit = (props) => {
   const [catCanEditProviderIn, setCatCanEditProviderIn] = useState([]);
 
   /**
- * Reset success/fail flags
- */
+   * Reset success/fail flags
+   */
   const resetFlags = () => {
     setHadError(false);
     setSuccess(false);
@@ -76,6 +75,7 @@ const UserEdit = (props) => {
 
   const clearState = () => {
     setEmail('');
+    setWillSetNewPassword(boolOptions[0]);
     setPassword('');
     setFirstName('');
     setLastName('');
@@ -91,14 +91,34 @@ const UserEdit = (props) => {
     setEmail(userToEdit.email);
     setFirstName(userToEdit.first_name);
     setLastName(userToEdit.last_name);
-    setRole(roleOptions.filter((option) => { return option.value === userToEdit.role })[0]);
-    setAssignedProvider(userToEdit.assigned_provider ? providerOptions.filter(option => { return option.value === userToEdit.assigned_provider })[0] : {})
-    setCanEditAssignedProvider(userToEdit.can_edit_assigned_provider ? boolOptions[1] : boolOptions[0]);
+    setRole(
+      roleOptions.filter((option) => {
+        return option.value === userToEdit.role;
+      })[0]
+    );
+    setAssignedProvider(
+      userToEdit.assigned_provider
+        ? providerOptions.filter((option) => {
+            return option.value === userToEdit.assigned_provider;
+          })[0]
+        : {}
+    );
+    setCanEditAssignedProvider(
+      userToEdit.can_edit_assigned_provider ? boolOptions[1] : boolOptions[0]
+    );
     const providerIds = new Set(userToEdit.provider_can_edit);
-    setProviderCanEdit(providerOptions.filter((option) => { return providerIds.has(option.value); }));
+    setProviderCanEdit(
+      providerOptions.filter((option) => {
+        return providerIds.has(option.value);
+      })
+    );
     const categoryIds = new Set(userToEdit.cat_can_edit_provider_in);
-    setCatCanEditProviderIn(categoryOptions.filter((option) => { return categoryIds.has(option.value) }));
-  }
+    setCatCanEditProviderIn(
+      categoryOptions.filter((option) => {
+        return categoryIds.has(option.value);
+      })
+    );
+  };
 
   useEffect(() => {
     setUserToEdit(getUserToEditFromProps());
@@ -117,6 +137,9 @@ const UserEdit = (props) => {
   };
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
+  };
+  const handleWillSetNewPasswordChange = (value) => {
+    setWillSetNewPassword(value);
   };
   const handleFirstNameChange = (event) => {
     setFirstName(event.target.value);
@@ -152,7 +175,7 @@ const UserEdit = (props) => {
 
     let postContent = {
       email: email,
-      password: password, // this is NOT stored in plaintext, passport-local-mongoose hashes and salts it, and only then stores it
+      password: willSetNewPassword.value ? password : '', // this is NOT stored in plaintext, passport-local-mongoose hashes and salts it, and only then stores it
       first_name: firstName,
       last_name: lastName,
       role: role.value,
@@ -168,7 +191,10 @@ const UserEdit = (props) => {
       return new Promise((resolve) => setTimeout(resolve, milliseconds));
     };
 
-    const postURL = props.id !== undefined && props.id !== '' ? `/api/users/update/${props.id}` : `/api/users/register`;
+    const postURL =
+      props.id !== undefined && props.id !== ''
+        ? `/api/users/update/${props.id}`
+        : `/api/users/register`;
 
     try {
       const res = await axios.post(postURL, postContent);
@@ -192,8 +218,34 @@ const UserEdit = (props) => {
   const closeModal = () => {
     setModalIsDisplayed(false);
     resetFlags();
-    if (!props.id)
-      clearState();
+    if (!props.id) clearState();
+  };
+
+  const renderPasswordBox = () => {
+    return (
+      <>
+        <Form.Group>
+          <Form.Label>Reset Password (Default is "Password1")</Form.Label>
+          <Select
+            isClearable={false}
+            value={willSetNewPassword}
+            onChange={handleWillSetNewPasswordChange}
+            options={boolOptions}
+          />
+        </Form.Group>
+        {willSetNewPassword.value ? (
+          <Form.Group controlId='formBasicPassword'>
+            <Form.Label>New Password</Form.Label>
+            <Form.Control
+              value={password}
+              onChange={handlePasswordChange}
+              type='password'
+              placeholder='Password'
+            />
+          </Form.Group>
+        ) : null}
+      </>
+    );
   };
 
   const renderAssignedProvider = () => {
@@ -214,7 +266,6 @@ const UserEdit = (props) => {
           <Form.Group>
             <Form.Label>Can Edit Assigned Provider</Form.Label>
             <Select
-              isSearchable
               isClearable={false}
               value={canEditAssignedProvider}
               onChange={handleCanEditAssignedProviderChange}
@@ -319,7 +370,8 @@ const UserEdit = (props) => {
           <Modal.Title>
             {props.id !== undefined && props.id !== ''
               ? `Edit ${userToEdit.email}`
-              : 'Register User'}</Modal.Title>
+              : 'Register User'}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {renderStatus()}
@@ -334,15 +386,7 @@ const UserEdit = (props) => {
               />
             </Form.Group>
 
-            <Form.Group controlId='formBasicPassword'>
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                value={password}
-                onChange={handlePasswordChange}
-                type='password'
-                placeholder='Password'
-              />
-            </Form.Group>
+            {renderPasswordBox()}
 
             <Form.Group>
               <Form.Label>First Name</Form.Label>
