@@ -3,6 +3,7 @@ const User = require('../models/UserSchema');
 
 // Register a new user, using email and password fields from body
 exports.register = (req, res) => {
+  if (req.user.role !== 'Owner') return res.status(403).end();
   const password =
     req.body.password && req.body.password !== ''
       ? req.body.password

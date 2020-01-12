@@ -56,6 +56,7 @@ exports.read = (req, res) => {
 
 // Create a category
 exports.create = (req, res) => {
+  if (req.user.role !== 'Owner') return res.status(403).end();
   const category = new Category(req.body);
 
   category.save((err) => {
@@ -70,6 +71,7 @@ exports.create = (req, res) => {
 
 // Update a category
 exports.update = (req, res) => {
+  if (req.user.role !== 'Owner') return res.status(403).end();
   const category = req.category;
   const newCategory = req.body;
 
@@ -90,6 +92,7 @@ exports.update = (req, res) => {
 };
 
 exports.delete = (req, res) => {
+  if (req.user.role !== 'Owner') return res.status(403).end();
   const category = req.category;
   Category.deleteOne(category, (err) => {
     if (err) {

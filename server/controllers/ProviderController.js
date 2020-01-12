@@ -2,6 +2,7 @@ const Provider = require('../models/ProviderSchema');
 
 // Create a provider
 exports.create = (req, res) => {
+  if (req.user.role !== 'Owner') return res.status(403).end();
   const provider = new Provider(req.body);
 
   provider.save((err) => {
@@ -21,6 +22,7 @@ exports.read = (req, res) => {
 
 // Update a provider
 exports.update = (req, res) => {
+  if (req.user.role !== 'Owner') return res.status(403).end();
   // TODO: UPDATE FIELDS FROM BODY?
   const provider = req.provider;
 
@@ -36,6 +38,7 @@ exports.update = (req, res) => {
 
 // Delete a provider
 exports.delete = (req, res) => {
+  if (req.user.role !== 'Owner') return res.status(403).end();
   const provider = req.provider;
   Provider.deleteOne(provider, (err) => {
     if (err) {
