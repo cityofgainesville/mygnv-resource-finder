@@ -1,5 +1,10 @@
 {
-  "extends": ["google", "eslint:recommended", "plugin:react/recommended"],
+  "extends": [
+    "google",
+    "plugin:react/recommended",
+    "prettier",
+    "plugin:prettier/recommended"
+  ],
   "parser": "babel-eslint",
   "globals": {
     "Atomics": "readonly",
@@ -19,14 +24,12 @@
     "ecmaVersion": 2020,
     "sourceType": "module"
   },
-  "plugins": ["babel", "react"],
+  "plugins": ["babel", "react", "prettier"],
   "rules": {
+    "prettier/prettier": "error",
     "require-jsdoc": "off",
     "no-eval": "error",
-    "indent": ["error", 2, { "MemberExpression": 1 }],
-    "object-curly-spacing": ["error", "always"],
     "no-console": "off",
-    "operator-linebreak": "off",
     "no-invalid-this": "off",
     "babel/no-invalid-this": "error"
   },

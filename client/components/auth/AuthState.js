@@ -1,41 +1,34 @@
-import React from 'reactn';
+import React, { useGlobal, useEffect, setGlobal } from 'reactn';
 import axios from 'axios';
 
-// Populates this.global.isAuthenticated with true or false
-// and this.global.userEmail with authenticated user's email
-
+// Populates useGlobal('currentUser') with the logged in user's session and role details
+// if const [currentUser] = useGlobal('currentUser'), and currentUser is null, user is not logged in or this is still getting user data
+// ReactN is used for this global user state
 // Used in App.js, runs on first render to check if session is active
 
-class AuthState extends React.Component {
-  constructor(props) {
-    super(props);
-    // Make auth state globally available
-    this.setGlobal({
-      isAuthenticated: false,
-      userEmail: null,
-    });
+const AuthState = (props) => {
+  const [currentUser, setCurrentUser] = useGlobal('currentUser');
 
-    // Check if the user is already logged in (if they refresh the page)
-    this.checkIfAuthenticated();
-  }
-
-  checkIfAuthenticated = () => {
+  const checkIfAuthenticated = () => {
     axios
-      .post('/api/user/isLoggedIn')
+      .post('/api/users/isLoggedIn')
       .then((res) => {
-        this.setGlobal({
-          isAuthenticated: res.data.success,
-          userEmail: res.data.email,
-        });
+        if (res.data.success) setCurrentUser(res.data.user);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  render() {
-    return null;
-  }
-}
+  // Check if the user is already logged in (if they refresh the page)
+  useEffect(() => {
+    checkIfAuthenticated();
+    setGlobal({
+      currentUser: null,
+    });
+  }, []);
+
+  return null;
+};
 
 export default AuthState;

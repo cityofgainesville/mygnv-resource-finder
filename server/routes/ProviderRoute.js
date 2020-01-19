@@ -3,34 +3,34 @@ const userController = require('../controllers/UserController');
 const express = require('express');
 const router = new express.Router();
 
-// Path is /api/provider
+// Path is /api/providers/list
 // GET will return JSON of all providers
 // POST will create provider if user authenticated
+router.route('/list').get(providerController.list);
+
+// Path is /api/providers/create
+// POST will create provider if user authenticated
 router
-  .route('/')
-  .get(providerController.list)
+  .route('/create')
   .post(userController.isAuthenticated, providerController.create);
 
-// Path is /api/provider/:providerId
+// Path is /api/providers/:providerId
 // GET will return provider
-// POST will update provider if authenticated
-// DELETE will delete provider if authenticated
-router
-  .route('/:providerId')
-  .get(providerController.read)
-  .put(userController.isAuthenticated, providerController.update)
-  .delete(userController.isAuthenticated, providerController.delete);
+router.route('/:providerId').get(providerController.read);
 
-// Path is /api/provider/subCategory/:categoryId
-// GET will return list of providers under subcategory id.
+// Path is /api/providers/update/:providerId
+// POST will update provider if authenticated
 router
-  .route('/subCategory/:categoryId')
-  .get(providerController.listSubCategory);
+  .route('/update/:providerId')
+  .post(userController.isAuthenticated, providerController.update);
+
+// Path is /api/providers/delete/:providerId
+// DELETE will update provider if authenticated
+router
+  .route('/delete/:providerId')
+  .delete(userController.isAuthenticated, providerController.delete);
 
 // Middleware to get provider by id from mongoDB
 router.param('providerId', providerController.providerById);
-// Middleware to get list of providers in subcategory from mongoDB
-// by category id
-router.param('categoryId', providerController.getSubCategory);
 
 module.exports = router;

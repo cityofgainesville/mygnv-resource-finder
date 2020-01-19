@@ -39,26 +39,26 @@ module.exports.start = () => {
   // Parse application/json
   app.use(bodyParser.json());
 
-  // A week in milliseconds
-  const WEEK_IN_MS = 7 * 24 * 3600000;
+  // A day in milliseconds
+  const DAY_IN_MS = 24 * 3600000;
 
   app.use(
     session({
       secret: sessionSecret,
-      // Session should expire after 1 week
-      maxAge: WEEK_IN_MS,
+      // Session should expire after 2 days
+      maxAge: 2 * DAY_IN_MS,
       resave: false,
       saveUninitialized: false,
       store: new MongoStore({ mongooseConnection: mongoose.connection }),
-    }),
+    })
   );
   app.use(passport.initialize());
   app.use(passport.session());
 
   // Routes
-  app.use('/api/provider', providerRouter);
-  app.use('/api/category', categoryRouter);
-  app.use('/api/user', userRouter);
+  app.use('/api/providers', providerRouter);
+  app.use('/api/categories', categoryRouter);
+  app.use('/api/users', userRouter);
 
   // Register all routes before registering webpack middleware
 
