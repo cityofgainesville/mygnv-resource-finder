@@ -71,6 +71,8 @@ const currentUserUpdate = async (req, res) => {
     const currentUser = req.user;
     const infoToUpdate = req.body;
     if (currentUser.role === 'Provider' || currentUser.role === 'Editor') {
+      currentUser.first_name = infoToUpdate.first_name;
+      currentUser.last_name = infoToUpdate.last_name;
       if (currentUser.assigned_provider !== infoToUpdate.assigned_provider) {
         currentUser.assigned_provider = infoToUpdate.assigned_provider;
         currentUser.can_edit_assigned_provider = false;

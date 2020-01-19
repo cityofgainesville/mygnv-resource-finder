@@ -92,7 +92,11 @@ const CategoryDelete = (props) => {
       </Button>
       <Modal show={modalIsDisplayed} onHide={closeModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Delete {categoryToEdit.name}</Modal.Title>
+          <Modal.Title>
+            Delete {categoryToEdit.name}
+            <br />
+            <h6 className="text-muted">ID: {categoryToEdit._id}</h6>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {renderStatus()}

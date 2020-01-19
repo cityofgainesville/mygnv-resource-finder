@@ -44,9 +44,9 @@ const AdminPortal = (props) => {
   };
 
   const renderUsersButton = () => {
-    if (currentUser && currentUser.role === 'Owner')
+    if (currentUser)
       return (
-        <Col md='auto' style={{ textAlign: 'center' }}>
+        <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
           <RedirectButton
             exact
             path={paths.usersAdminPath}

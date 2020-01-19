@@ -7,16 +7,8 @@ import Select from 'react-select';
 // Modal style register component
 // Communicates with backend, see backend comments for api docs
 
-const UserEdit = (props) => {
+const CurrentUserEdit = (props) => {
   const [currentUser] = useGlobal('currentUser');
-
-  const getUserToEditFromProps = () => {
-    return props.id
-      ? props.users.filter((user) => {
-        return user._id === props.id;
-      })[0]
-      : null;
-  };
 
   const generateProviderOptions = () => {
     return props.providers.map((provider) => {
@@ -30,7 +22,6 @@ const UserEdit = (props) => {
     });
   };
 
-  const [userToEdit, setUserToEdit] = useState(getUserToEditFromProps());
   const [providerOptions, setProviderOptions] = useState(
     generateProviderOptions()
   );
@@ -56,9 +47,10 @@ const UserEdit = (props) => {
   const [lastName, setLastName] = useState('');
 
   const [willSetNewPassword, setWillSetNewPassword] = useState(boolOptions[0]);
+  const [currentPassword, setCurrentPassword] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [validConfirmPassword, setValidConfirmPassword] = useState(true);
+  const [validConfirmPassword, setValidConfirmPassword] = useState(false);
 
   const [role, setRole] = useState(roleOptions[0]);
   const [assignedProvider, setAssignedProvider] = useState({});
@@ -76,51 +68,32 @@ const UserEdit = (props) => {
     setSuccess(false);
   };
 
-  const clearState = () => {
-    setEmail('');
-
-    setWillSetNewPassword(boolOptions[0]);
-    setPassword('');
-    setConfirmPassword('');
-    setValidConfirmPassword(false);
-
-    setPassword('');
-    setFirstName('');
-    setLastName('');
-
-    setRole(roleOptions[0]);
-    setAssignedProvider('');
-    setCanEditAssignedProvider(boolOptions[0]);
-    setProviderCanEdit([]);
-    setCatCanEditProviderIn([]);
-  };
-
   const populateExistingUser = () => {
-    setEmail(userToEdit.email);
-    setFirstName(userToEdit.first_name);
-    setLastName(userToEdit.last_name);
+    setEmail(currentUser.email);
+    setFirstName(currentUser.first_name);
+    setLastName(currentUser.last_name);
     setRole(
       roleOptions.filter((option) => {
-        return option.value === userToEdit.role;
+        return option.value === currentUser.role;
       })[0]
     );
     setAssignedProvider(
-      userToEdit.assigned_provider
+      currentUser.assigned_provider
         ? providerOptions.filter((option) => {
-          return option.value === userToEdit.assigned_provider;
+          return option.value === currentUser.assigned_provider;
         })[0]
         : {}
     );
     setCanEditAssignedProvider(
-      userToEdit.can_edit_assigned_provider ? boolOptions[1] : boolOptions[0]
+      currentUser.can_edit_assigned_provider ? boolOptions[1] : boolOptions[0]
     );
-    const providerIds = new Set(userToEdit.provider_can_edit);
+    const providerIds = new Set(currentUser.provider_can_edit);
     setProviderCanEdit(
       providerOptions.filter((option) => {
         return providerIds.has(option.value);
       })
     );
-    const categoryIds = new Set(userToEdit.cat_can_edit_provider_in);
+    const categoryIds = new Set(currentUser.cat_can_edit_provider_in);
     setCatCanEditProviderIn(
       categoryOptions.filter((option) => {
         return categoryIds.has(option.value);
@@ -129,16 +102,15 @@ const UserEdit = (props) => {
   };
 
   useEffect(() => {
-    setUserToEdit(getUserToEditFromProps());
     setProviderOptions(generateProviderOptions());
     setCategoryOptions(generateCategoryOptions());
   }, [props]);
 
   useEffect(() => {
-    if (props.id && userToEdit) {
+    if (currentUser) {
       populateExistingUser();
     }
-  }, [userToEdit, providerOptions, categoryOptions]);
+  }, [currentUser, providerOptions, categoryOptions]);
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -150,6 +122,9 @@ const UserEdit = (props) => {
     setLastName(event.target.value);
   };
 
+  const handleCurrentPasswordChange = (event) => {
+    setCurrentPassword(event.target.value);
+  }
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
     setValidConfirmPassword(event.target.value === confirmPassword && event.target.value !== '');
@@ -161,6 +136,7 @@ const UserEdit = (props) => {
   const handleWillSetNewPasswordChange = (value) => {
     setWillSetNewPassword(value);
   };
+
 
   const handleRoleChange = (value) => {
     setRole(value);
@@ -189,6 +165,7 @@ const UserEdit = (props) => {
 
     let postContent = {
       email: email,
+      old_password: willSetNewPassword.value ? currentPassword : '',
       password: willSetNewPassword.value ? password : '', // this is NOT stored in plaintext, passport-local-mongoose hashes and salts it, and only then stores it
       first_name: firstName,
       last_name: lastName,
@@ -205,13 +182,8 @@ const UserEdit = (props) => {
       return new Promise((resolve) => setTimeout(resolve, milliseconds));
     };
 
-    const postURL =
-      props.id !== undefined && props.id !== ''
-        ? `/api/users/update/${props.id}`
-        : `/api/users/register`;
-
     try {
-      const res = await axios.post(postURL, postContent);
+      const res = await axios.post('/api/users/update', postContent);
       if (res.data.success) {
         setHadError(false);
         setSuccess(true);
@@ -232,16 +204,29 @@ const UserEdit = (props) => {
   const closeModal = () => {
     setModalIsDisplayed(false);
     resetFlags();
-    if (!props.id) clearState();
   };
+
+  const renderEmailBox = () => {
+    if (role.value === 'Owner')
+      return (
+        <Form.Group controlId='formBasicEmail'>
+          <Form.Label>Email</Form.Label>
+          <Form.Control
+            value={email}
+            onChange={handleEmailChange}
+            type='email'
+            placeholder='Email'
+          />
+        </Form.Group>
+      );
+    else return null;
+  }
 
   const renderPasswordBox = () => {
     return (
       <>
         <Form.Group>
-          <Form.Label>
-            Change Password
-            {props && !props.id ? ' (Default is "Password1")' : null}</Form.Label>
+          <Form.Label>Change Password</Form.Label>
           <Select
             isClearable={false}
             value={willSetNewPassword}
@@ -249,6 +234,18 @@ const UserEdit = (props) => {
             options={boolOptions}
           />
         </Form.Group>
+
+        {willSetNewPassword.value ?
+          <Form.Group controlId='formBasicPassword'>
+            <Form.Label>Current Password</Form.Label>
+            <Form.Control
+              value={currentPassword}
+              onChange={handleCurrentPasswordChange}
+              type='password'
+              placeholder='Current Password'
+            />
+          </Form.Group>
+          : null}
 
         {willSetNewPassword.value ?
           <Form.Group controlId='formBasicPassword'>
@@ -299,22 +296,24 @@ const UserEdit = (props) => {
             />
           </Form.Group>
 
-          <Form.Group>
-            <Form.Label>Can Edit Assigned Provider</Form.Label>
-            <Select
-              isClearable={false}
-              value={canEditAssignedProvider}
-              onChange={handleCanEditAssignedProviderChange}
-              options={boolOptions}
-            />
-          </Form.Group>
+          {currentUser && currentUser.role === 'Owner' ?
+            <Form.Group>
+              <Form.Label>Can Edit Assigned Provider</Form.Label>
+              <Select
+                isClearable={false}
+                value={canEditAssignedProvider}
+                onChange={handleCanEditAssignedProviderChange}
+                options={boolOptions}
+              />
+            </Form.Group>
+            : null}
         </>
       );
     } else return null;
   };
 
   const renderEditorRole = () => {
-    if (role.value === 'Editor') {
+    if (role.value === 'Editor' && currentUser && currentUser.role === 'Owner') {
       return (
         <>
           <Form.Group>
@@ -345,6 +344,23 @@ const UserEdit = (props) => {
     } else return null;
   };
 
+  const renderRoleSelect = () => {
+    if (currentUser && currentUser.role === 'Owner')
+      return (
+        <Form.Group>
+          <Form.Label>Role</Form.Label>
+          <Select
+            isSearchable
+            isClearable={false}
+            value={role}
+            onChange={handleRoleChange}
+            options={roleOptions}
+          />
+        </Form.Group>
+      );
+    else return null;
+  }
+
   const renderStatus = () => {
     if (success && !hadError) {
       return (
@@ -356,7 +372,7 @@ const UserEdit = (props) => {
             marginRight: 'auto',
           }}
         >
-          Successfully saved user.
+          Successfully edited user.
         </Alert>
       );
     } else if (hadError) {
@@ -378,6 +394,7 @@ const UserEdit = (props) => {
   const renderSubmitButton = () => {
     const isDisabled = willSetNewPassword.value && !validConfirmPassword;
     if (success)
+
       return (
         <Button disabled={isDisabled} onClick={doSubmit} variant='success' type='submit'>
           Success
@@ -405,29 +422,19 @@ const UserEdit = (props) => {
       <Modal show={modalIsDisplayed} onHide={closeModal} size='lg'>
         <Modal.Header closeButton>
           <Modal.Title>
-            {props.id !== undefined && props.id !== ''
-              ? `Edit ${userToEdit.email}`
-              : 'Register User'}
-            {props.id !== undefined && props.id !== '' ?
+            Edit {currentUser ? currentUser.email : 'current user'}
+            {currentUser ?
               <>
                 <br />
-                <h6 className="text-muted">ID: {userToEdit._id}</h6>
+                <h6 className="text-muted">ID: {currentUser._id}</h6>
               </>
               : null}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {renderStatus()}
-          <Form>
-            <Form.Group controlId='formBasicEmail'>
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                value={email}
-                onChange={handleEmailChange}
-                type='email'
-                placeholder='Email'
-              />
-            </Form.Group>
+          <Form noValidate>
+            {renderEmailBox()}
 
             {renderPasswordBox()}
 
@@ -451,16 +458,7 @@ const UserEdit = (props) => {
               />
             </Form.Group>
 
-            <Form.Group>
-              <Form.Label>Role</Form.Label>
-              <Select
-                isSearchable
-                isClearable={false}
-                value={role}
-                onChange={handleRoleChange}
-                options={roleOptions}
-              />
-            </Form.Group>
+            {renderRoleSelect()}
 
             {renderAssignedProvider()}
 
@@ -478,9 +476,9 @@ const UserEdit = (props) => {
   );
 };
 
-UserEdit.propTypes = {
+CurrentUserEdit.propTypes = {
   history: PropTypes.instanceOf(Object).isRequired,
   location: PropTypes.instanceOf(Object).isRequired,
 };
 
-export default UserEdit;
+export default CurrentUserEdit;

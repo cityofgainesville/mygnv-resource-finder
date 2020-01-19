@@ -209,7 +209,7 @@ const CategoryEdit = (props) => {
             <Form.Control
               value={iconName}
               onChange={handleIconNameChange}
-              placeholder='Fontawesome Icon Name'
+              placeholder='FontAwesome Icon Name'
             />
           </Form.Group>
         </Col>
@@ -292,7 +292,7 @@ const CategoryEdit = (props) => {
             marginRight: 'auto',
           }}
         >
-          Successfully edited category.
+          Successfully saved category.
         </Alert>
       );
     } else if (hadError) {
@@ -343,6 +343,13 @@ const CategoryEdit = (props) => {
             {props.id !== undefined && props.id !== ''
               ? `Edit ${name}`
               : 'Add Category'}
+
+            {props.id !== undefined && props.id !== '' ?
+              <>
+                <br />
+                <h6 className="text-muted">ID: {categoryToEdit._id}</h6>
+              </>
+              : null}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

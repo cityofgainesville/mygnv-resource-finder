@@ -96,7 +96,11 @@ const UserDelete = (props) => {
       </Button>
       <Modal show={modalIsDisplayed} onHide={closeModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Delete {userToEdit.email}</Modal.Title>
+          <Modal.Title>
+            Delete {userToEdit.email}
+            <br />
+            <h6 className="text-muted">ID: {userToEdit._id}</h6>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {renderStatus()}
