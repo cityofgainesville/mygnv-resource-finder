@@ -88,13 +88,6 @@ const AdminPortal = (props) => {
       <Login />
       {currentUser ? renderLoggedIn : null}
       <Switch>
-        {/* <Route
-          exact
-          path={paths.adminPath}
-          render={() => {
-            <React.Fragment>{renderLoggedIn}</React.Fragment>;
-          }}
-        /> */}
         <Route
           exact
           path={paths.providersAdminPath}

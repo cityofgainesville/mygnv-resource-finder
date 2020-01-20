@@ -115,8 +115,7 @@ const UserDelete = (props) => {
             }}
           >
             DANGER: This operation is irreversible. Be ABSOLUTELY sure that this
-            is what you intend to do. THIS WILL IRREVERSIBLY DELETE THE
-            CATEGORY.
+            is what you intend to do. THIS WILL IRREVERSIBLY DELETE THE USER.
           </Alert>
         </Modal.Body>
         <Modal.Footer>
