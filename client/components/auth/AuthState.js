@@ -1,4 +1,4 @@
-import React, { useGlobal, useEffect, setGlobal } from 'reactn';
+import { useGlobal, useEffect, setGlobal } from 'reactn';
 import axios from 'axios';
 
 // Populates useGlobal('currentUser') with the logged in user's session and role details
@@ -7,7 +7,8 @@ import axios from 'axios';
 // Used in App.js, runs on first render to check if session is active
 
 const AuthState = (props) => {
-  const [currentUser, setCurrentUser] = useGlobal('currentUser');
+  // eslint-disable no-unused-vars
+  const [, setCurrentUser] = useGlobal('currentUser');
 
   const checkIfAuthenticated = () => {
     axios

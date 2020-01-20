@@ -1,4 +1,4 @@
-import React, { useState, useGlobal, useEffect } from 'reactn';
+import React, { useState } from 'reactn';
 import { Button, Modal, Alert } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -6,19 +6,15 @@ import axios from 'axios';
 // Category delete modal with delete confirmation
 
 const CategoryDelete = (props) => {
-  const [currentUser] = useGlobal('currentUser');
-
   const getCategoryToEditFromProps = () => {
     return props.id
       ? props.categories.filter((category) => {
-        return category._id === props.id;
-      })[0]
+          return category._id === props.id;
+        })[0]
       : null;
   };
 
-  const [categoryToEdit, setCategoryToEdit] = useState(
-    getCategoryToEditFromProps()
-  );
+  const [categoryToEdit] = useState(getCategoryToEditFromProps());
   const [success, setSuccess] = useState(false);
   const [hadError, setHadError] = useState(false);
   const [modalIsDisplayed, setModalIsDisplayed] = useState(false);
@@ -95,7 +91,7 @@ const CategoryDelete = (props) => {
           <Modal.Title>
             Delete {categoryToEdit.name}
             <br />
-            <h6 className="text-muted">ID: {categoryToEdit._id}</h6>
+            <h6 className='text-muted'>ID: {categoryToEdit._id}</h6>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

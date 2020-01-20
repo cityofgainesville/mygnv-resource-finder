@@ -1,4 +1,4 @@
-import React, { useState, useGlobal, useEffect } from 'reactn';
+import React, { useState, useEffect } from 'reactn';
 import { Button, Modal, Alert } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -6,19 +6,15 @@ import axios from 'axios';
 // Category delete modal with delete confirmation
 
 const UserDelete = (props) => {
-  const [currentUser] = useGlobal('currentUser');
-
   const getUserToEditFromProps = () => {
     return props.id
       ? props.users.filter((user) => {
-        return user._id === props.id;
-      })[0]
+          return user._id === props.id;
+        })[0]
       : null;
   };
 
-  const [userToEdit, setUserToEdit] = useState(
-    getUserToEditFromProps()
-  );
+  const [userToEdit, setUserToEdit] = useState(getUserToEditFromProps());
   const [success, setSuccess] = useState(false);
   const [hadError, setHadError] = useState(false);
   const [modalIsDisplayed, setModalIsDisplayed] = useState(false);
@@ -99,7 +95,7 @@ const UserDelete = (props) => {
           <Modal.Title>
             Delete {userToEdit.email}
             <br />
-            <h6 className="text-muted">ID: {userToEdit._id}</h6>
+            <h6 className='text-muted'>ID: {userToEdit._id}</h6>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -135,7 +131,7 @@ UserDelete.propTypes = {
   style: PropTypes.object,
   buttonName: PropTypes.string.isRequired,
   refreshDataCallback: PropTypes.func.isRequired,
-  users: PropTypes.array.isRequired
+  users: PropTypes.array.isRequired,
 };
 
 export default UserDelete;

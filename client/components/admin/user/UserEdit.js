@@ -1,6 +1,6 @@
-import React, { useState, useGlobal, useEffect } from 'reactn';
+import React, { useState, useEffect } from 'reactn';
 import { Button, Form, Modal, Alert } from 'react-bootstrap';
-import PropTypes, { bool } from 'prop-types';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import Select from 'react-select';
 
@@ -8,13 +8,11 @@ import Select from 'react-select';
 // Communicates with backend, see backend comments for api docs
 
 const UserEdit = (props) => {
-  const [currentUser] = useGlobal('currentUser');
-
   const getUserToEditFromProps = () => {
     return props.id
       ? props.users.filter((user) => {
-        return user._id === props.id;
-      })[0]
+          return user._id === props.id;
+        })[0]
       : null;
   };
 
@@ -107,8 +105,8 @@ const UserEdit = (props) => {
     setAssignedProvider(
       userToEdit.assigned_provider
         ? providerOptions.filter((option) => {
-          return option.value === userToEdit.assigned_provider;
-        })[0]
+            return option.value === userToEdit.assigned_provider;
+          })[0]
         : {}
     );
     setCanEditAssignedProvider(
@@ -152,12 +150,16 @@ const UserEdit = (props) => {
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
-    setValidConfirmPassword(event.target.value === confirmPassword && event.target.value !== '');
+    setValidConfirmPassword(
+      event.target.value === confirmPassword && event.target.value !== ''
+    );
   };
   const handleConfirmPasswordChange = (event) => {
     setConfirmPassword(event.target.value);
-    setValidConfirmPassword(password === event.target.value && event.target.value !== '');
-  }
+    setValidConfirmPassword(
+      password === event.target.value && event.target.value !== ''
+    );
+  };
   const handleWillSetNewPasswordChange = (value) => {
     setWillSetNewPassword(value);
   };
@@ -187,7 +189,7 @@ const UserEdit = (props) => {
       return maybeArray.map((element) => element.value);
     };
 
-    let postContent = {
+    const postContent = {
       email: email,
       password: willSetNewPassword.value ? password : '', // this is NOT stored in plaintext, passport-local-mongoose hashes and salts it, and only then stores it
       first_name: firstName,
@@ -241,7 +243,8 @@ const UserEdit = (props) => {
         <Form.Group>
           <Form.Label>
             Change Password
-            {props && !props.id ? ' (Default is "Password1")' : null}</Form.Label>
+            {props && !props.id ? ' (Default is "Password1")' : null}
+          </Form.Label>
           <Select
             isClearable={false}
             value={willSetNewPassword}
@@ -250,7 +253,7 @@ const UserEdit = (props) => {
           />
         </Form.Group>
 
-        {willSetNewPassword.value ?
+        {willSetNewPassword.value ? (
           <Form.Group controlId='formBasicPassword'>
             <Form.Label>New Password</Form.Label>
             <Form.Control
@@ -261,11 +264,10 @@ const UserEdit = (props) => {
               isValid={validConfirmPassword && password !== ''}
               isInvalid={!validConfirmPassword && password !== ''}
             />
-
           </Form.Group>
-          : null}
+        ) : null}
 
-        {willSetNewPassword.value ?
+        {willSetNewPassword.value ? (
           <Form.Group controlId='formBasicPassword'>
             <Form.Label>Confirm New Password</Form.Label>
             <Form.Control
@@ -276,10 +278,11 @@ const UserEdit = (props) => {
               isValid={validConfirmPassword && password !== ''}
               isInvalid={!validConfirmPassword && password !== ''}
             />
-            <Form.Control.Feedback type="invalid">
+            <Form.Control.Feedback type='invalid'>
               Passwords do not match
             </Form.Control.Feedback>
-          </Form.Group> : null}
+          </Form.Group>
+        ) : null}
       </>
     );
   };
@@ -379,19 +382,34 @@ const UserEdit = (props) => {
     const isDisabled = willSetNewPassword.value && !validConfirmPassword;
     if (success)
       return (
-        <Button disabled={isDisabled} onClick={doSubmit} variant='success' type='submit'>
+        <Button
+          disabled={isDisabled}
+          onClick={doSubmit}
+          variant='success'
+          type='submit'
+        >
           Success
         </Button>
       );
     else if (hadError) {
       return (
-        <Button disabled={isDisabled} onClick={doSubmit} variant='warning' type='submit'>
+        <Button
+          disabled={isDisabled}
+          onClick={doSubmit}
+          variant='warning'
+          type='submit'
+        >
           Try Again
         </Button>
       );
     } else
       return (
-        <Button disabled={isDisabled} onClick={doSubmit} variant='primary' type='submit'>
+        <Button
+          disabled={isDisabled}
+          onClick={doSubmit}
+          variant='primary'
+          type='submit'
+        >
           Submit
         </Button>
       );
@@ -408,12 +426,12 @@ const UserEdit = (props) => {
             {props.id !== undefined && props.id !== ''
               ? `Edit ${userToEdit.email}`
               : 'Register User'}
-            {props.id !== undefined && props.id !== '' ?
+            {props.id !== undefined && props.id !== '' ? (
               <>
                 <br />
-                <h6 className="text-muted">ID: {userToEdit._id}</h6>
+                <h6 className='text-muted'>ID: {userToEdit._id}</h6>
               </>
-              : null}
+            ) : null}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -481,6 +499,13 @@ const UserEdit = (props) => {
 UserEdit.propTypes = {
   history: PropTypes.instanceOf(Object).isRequired,
   location: PropTypes.instanceOf(Object).isRequired,
+  providers: PropTypes.array.isRequired,
+  categories: PropTypes.array.isRequired,
+  users: PropTypes.array,
+  id: PropTypes.string,
+  buttonName: PropTypes.string,
+  style: PropTypes.string,
+  refreshDataCallback: PropTypes.func.isRequired,
 };
 
 export default UserEdit;

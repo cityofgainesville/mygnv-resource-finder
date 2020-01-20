@@ -62,27 +62,6 @@ const Login = (props) => {
       );
   };
 
-  const renderLoginButton = () => {
-    if (success)
-      return (
-        <Button onClick={doLogin} variant='success' type='submit'>
-          Success
-        </Button>
-      );
-    else if (hadError) {
-      return (
-        <Button onClick={doLogin} variant='warning' type='submit'>
-          Try Again
-        </Button>
-      );
-    } else
-      return (
-        <Button onClick={doLogin} variant='primary' type='submit'>
-          Login
-        </Button>
-      );
-  };
-
   const needsLogin = (
     <React.Fragment>
       <span style={{ marginRight: '1em' }}>

@@ -1,16 +1,16 @@
 import React, { useGlobal } from 'reactn';
 import { Route, Switch } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
-import RedirectButton from './RedirectButton';
+import RedirectButton from '../RedirectButton';
 
-import Login from './auth/Login';
-import UserAdmin from './admin/user/UserAdmin';
-import CategoryAdmin from './admin/category';
+import Login from '../auth/Login';
+import UserAdmin from './user';
+import CategoryAdmin from './category';
 import { withRouter } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 
-import paths from '../RouterPaths';
+import paths from '../../RouterPaths';
 
 // Either prompts user to login or displays logout button
 // And buttons for the different admin portal sections
