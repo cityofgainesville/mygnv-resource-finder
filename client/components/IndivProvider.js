@@ -31,6 +31,36 @@ const IndivProvider = (props) => {
     );
   };
 
+  const renderHours = () => {
+    return (
+      <Card.Text>
+        {provider.hours !== undefined ? addBreakToEnd('Hours:') : ''}
+        {provider.hours.monday !== undefined && provider.hours.monday !== ''
+          ? addBreakToEnd('Monday: ' + provider.hours.monday)
+          : ''}
+        {provider.hours.tuesday !== undefined && provider.hours.tuesday !== ''
+          ? addBreakToEnd('Tuesday: ' + provider.hours.tuesday)
+          : ''}
+        {provider.hours.wednesday !== undefined &&
+        provider.hours.wednesday !== ''
+          ? addBreakToEnd('Wednesday: ' + provider.hours.wednesday)
+          : ''}
+        {provider.hours.thursday !== undefined && provider.hours.thursday !== ''
+          ? addBreakToEnd('Thursday: ' + provider.hours.thursday)
+          : ''}
+        {provider.hours.friday !== undefined && provider.hours.friday !== ''
+          ? addBreakToEnd('Friday: ' + provider.hours.friday)
+          : ''}
+        {provider.hours.saturday !== undefined && provider.hours.saturday !== ''
+          ? addBreakToEnd('Saturday: ' + provider.hours.saturday)
+          : ''}
+        {provider.hours.sunday !== undefined && provider.hours.sunday !== ''
+          ? 'Sunday: ' + provider.hours.sunday
+          : ''}
+      </Card.Text>
+    );
+  };
+
   const br = <br></br>;
   return (
     <>
@@ -115,37 +145,7 @@ const IndivProvider = (props) => {
                   ? 'Website: ' + provider.website[0]
                   : ''}
               </Card.Text>
-              <Card.Text>
-                {provider.hours !== undefined ? addBreakToEnd('Hours:') : ''}
-                {provider.hours.monday !== undefined &&
-                provider.hours.monday !== ''
-                  ? addBreakToEnd('Monday: ' + provider.hours.monday)
-                  : ''}
-                {provider.hours.tuesday !== undefined &&
-                provider.hours.tuesday !== ''
-                  ? addBreakToEnd('Tuesday: ' + provider.hours.tuesday)
-                  : ''}
-                {provider.hours.wednesday !== undefined &&
-                provider.hours.wednesday !== ''
-                  ? addBreakToEnd('Wednesday: ' + provider.hours.wednesday)
-                  : ''}
-                {provider.hours.thursday !== undefined &&
-                provider.hours.thursday !== ''
-                  ? addBreakToEnd('Thursday: ' + provider.hours.thursday)
-                  : ''}
-                {provider.hours.friday !== undefined &&
-                provider.hours.friday !== ''
-                  ? addBreakToEnd('Friday: ' + provider.hours.friday)
-                  : ''}
-                {provider.hours.saturday !== undefined &&
-                provider.hours.saturday !== ''
-                  ? addBreakToEnd('Saturday: ' + provider.hours.saturday)
-                  : ''}
-                {provider.hours.sunday !== undefined &&
-                provider.hours.sunday !== ''
-                  ? 'Sunday: ' + provider.hours.sunday
-                  : ''}
-              </Card.Text>
+              {provider.hours ? renderHours() : null}
               <Card.Text>
                 {provider.walk_ins !== undefined && provider.walk_ins !== ''
                   ? provider.walk_ins === 'Y' || provider.walk_ins === 'y'

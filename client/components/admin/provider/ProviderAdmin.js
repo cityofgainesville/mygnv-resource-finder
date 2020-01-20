@@ -109,12 +109,14 @@ const CategoryAdmin = (props) => {
               buttonName='Edit'
               id={provider._id}
             />{' '}
-            <ProviderDelete
-              providers={providers}
-              refreshDataCallback={handleRefreshData}
-              buttonName='Delete'
-              id={provider._id}
-            />
+            {currentUser.role === 'Owner' ? (
+              <ProviderDelete
+                providers={providers}
+                refreshDataCallback={handleRefreshData}
+                buttonName='Delete'
+                id={provider._id}
+              />
+            ) : null}
             <h5
               style={{
                 color: 'black',
