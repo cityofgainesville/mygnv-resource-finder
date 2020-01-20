@@ -85,12 +85,6 @@ const CategoryEdit = (props) => {
   const populateExistingCategory = () => {
     setName(categoryToEdit.name);
     const providerIds = new Set(categoryToEdit.providers);
-    console.log(providerIds);
-    console.log(
-      providerOptions.filter((option) => {
-        return providerIds.has(option.value);
-      })
-    );
     setProviders(
       providerOptions.filter((option) => {
         return providerIds.has(option.value);
@@ -343,7 +337,7 @@ const CategoryEdit = (props) => {
               ? `Edit ${name}`
               : 'Add Category'}
 
-            {props.id !== undefined && props.id !== '' ? (
+            {props.id !== undefined && props.id !== '' && categoryToEdit ? (
               <>
                 <br />
                 <h6 className='text-muted'>ID: {categoryToEdit._id}</h6>

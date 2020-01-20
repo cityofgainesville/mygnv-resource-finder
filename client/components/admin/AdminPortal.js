@@ -6,6 +6,7 @@ import RedirectButton from '../RedirectButton';
 import Login from '../auth/Login';
 import UserAdmin from './user';
 import CategoryAdmin from './category';
+import ProviderAdmin from './provider';
 import { withRouter } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
@@ -87,13 +88,18 @@ const AdminPortal = (props) => {
       <Login />
       {currentUser ? renderLoggedIn : null}
       <Switch>
-        <Route
+        {/* <Route
           exact
           path={paths.adminPath}
           render={() => {
             <React.Fragment>{renderLoggedIn}</React.Fragment>;
           }}
-        />
+        /> */}
+        <Route
+          exact
+          path={paths.providersAdminPath}
+          render={() => <ProviderAdmin />}
+        ></Route>
         <Route
           exact
           path={paths.categoriesAdminPath}

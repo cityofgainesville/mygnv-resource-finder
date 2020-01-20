@@ -44,7 +44,6 @@ const providerSchema = new Schema({
     saturday: String,
     sunday: String,
   },
-  walk_ins: String,
   appointment: {
     is_required: Boolean,
     phone: String,
@@ -52,6 +51,7 @@ const providerSchema = new Schema({
     email: String,
     other_info: String,
   },
+  walk_ins: String,
   application: {
     is_required: Boolean,
     apply_online: Boolean,

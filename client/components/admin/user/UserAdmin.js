@@ -82,6 +82,7 @@ const UserAdmin = (props) => {
                   categories={categories}
                   providers={providers}
                   users={users}
+                  buttonName='Delete'
                   refreshDataCallback={handleRefreshData}
                   id={user._id}
                 />

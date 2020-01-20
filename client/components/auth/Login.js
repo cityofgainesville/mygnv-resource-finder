@@ -1,6 +1,5 @@
 import React, { useState, useGlobal } from 'reactn';
 import { Button, Form, Modal, Alert, Row } from 'react-bootstrap';
-import PropTypes from 'prop-types';
 import axios from 'axios';
 import LogoutButton from './LogoutButton';
 
@@ -132,11 +131,6 @@ const Login = (props) => {
       {currentUser ? alreadyLoggedIn() : needsLogin}
     </Row>
   );
-};
-
-Login.propTypes = {
-  history: PropTypes.instanceOf(Object).isRequired,
-  location: PropTypes.instanceOf(Object).isRequired,
 };
 
 export default Login;

@@ -88,14 +88,20 @@ const UserDelete = (props) => {
   return (
     <React.Fragment>
       <Button variant='danger' onClick={openModal} style={props.style}>
-        Delete
+        {props.buttonName}
       </Button>
       <Modal show={modalIsDisplayed} onHide={closeModal}>
         <Modal.Header closeButton>
           <Modal.Title>
-            Delete {userToEdit.email}
-            <br />
-            <h6 className='text-muted'>ID: {userToEdit._id}</h6>
+            {props.id !== undefined && props.id !== ''
+              ? `Delete ${userToEdit.email}`
+              : 'Delete User'}
+            {props.id !== undefined && props.id !== '' && userToEdit ? (
+              <>
+                <br />
+                <h6 className='text-muted'>ID: {userToEdit._id}</h6>
+              </>
+            ) : null}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

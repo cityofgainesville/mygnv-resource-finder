@@ -185,8 +185,10 @@ const UserEdit = (props) => {
     event.preventDefault();
 
     const processMaybeArray = (maybeArray) => {
-      if (!Array.isArray(maybeArray)) maybeArray = [maybeArray];
-      return maybeArray.map((element) => element.value);
+      if (maybeArray === null) return [];
+      return Array.isArray(maybeArray)
+        ? maybeArray.map((e) => e.value)
+        : [maybeArray.value];
     };
 
     const postContent = {

@@ -85,7 +85,6 @@ const Search = (props) => {
 };
 
 Search.propTypes = {
-  category: PropTypes.instanceOf(Object).isRequired,
   history: PropTypes.instanceOf(Object).isRequired,
 };
 
