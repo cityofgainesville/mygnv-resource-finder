@@ -59,6 +59,7 @@ const CategoryAdmin = (props) => {
           <CategoryDelete
             categories={categories}
             refreshDataCallback={handleRefreshData}
+            buttonName='Delete'
             id={category._id}
           />
           <h5
@@ -79,8 +80,9 @@ const CategoryAdmin = (props) => {
   const topLevelCategories = mapCategories(
     categories.filter((category) => {
       return (
-        !category.is_subcategory &&
-        category.name.toLowerCase().includes(filterText.toLowerCase())
+        (!category.is_subcategory &&
+          category.name.toLowerCase().includes(filterText.toLowerCase())) ||
+        category._id.includes(filterText)
       );
     })
   );
@@ -88,8 +90,9 @@ const CategoryAdmin = (props) => {
   const subcategories = mapCategories(
     categories.filter((category) => {
       return (
-        category.is_subcategory &&
-        category.name.toLowerCase().includes(filterText.toLowerCase())
+        (category.is_subcategory &&
+          category.name.toLowerCase().includes(filterText.toLowerCase())) ||
+        category._id.includes(filterText)
       );
     })
   );

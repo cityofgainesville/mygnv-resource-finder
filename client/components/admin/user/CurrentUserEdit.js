@@ -1,6 +1,6 @@
 import React, { useState, useGlobal, useEffect } from 'reactn';
 import { Button, Form, Modal, Alert } from 'react-bootstrap';
-import PropTypes, { bool } from 'prop-types';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import Select from 'react-select';
 
@@ -80,8 +80,8 @@ const CurrentUserEdit = (props) => {
     setAssignedProvider(
       currentUser.assigned_provider
         ? providerOptions.filter((option) => {
-          return option.value === currentUser.assigned_provider;
-        })[0]
+            return option.value === currentUser.assigned_provider;
+          })[0]
         : {}
     );
     setCanEditAssignedProvider(
@@ -124,19 +124,22 @@ const CurrentUserEdit = (props) => {
 
   const handleCurrentPasswordChange = (event) => {
     setCurrentPassword(event.target.value);
-  }
+  };
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
-    setValidConfirmPassword(event.target.value === confirmPassword && event.target.value !== '');
+    setValidConfirmPassword(
+      event.target.value === confirmPassword && event.target.value !== ''
+    );
   };
   const handleConfirmPasswordChange = (event) => {
     setConfirmPassword(event.target.value);
-    setValidConfirmPassword(password === event.target.value && event.target.value !== '');
-  }
+    setValidConfirmPassword(
+      password === event.target.value && event.target.value !== ''
+    );
+  };
   const handleWillSetNewPasswordChange = (value) => {
     setWillSetNewPassword(value);
   };
-
 
   const handleRoleChange = (value) => {
     setRole(value);
@@ -163,7 +166,7 @@ const CurrentUserEdit = (props) => {
       return maybeArray.map((element) => element.value);
     };
 
-    let postContent = {
+    const postContent = {
       email: email,
       old_password: willSetNewPassword.value ? currentPassword : '',
       password: willSetNewPassword.value ? password : '', // this is NOT stored in plaintext, passport-local-mongoose hashes and salts it, and only then stores it
@@ -220,7 +223,7 @@ const CurrentUserEdit = (props) => {
         </Form.Group>
       );
     else return null;
-  }
+  };
 
   const renderPasswordBox = () => {
     return (
@@ -235,7 +238,7 @@ const CurrentUserEdit = (props) => {
           />
         </Form.Group>
 
-        {willSetNewPassword.value ?
+        {willSetNewPassword.value ? (
           <Form.Group controlId='formBasicPassword'>
             <Form.Label>Current Password</Form.Label>
             <Form.Control
@@ -245,9 +248,9 @@ const CurrentUserEdit = (props) => {
               placeholder='Current Password'
             />
           </Form.Group>
-          : null}
+        ) : null}
 
-        {willSetNewPassword.value ?
+        {willSetNewPassword.value ? (
           <Form.Group controlId='formBasicPassword'>
             <Form.Label>New Password</Form.Label>
             <Form.Control
@@ -258,11 +261,10 @@ const CurrentUserEdit = (props) => {
               isValid={validConfirmPassword && password !== ''}
               isInvalid={!validConfirmPassword && password !== ''}
             />
-
           </Form.Group>
-          : null}
+        ) : null}
 
-        {willSetNewPassword.value ?
+        {willSetNewPassword.value ? (
           <Form.Group controlId='formBasicPassword'>
             <Form.Label>Confirm New Password</Form.Label>
             <Form.Control
@@ -273,10 +275,11 @@ const CurrentUserEdit = (props) => {
               isValid={validConfirmPassword && password !== ''}
               isInvalid={!validConfirmPassword && password !== ''}
             />
-            <Form.Control.Feedback type="invalid">
+            <Form.Control.Feedback type='invalid'>
               Passwords do not match
             </Form.Control.Feedback>
-          </Form.Group> : null}
+          </Form.Group>
+        ) : null}
       </>
     );
   };
@@ -296,7 +299,7 @@ const CurrentUserEdit = (props) => {
             />
           </Form.Group>
 
-          {currentUser && currentUser.role === 'Owner' ?
+          {currentUser && currentUser.role === 'Owner' ? (
             <Form.Group>
               <Form.Label>Can Edit Assigned Provider</Form.Label>
               <Select
@@ -306,14 +309,18 @@ const CurrentUserEdit = (props) => {
                 options={boolOptions}
               />
             </Form.Group>
-            : null}
+          ) : null}
         </>
       );
     } else return null;
   };
 
   const renderEditorRole = () => {
-    if (role.value === 'Editor' && currentUser && currentUser.role === 'Owner') {
+    if (
+      role.value === 'Editor' &&
+      currentUser &&
+      currentUser.role === 'Owner'
+    ) {
       return (
         <>
           <Form.Group>
@@ -359,7 +366,7 @@ const CurrentUserEdit = (props) => {
         </Form.Group>
       );
     else return null;
-  }
+  };
 
   const renderStatus = () => {
     if (success && !hadError) {
@@ -394,21 +401,35 @@ const CurrentUserEdit = (props) => {
   const renderSubmitButton = () => {
     const isDisabled = willSetNewPassword.value && !validConfirmPassword;
     if (success)
-
       return (
-        <Button disabled={isDisabled} onClick={doSubmit} variant='success' type='submit'>
+        <Button
+          disabled={isDisabled}
+          onClick={doSubmit}
+          variant='success'
+          type='submit'
+        >
           Success
         </Button>
       );
     else if (hadError) {
       return (
-        <Button disabled={isDisabled} onClick={doSubmit} variant='warning' type='submit'>
+        <Button
+          disabled={isDisabled}
+          onClick={doSubmit}
+          variant='warning'
+          type='submit'
+        >
           Try Again
         </Button>
       );
     } else
       return (
-        <Button disabled={isDisabled} onClick={doSubmit} variant='primary' type='submit'>
+        <Button
+          disabled={isDisabled}
+          onClick={doSubmit}
+          variant='primary'
+          type='submit'
+        >
           Submit
         </Button>
       );
@@ -423,12 +444,12 @@ const CurrentUserEdit = (props) => {
         <Modal.Header closeButton>
           <Modal.Title>
             Edit {currentUser ? currentUser.email : 'current user'}
-            {currentUser ?
+            {currentUser ? (
               <>
                 <br />
-                <h6 className="text-muted">ID: {currentUser._id}</h6>
+                <h6 className='text-muted'>ID: {currentUser._id}</h6>
               </>
-              : null}
+            ) : null}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -479,6 +500,11 @@ const CurrentUserEdit = (props) => {
 CurrentUserEdit.propTypes = {
   history: PropTypes.instanceOf(Object).isRequired,
   location: PropTypes.instanceOf(Object).isRequired,
+  providers: PropTypes.array.isRequired,
+  categories: PropTypes.array.isRequired,
+  buttonName: PropTypes.string,
+  style: PropTypes.string,
+  refreshDataCallback: PropTypes.func.isRequired,
 };
 
 export default CurrentUserEdit;

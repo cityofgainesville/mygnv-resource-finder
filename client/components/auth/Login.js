@@ -1,6 +1,5 @@
 import React, { useState, useGlobal } from 'reactn';
 import { Button, Form, Modal, Alert, Row } from 'react-bootstrap';
-import PropTypes from 'prop-types';
 import axios from 'axios';
 import LogoutButton from './LogoutButton';
 
@@ -59,27 +58,6 @@ const Login = (props) => {
           </span>
           <LogoutButton />
         </React.Fragment>
-      );
-  };
-
-  const renderLoginButton = () => {
-    if (success)
-      return (
-        <Button onClick={doLogin} variant='success' type='submit'>
-          Success
-        </Button>
-      );
-    else if (hadError) {
-      return (
-        <Button onClick={doLogin} variant='warning' type='submit'>
-          Try Again
-        </Button>
-      );
-    } else
-      return (
-        <Button onClick={doLogin} variant='primary' type='submit'>
-          Login
-        </Button>
       );
   };
 
@@ -153,11 +131,6 @@ const Login = (props) => {
       {currentUser ? alreadyLoggedIn() : needsLogin}
     </Row>
   );
-};
-
-Login.propTypes = {
-  history: PropTypes.instanceOf(Object).isRequired,
-  location: PropTypes.instanceOf(Object).isRequired,
 };
 
 export default Login;

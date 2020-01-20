@@ -1,5 +1,6 @@
 import { hot } from 'react-hot-loader/root';
 import React from 'reactn';
+import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import paths from './RouterPaths';
 
@@ -8,7 +9,7 @@ import Category from './components/category';
 import NavBar from './components/NavBar';
 import MainPage from './components/MainPage';
 import Title from './components/Title';
-import AdminPortal from './components/AdminPortal';
+import AdminPortal from './components/admin';
 import IndivProvider from './components/IndivProvider';
 import Search from './components/Search';
 
@@ -39,6 +40,10 @@ const App = (props) => {
       </Switch>
     </React.Fragment>
   );
+};
+
+App.propTypes = {
+  match: PropTypes.instanceOf(Object).isRequired,
 };
 
 export default hot(App);

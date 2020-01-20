@@ -81,7 +81,7 @@ const CategoryView = (props) => {
 };
 
 CategoryView.propTypes = {
-  id: PropTypes.instanceOf(String),
+  id: PropTypes.string,
 };
 
 export default CategoryView;

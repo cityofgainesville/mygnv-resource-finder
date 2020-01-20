@@ -1,4 +1,4 @@
-import React, { useState, useGlobal, useEffect } from 'reactn';
+import React, { useState, useEffect } from 'reactn';
 import { Button, Form, Modal, Alert, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
@@ -8,13 +8,11 @@ import axios from 'axios';
 // Used for category admin portal
 
 const CategoryEdit = (props) => {
-  const [currentUser] = useGlobal('currentUser');
-
   const getCategoryToEditFromProps = () => {
     return props.id
       ? props.categories.filter((category) => {
-        return category._id === props.id;
-      })[0]
+          return category._id === props.id;
+        })[0]
       : null;
   };
 
@@ -69,8 +67,8 @@ const CategoryEdit = (props) => {
   const [isSubcategory, setIsSubcategory] = useState(boolOptions[0]);
 
   /**
- * Reset success/fail flags
- */
+   * Reset success/fail flags
+   */
   const resetFlags = () => {
     setHadError(false);
     setSuccess(false);
@@ -81,18 +79,12 @@ const CategoryEdit = (props) => {
     setProviders([]);
     setChildren([]);
     setIconName('');
-    setIsSubcategory(boolOptions[0])
+    setIsSubcategory(boolOptions[0]);
   };
 
   const populateExistingCategory = () => {
     setName(categoryToEdit.name);
     const providerIds = new Set(categoryToEdit.providers);
-    console.log(providerIds);
-    console.log(
-      providerOptions.filter((option) => {
-        return providerIds.has(option.value);
-      })
-    );
     setProviders(
       providerOptions.filter((option) => {
         return providerIds.has(option.value);
@@ -104,7 +96,9 @@ const CategoryEdit = (props) => {
         return categoryIds.has(option.value);
       })
     );
-    setIconName(categoryToEdit.icon_name === 'null' ? '' : categoryToEdit.icon_name);
+    setIconName(
+      categoryToEdit.icon_name === 'null' ? '' : categoryToEdit.icon_name
+    );
     setIsSubcategory(
       categoryToEdit.is_subcategory ? boolOptions[1] : boolOptions[0]
     );
@@ -154,8 +148,7 @@ const CategoryEdit = (props) => {
   const closeModal = () => {
     setModalIsDisplayed(false);
     resetFlags();
-    if (!props.id)
-      clearState();
+    if (!props.id) clearState();
   };
 
   const doSubmit = async (event) => {
@@ -168,7 +161,7 @@ const CategoryEdit = (props) => {
         : [maybeArray.value];
     };
 
-    let postContent = {
+    const postContent = {
       name: name,
       providers: processMaybeArray(providers), // this is NOT stored in plaintext, passport-local-mongoose hashes and salts it, and only then stores it
       children: processMaybeArray(children),
@@ -344,12 +337,12 @@ const CategoryEdit = (props) => {
               ? `Edit ${name}`
               : 'Add Category'}
 
-            {props.id !== undefined && props.id !== '' ?
+            {props.id !== undefined && props.id !== '' && categoryToEdit ? (
               <>
                 <br />
-                <h6 className="text-muted">ID: {categoryToEdit._id}</h6>
+                <h6 className='text-muted'>ID: {categoryToEdit._id}</h6>
               </>
-              : null}
+            ) : null}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

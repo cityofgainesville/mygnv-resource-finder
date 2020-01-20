@@ -2,8 +2,10 @@
   "extends": [
     "google",
     "plugin:react/recommended",
+    "plugin:prettier/recommended",
     "prettier",
-    "plugin:prettier/recommended"
+    "prettier/babel",
+    "prettier/react"
   ],
   "parser": "babel-eslint",
   "globals": {
@@ -24,7 +26,11 @@
     "ecmaVersion": 2020,
     "sourceType": "module"
   },
-  "plugins": ["babel", "react", "prettier"],
+  "plugins": [
+    "babel",
+    "react",
+    "prettier"
+  ],
   "rules": {
     "prettier/prettier": "error",
     "require-jsdoc": "off",

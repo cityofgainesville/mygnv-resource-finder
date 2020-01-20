@@ -2,13 +2,12 @@ import React, { useState, useEffect, useGlobal } from 'reactn';
 import { ListGroup, Container, Row, Col, Form } from 'react-bootstrap';
 import axios from 'axios';
 
-import CurrentUserEdit from './CurrentUserEdit'
+import CurrentUserEdit from './CurrentUserEdit';
 import UserEdit from './UserEdit';
 import UserDelete from './UserDelete';
 
 const UserAdmin = (props) => {
   const [currentUser] = useGlobal('currentUser');
-
 
   const [categories, setCategories] = useState([]);
   const [providers, setProviders] = useState([]);
@@ -83,6 +82,7 @@ const UserAdmin = (props) => {
                   categories={categories}
                   providers={providers}
                   users={users}
+                  buttonName='Delete'
                   refreshDataCallback={handleRefreshData}
                   id={user._id}
                 />
@@ -113,28 +113,30 @@ const UserAdmin = (props) => {
       });
   };
 
-  const filterFormElement = <Form.Group controlId='formFilterText'>
-    <Form.Label>
-      <strong>Filter users</strong>
-    </Form.Label>
-    <Row>
-      <Col>
-        <Form.Control
-          value={filterText}
-          onChange={handleFilterTextChange}
-          placeholder='Filter users'
-        />
-      </Col>
-      <Col sm='auto'>
-        <Row
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        ></Row>
-      </Col>
-    </Row>
-  </Form.Group>;
+  const filterFormElement = (
+    <Form.Group controlId='formFilterText'>
+      <Form.Label>
+        <strong>Filter users</strong>
+      </Form.Label>
+      <Row>
+        <Col>
+          <Form.Control
+            value={filterText}
+            onChange={handleFilterTextChange}
+            placeholder='Filter users'
+          />
+        </Col>
+        <Col sm='auto'>
+          <Row
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          ></Row>
+        </Col>
+      </Row>
+    </Form.Group>
+  );
 
   const renderUsers = () => {
     return (
@@ -164,7 +166,7 @@ const UserAdmin = (props) => {
         </ListGroup>
       </Row>
     );
-  }
+  };
 
   // Center the two columns of top level categories and subcategories
   return (
@@ -172,7 +174,7 @@ const UserAdmin = (props) => {
       <Row style={{ alignItems: 'center', justifyContent: 'center' }}>
         <Col>
           <Form style={{ width: '100%' }}>
-            {currentUser && currentUser.role === 'Owner' ?
+            {currentUser && currentUser.role === 'Owner' ? (
               <UserEdit
                 refreshDataCallback={handleRefreshData}
                 categories={categories}
@@ -180,7 +182,8 @@ const UserAdmin = (props) => {
                 users={users}
                 buttonName='Add User'
                 style={{ marginBottom: '1em', marginRight: '1em' }}
-              /> : null}
+              />
+            ) : null}
             <CurrentUserEdit
               refreshDataCallback={handleRefreshData}
               categories={categories}
@@ -189,8 +192,9 @@ const UserAdmin = (props) => {
               buttonName='Edit Current User'
               style={{ marginBottom: '1em' }}
             />
-            {currentUser && currentUser.role === 'Owner' ?
-              filterFormElement : null}
+            {currentUser && currentUser.role === 'Owner'
+              ? filterFormElement
+              : null}
           </Form>
         </Col>
       </Row>

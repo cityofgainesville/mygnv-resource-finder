@@ -22,7 +22,11 @@ router.route('/:providerId').get(providerController.read);
 // POST will update provider if authenticated
 router
   .route('/update/:providerId')
-  .post(userController.isAuthenticated, providerController.update);
+  .post(
+    userController.isAuthenticated,
+    providerController.isProviderUpdateAllowed,
+    providerController.update
+  );
 
 // Path is /api/providers/delete/:providerId
 // DELETE will update provider if authenticated

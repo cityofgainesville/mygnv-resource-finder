@@ -1,20 +1,22 @@
-import React, { useState } from 'reactn';
+import React, { useState, useEffect } from 'reactn';
 import { Button, Modal, Alert } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-// Category delete modal with delete confirmation
+// Provider delete modal with delete confirmation
 
-const CategoryDelete = (props) => {
-  const getCategoryToEditFromProps = () => {
+const ProviderDelete = (props) => {
+  const getProviderToEditFromProps = () => {
     return props.id
-      ? props.categories.filter((category) => {
-          return category._id === props.id;
+      ? props.providers.filter((provider) => {
+          return provider._id === props.id;
         })[0]
       : null;
   };
 
-  const [categoryToEdit] = useState(getCategoryToEditFromProps());
+  const [providerToEdit, setProviderToEdit] = useState(
+    getProviderToEditFromProps()
+  );
   const [success, setSuccess] = useState(false);
   const [hadError, setHadError] = useState(false);
   const [modalIsDisplayed, setModalIsDisplayed] = useState(false);
@@ -29,6 +31,10 @@ const CategoryDelete = (props) => {
     setSuccess(false);
   };
 
+  useEffect(() => {
+    setProviderToEdit(getProviderToEditFromProps());
+  }, [props]);
+
   const doSubmit = async (event) => {
     event.preventDefault();
 
@@ -37,7 +43,7 @@ const CategoryDelete = (props) => {
     };
 
     try {
-      const res = await axios.delete(`/api/categories/delete/${props.id}`);
+      const res = await axios.delete(`/api/providers/delete/${props.id}`);
       if (res.data.success) {
         setHadError(false);
         setSuccess(true);
@@ -62,7 +68,7 @@ const CategoryDelete = (props) => {
             marginRight: 'auto',
           }}
         >
-          Successfully deleted category.
+          Successfully deleted provider.
         </Alert>
       );
     } else if (hadError) {
@@ -89,13 +95,13 @@ const CategoryDelete = (props) => {
       <Modal show={modalIsDisplayed} onHide={closeModal}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {props.id !== undefined && props.id !== ''
-              ? `Delete ${name}`
-              : 'Delete Category'}
-            {props.id !== undefined && props.id !== '' && categoryToEdit ? (
+            {props.id !== undefined && props.id !== '' && providerToEdit
+              ? `Delete ${providerToEdit.name}`
+              : 'Delete Provider'}
+            {props.id !== undefined && props.id !== '' && providerToEdit ? (
               <>
                 <br />
-                <h6 className='text-muted'>ID: {categoryToEdit._id}</h6>
+                <h6 className='text-muted'>ID: {providerToEdit._id}</h6>
               </>
             ) : null}
           </Modal.Title>
@@ -112,7 +118,7 @@ const CategoryDelete = (props) => {
           >
             DANGER: This operation is irreversible. Be ABSOLUTELY sure that this
             is what you intend to do. THIS WILL IRREVERSIBLY DELETE THE
-            CATEGORY.
+            PROVIDER.
           </Alert>
         </Modal.Body>
         <Modal.Footer>
@@ -120,7 +126,7 @@ const CategoryDelete = (props) => {
             Close
           </Button>
           <Button onClick={doSubmit} variant='danger' type='submit'>
-            Delete Category
+            Delete Provider
           </Button>
         </Modal.Footer>
       </Modal>
@@ -128,12 +134,12 @@ const CategoryDelete = (props) => {
   );
 };
 
-CategoryDelete.propTypes = {
+ProviderDelete.propTypes = {
   id: PropTypes.string,
   style: PropTypes.object,
   buttonName: PropTypes.string.isRequired,
   refreshDataCallback: PropTypes.func.isRequired,
-  categories: PropTypes.array.isRequired,
+  providers: PropTypes.array.isRequired,
 };
 
-export default CategoryDelete;
+export default ProviderDelete;

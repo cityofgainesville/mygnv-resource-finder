@@ -1,16 +1,17 @@
 import React, { useGlobal } from 'reactn';
 import { Route, Switch } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
-import RedirectButton from './RedirectButton';
+import RedirectButton from '../RedirectButton';
 
-import Login from './auth/Login';
-import UserAdmin from './admin/user/UserAdmin';
-import CategoryAdmin from './admin/category';
+import Login from '../auth/Login';
+import UserAdmin from './user';
+import CategoryAdmin from './category';
+import ProviderAdmin from './provider';
 import { withRouter } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 
-import paths from '../RouterPaths';
+import paths from '../../RouterPaths';
 
 // Either prompts user to login or displays logout button
 // And buttons for the different admin portal sections
@@ -87,13 +88,18 @@ const AdminPortal = (props) => {
       <Login />
       {currentUser ? renderLoggedIn : null}
       <Switch>
-        <Route
+        {/* <Route
           exact
           path={paths.adminPath}
           render={() => {
             <React.Fragment>{renderLoggedIn}</React.Fragment>;
           }}
-        />
+        /> */}
+        <Route
+          exact
+          path={paths.providersAdminPath}
+          render={() => <ProviderAdmin />}
+        ></Route>
         <Route
           exact
           path={paths.categoriesAdminPath}
