@@ -14,6 +14,3 @@
 
 # logs
 npm-debug.log*
-
-# config files with keys
-/server/config/config.js
