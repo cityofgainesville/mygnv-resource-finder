@@ -35,7 +35,10 @@ const Search = (props) => {
 
   const providerList = providers
     .filter((provider) => {
-      return provider.name.toLowerCase().includes(filterText.toLowerCase());
+      return (
+        provider.name.toLowerCase().includes(filterText.toLowerCase()) ||
+        provider._id.includes(filterText)
+      );
     })
     .map((provider) => {
       return (

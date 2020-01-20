@@ -62,7 +62,8 @@ const UserAdmin = (props) => {
           (user.first_name &&
             user.first_name.toLowerCase().includes(filterText.toLowerCase())) ||
           (user.last_name &&
-            user.last_name.toLowerCase().includes(filterText.toLowerCase()))
+            user.last_name.toLowerCase().includes(filterText.toLowerCase())) ||
+          user._id.includes(filterText)
         );
       })
       .map((user) => {
