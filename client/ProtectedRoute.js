@@ -7,17 +7,18 @@ import paths from './RouterPaths';
 // modals are used for the admin portal, but can be useful
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
-  const [global] = useGlobal();
+  const [currentUser] = useGlobal('currentUser');
+
   return (
     <Route
       {...rest}
       render={(props) =>
-        global.isAuthenticated === true ? (
+        currentUser ? (
           <Component {...props} />
         ) : (
           <Redirect
             to={{
-              pathname: paths.login,
+              pathname: paths.adminPath,
               state: { from: props.location },
             }}
           />

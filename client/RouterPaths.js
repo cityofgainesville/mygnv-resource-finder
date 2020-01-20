@@ -1,8 +1,6 @@
-// Holds router variables and generates router paths from category names
+// Holds router path variables
 
 const mainPath = '/';
-const login = '/login';
-const register = '/register';
 
 const adminPath = '/admin';
 const categoriesAdminPath = `${adminPath}/categories`;
@@ -13,11 +11,8 @@ const categoryPath = '/categories';
 const providerPath = '/provider';
 const searchPath = '/search';
 
-/* eslint-disable no-unused-vars */
 const paths = {
   mainPath,
-  login,
-  register,
 
   adminPath,
   categoriesAdminPath,
