@@ -28,39 +28,7 @@ const AdminPortal = (props) => {
 
   console.log(props.history);
 
-  const renderCategoriesButton = () => {
-    if (currentUser && currentUser.role === 'Owner')
-      return (
-        <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
-          <RedirectButton
-            exact
-            path={paths.categoriesAdminPath}
-            variant={buttonColorIfMatchPath(paths.categoriesAdminPath)}
-          >
-            Edit Categories
-          </RedirectButton>
-        </Col>
-      );
-    else return null;
-  };
-
-  const renderUsersButton = () => {
-    if (currentUser)
-      return (
-        <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
-          <RedirectButton
-            exact
-            path={paths.usersAdminPath}
-            variant={buttonColorIfMatchPath(paths.usersAdminPath)}
-          >
-            Edit Users
-          </RedirectButton>
-        </Col>
-      );
-    else return null;
-  };
-
-  const renderLoggedIn = (
+  const renderLoggedIn = () => (
     <Container
       style={{
         margins: 'auto auto',
@@ -68,7 +36,17 @@ const AdminPortal = (props) => {
       }}
     >
       <Row className='justify-content-md-center' style={{ margin: 'auto' }}>
-        {renderCategoriesButton()}
+        {currentUser.role === 'Owner' ? (
+          <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
+            <RedirectButton
+              exact
+              path={paths.categoriesAdminPath}
+              variant={buttonColorIfMatchPath(paths.categoriesAdminPath)}
+            >
+              Edit Categories
+            </RedirectButton>
+          </Col>
+        ) : null}
         <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
           <RedirectButton
             exact
@@ -78,29 +56,47 @@ const AdminPortal = (props) => {
             Edit Providers
           </RedirectButton>
         </Col>
-        {renderUsersButton()}
+        <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
+          <RedirectButton
+            exact
+            path={paths.usersAdminPath}
+            variant={buttonColorIfMatchPath(paths.usersAdminPath)}
+          >
+            Edit Users
+          </RedirectButton>
+        </Col>
       </Row>
     </Container>
   );
 
   return (
-    <React.Fragment>
+    <>
       <Login />
-      {currentUser ? renderLoggedIn : null}
-      <Switch>
-        <Route
-          exact
-          path={paths.providersAdminPath}
-          render={() => <ProviderAdmin />}
-        ></Route>
-        <Route
-          exact
-          path={paths.categoriesAdminPath}
-          render={() => <CategoryAdmin />}
-        />
-        <Route exact path={paths.usersAdminPath} render={() => <UserAdmin />} />
-      </Switch>
-    </React.Fragment>
+      {currentUser ? (
+        <>
+          {renderLoggedIn()}
+          <Switch>
+            {currentUser.role === 'Owner' ? (
+              <Route
+                exact
+                path={paths.categoriesAdminPath}
+                render={() => <CategoryAdmin />}
+              />
+            ) : null}
+            <Route
+              exact
+              path={paths.providersAdminPath}
+              render={() => <ProviderAdmin />}
+            />
+            <Route
+              exact
+              path={paths.usersAdminPath}
+              render={() => <UserAdmin />}
+            />
+          </Switch>
+        </>
+      ) : null}
+    </>
   );
 };
 
