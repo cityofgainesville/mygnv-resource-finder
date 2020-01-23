@@ -142,15 +142,17 @@ const AdminPortal = (props) => {
             Edit Providers
           </RedirectButton>
         </Col>
-        <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
-          <RedirectButton
-            exact
-            path={paths.usersAdminPath}
-            variant={buttonColorIfMatchPath(paths.usersAdminPath)}
-          >
-            Edit Users
-          </RedirectButton>
-        </Col>
+        {currentUser.role === 'Owner' ? (
+          <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
+            <RedirectButton
+              exact
+              path={paths.usersAdminPath}
+              variant={buttonColorIfMatchPath(paths.usersAdminPath)}
+            >
+              Edit Users
+            </RedirectButton>
+          </Col>
+        ) : null}
       </Row>
     </Container>
   );
@@ -190,18 +192,20 @@ const AdminPortal = (props) => {
                 />
               )}
             />
-            <Route
-              exact
-              path={paths.usersAdminPath}
-              render={() => (
-                <UserAdmin
-                  categories={categories}
-                  providers={providers}
-                  users={users}
-                  refreshDataCallback={handleRefreshData}
-                />
-              )}
-            />
+            {currentUser.role === 'Owner' ? (
+              <Route
+                exact
+                path={paths.usersAdminPath}
+                render={() => (
+                  <UserAdmin
+                    categories={categories}
+                    providers={providers}
+                    users={users}
+                    refreshDataCallback={handleRefreshData}
+                  />
+                )}
+              />
+            ) : null}
           </Switch>
         </>
       ) : null}

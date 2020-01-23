@@ -65,9 +65,7 @@ const Login = (props) => {
       return (
         <Row className='justify-content-md-center' style={{ margin: 'auto' }}>
           <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
-            <span>
-              {`Logged in: ${currentUser.first_name} ${currentUser.last_name}`}
-            </span>
+            <span>{`Logged in as: ${currentUser.email}`}</span>
           </Col>
           <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
             <CurrentUserEdit
