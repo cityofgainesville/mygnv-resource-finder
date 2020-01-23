@@ -499,14 +499,12 @@ const UserEdit = (props) => {
 };
 
 UserEdit.propTypes = {
-  history: PropTypes.instanceOf(Object).isRequired,
-  location: PropTypes.instanceOf(Object).isRequired,
   providers: PropTypes.array.isRequired,
   categories: PropTypes.array.isRequired,
   users: PropTypes.array,
   id: PropTypes.string,
   buttonName: PropTypes.string,
-  style: PropTypes.string,
+  style: PropTypes.object,
   refreshDataCallback: PropTypes.func.isRequired,
 };
 

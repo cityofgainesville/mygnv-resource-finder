@@ -1,56 +1,17 @@
-import React, { useState, useEffect, useGlobal } from 'reactn';
+import React, { useState, useGlobal } from 'reactn';
 import { ListGroup, Container, Row, Col, Form } from 'react-bootstrap';
-import axios from 'axios';
+import PropTypes from 'prop-types';
 
-import CurrentUserEdit from './CurrentUserEdit';
 import UserEdit from './UserEdit';
 import UserDelete from './UserDelete';
 
 const UserAdmin = (props) => {
   const [currentUser] = useGlobal('currentUser');
 
-  const [categories, setCategories] = useState([]);
-  const [providers, setProviders] = useState([]);
-  const [users, setUsers] = useState([]);
   const [filterText, setFilterText] = useState('');
-
-  const getData = () => {
-    axios
-      .get('/api/categories/list')
-      .then((res) => {
-        setCategories(Object.values(res.data));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    axios
-      .get('/api/providers/list')
-      .then((res) => {
-        setProviders(Object.values(res.data));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    axios
-      .get('/api/users/list')
-      .then((res) => {
-        setUsers(Object.values(res.data));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   const handleFilterTextChange = (event) => {
     setFilterText(event.target.value);
-  };
-
-  const handleRefreshData = () => {
-    getData();
   };
 
   const mapUsers = (users) => {
@@ -72,19 +33,20 @@ const UserAdmin = (props) => {
             <Row lg='auto'>
               <Col md='auto'>
                 <UserEdit
-                  refreshDataCallback={handleRefreshData}
-                  categories={categories}
-                  providers={providers}
-                  users={users}
+                  categories={props.categories}
+                  providers={props.providers}
+                  users={props.users}
+                  refreshDataCallback={props.refreshDataCallback}
                   buttonName='Edit'
                   id={user._id}
-                />{' '}
+                  style={{ marginRight: '0.5em' }}
+                />
                 <UserDelete
-                  categories={categories}
-                  providers={providers}
-                  users={users}
+                  categories={props.categories}
+                  providers={props.providers}
+                  users={props.users}
+                  refreshDataCallback={props.refreshDataCallback}
                   buttonName='Delete'
-                  refreshDataCallback={handleRefreshData}
                   id={user._id}
                 />
               </Col>
@@ -153,13 +115,18 @@ const UserAdmin = (props) => {
           <Row>
             <Col xs='auto'>
               <ListGroup>
-                {mapUsers(users.slice(0, Math.floor(users.length / 2)))}
+                {mapUsers(
+                  props.users.slice(0, Math.floor(props.users.length / 2))
+                )}
               </ListGroup>
             </Col>
             <Col xs='auto'>
               <ListGroup>
                 {mapUsers(
-                  users.slice(Math.floor(users.length / 2), users.length)
+                  props.users.slice(
+                    Math.floor(props.users.length / 2),
+                    props.users.length
+                  )
                 )}
               </ListGroup>
             </Col>
@@ -177,22 +144,14 @@ const UserAdmin = (props) => {
           <Form style={{ width: '100%' }}>
             {currentUser && currentUser.role === 'Owner' ? (
               <UserEdit
-                refreshDataCallback={handleRefreshData}
-                categories={categories}
-                providers={providers}
-                users={users}
+                categories={props.categories}
+                providers={props.providers}
+                users={props.users}
+                refreshDataCallback={props.refreshDataCallback}
                 buttonName='Add User'
-                style={{ marginBottom: '1em', marginRight: '1em' }}
+                style={{ marginBottom: '1em' }}
               />
             ) : null}
-            <CurrentUserEdit
-              refreshDataCallback={handleRefreshData}
-              categories={categories}
-              providers={providers}
-              users={users}
-              buttonName='Edit Current User'
-              style={{ marginBottom: '1em' }}
-            />
             {currentUser && currentUser.role === 'Owner'
               ? filterFormElement
               : null}
@@ -202,6 +161,13 @@ const UserAdmin = (props) => {
       {currentUser && currentUser.role === 'Owner' ? renderUsers() : null}
     </Container>
   );
+};
+
+UserAdmin.propTypes = {
+  categories: PropTypes.array.isRequired,
+  providers: PropTypes.array.isRequired,
+  users: PropTypes.array.isRequired,
+  refreshDataCallback: PropTypes.func.isRequired,
 };
 
 export default UserAdmin;

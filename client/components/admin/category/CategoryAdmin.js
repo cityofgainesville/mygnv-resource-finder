@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'reactn';
+import React, { useState } from 'reactn';
 import { ListGroup, Container, Row, Col, Form } from 'react-bootstrap';
-import axios from 'axios';
+import PropTypes from 'prop-types';
 
 import CategoryEdit from './CategoryEdit';
 import CategoryDelete from './CategoryDelete';
@@ -10,39 +10,10 @@ import CategoryDelete from './CategoryDelete';
 // deleting categories and subcategories
 
 const CategoryAdmin = (props) => {
-  const [categories, setCategories] = useState([]);
-  const [providers, setProviders] = useState([]);
   const [filterText, setFilterText] = useState('');
-
-  const getData = () => {
-    axios
-      .get('/api/categories/list')
-      .then((res) => {
-        setCategories(Object.values(res.data));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    axios
-      .get('/api/providers/list')
-      .then((res) => {
-        setProviders(Object.values(res.data));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   const handleFilterTextChange = (event) => {
     setFilterText(event.target.value);
-  };
-
-  const handleRefreshData = () => {
-    getData();
   };
 
   const mapCategories = (categoriesToMap) => {
@@ -50,15 +21,17 @@ const CategoryAdmin = (props) => {
       return (
         <ListGroup.Item key={category._id}>
           <CategoryEdit
-            refreshDataCallback={handleRefreshData}
-            categories={categories}
-            providers={providers}
+            categories={props.categories}
+            providers={props.providers}
+            refreshDataCallback={props.refreshDataCallback}
             buttonName='Edit'
             id={category._id}
-          />{' '}
+            style={{ marginRight: '0.5em' }}
+          />
           <CategoryDelete
-            categories={categories}
-            refreshDataCallback={handleRefreshData}
+            categories={props.categories}
+            providers={props.providers}
+            refreshDataCallback={props.refreshDataCallback}
             buttonName='Delete'
             id={category._id}
           />
@@ -78,7 +51,7 @@ const CategoryAdmin = (props) => {
   };
 
   const topLevelCategories = mapCategories(
-    categories.filter((category) => {
+    props.categories.filter((category) => {
       return (
         !category.is_subcategory &&
         (category.name.toLowerCase().includes(filterText.toLowerCase()) ||
@@ -88,7 +61,7 @@ const CategoryAdmin = (props) => {
   );
 
   const subcategories = mapCategories(
-    categories.filter((category) => {
+    props.categories.filter((category) => {
       return (
         category.is_subcategory &&
         (category.name.toLowerCase().includes(filterText.toLowerCase()) ||
@@ -104,9 +77,9 @@ const CategoryAdmin = (props) => {
         <Col>
           <Form style={{ width: '100%' }}>
             <CategoryEdit
-              refreshDataCallback={handleRefreshData}
-              categories={categories}
-              providers={providers}
+              categories={props.categories}
+              providers={props.providers}
+              refreshDataCallback={props.refreshDataCallback}
               buttonName='Add Category'
               style={{ marginBottom: '1em' }}
             />
@@ -159,6 +132,12 @@ const CategoryAdmin = (props) => {
       </Row>
     </Container>
   );
+};
+
+CategoryAdmin.propTypes = {
+  categories: PropTypes.array.isRequired,
+  providers: PropTypes.array.isRequired,
+  refreshDataCallback: PropTypes.func.isRequired,
 };
 
 export default CategoryAdmin;

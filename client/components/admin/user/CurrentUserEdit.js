@@ -498,12 +498,10 @@ const CurrentUserEdit = (props) => {
 };
 
 CurrentUserEdit.propTypes = {
-  history: PropTypes.instanceOf(Object).isRequired,
-  location: PropTypes.instanceOf(Object).isRequired,
   providers: PropTypes.array.isRequired,
   categories: PropTypes.array.isRequired,
   buttonName: PropTypes.string,
-  style: PropTypes.string,
+  style: PropTypes.object,
   refreshDataCallback: PropTypes.func.isRequired,
 };
 

@@ -1,7 +1,18 @@
 import React, { useState, useGlobal } from 'reactn';
-import { Button, Form, Modal, Alert, Row } from 'react-bootstrap';
+import {
+  Container,
+  Button,
+  Form,
+  Modal,
+  Alert,
+  Row,
+  Col,
+} from 'react-bootstrap';
 import axios from 'axios';
+import PropTypes from 'prop-types';
+
 import LogoutButton from './LogoutButton';
+import CurrentUserEdit from '../admin/user/CurrentUserEdit';
 
 // Modal style login component
 // Communicates with backend, see backend comments for api docs
@@ -52,23 +63,37 @@ const Login = (props) => {
     if (!currentUser) return null;
     else
       return (
-        <React.Fragment>
-          <span style={{ marginRight: '1em' }}>
-            Welcome {currentUser.email}!
-          </span>
-          <LogoutButton />
-        </React.Fragment>
+        <Row className='justify-content-md-center' style={{ margin: 'auto' }}>
+          <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
+            <span>
+              {`Logged in: ${currentUser.first_name} ${currentUser.last_name}`}
+            </span>
+          </Col>
+          <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
+            <CurrentUserEdit
+              categories={props.categories}
+              providers={props.providers}
+              refreshDataCallback={props.refreshDataCallback}
+              buttonName='Edit Current User'
+            />
+          </Col>
+          <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
+            <LogoutButton />
+          </Col>
+        </Row>
       );
   };
 
   const needsLogin = (
-    <React.Fragment>
-      <span style={{ marginRight: '1em' }}>
-        Welcome, please login to access the admin portal.
-      </span>
-      <Button variant='primary' onClick={openModal}>
-        Login
-      </Button>
+    <Row className='justify-content-md-center' style={{ margin: 'auto' }}>
+      <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
+        <span>Welcome, please login to access the admin portal.</span>
+      </Col>
+      <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
+        <Button variant='primary' onClick={openModal}>
+          Login
+        </Button>
+      </Col>
       <Modal show={modalIsDisplayed} onHide={closeModal}>
         <Modal.Header closeButton>
           <Modal.Title>Login</Modal.Title>
@@ -116,21 +141,25 @@ const Login = (props) => {
           </Button>
         </Modal.Footer>
       </Modal>
-    </React.Fragment>
+    </Row>
   );
 
   return (
-    <Row
+    <Container
       style={{
-        margin: 'auto',
-        marginBottom: '1em',
-        alignItems: 'center',
-        justifyContent: 'center',
+        margins: 'auto auto',
+        maxWidth: '60em',
       }}
     >
       {currentUser ? alreadyLoggedIn() : needsLogin}
-    </Row>
+    </Container>
   );
+};
+
+Login.propTypes = {
+  categories: PropTypes.array.isRequired,
+  providers: PropTypes.array.isRequired,
+  refreshDataCallback: PropTypes.func.isRequired,
 };
 
 export default Login;
