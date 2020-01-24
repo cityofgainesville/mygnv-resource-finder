@@ -11,6 +11,7 @@ const ProviderSchema = {
     },
   },
   type: 'object',
+  required: ['name', 'united_way_approval'],
   properties: {
     name: {
       type: 'string',
@@ -81,7 +82,6 @@ const ProviderSchema = {
       title: 'Emails',
       items: {
         type: 'string',
-        default: '',
       },
     },
     bus_routes: {
@@ -136,11 +136,12 @@ const ProviderSchema = {
     appointment: {
       type: 'object',
       title: 'Appointment Information',
-      required: [],
+      required: ['is_required'],
       properties: {
         is_required: {
           type: 'boolean',
           title: 'Is Required',
+          default: false,
         },
         phone: {
           type: 'string',
@@ -167,19 +168,22 @@ const ProviderSchema = {
     application: {
       type: 'object',
       title: 'Application Information',
-      required: [],
+      required: ['is_required', 'apply_online', 'apply_in_person'],
       properties: {
         is_required: {
           type: 'boolean',
           title: 'Is Required',
+          default: false,
         },
         apply_online: {
           type: 'boolean',
           title: 'Can Apply Online',
+          default: false,
         },
         apply_in_person: {
           type: 'boolean',
           title: 'Can Apply In Person',
+          default: false,
         },
         phone: {
           type: 'string',
@@ -210,6 +214,7 @@ const ProviderSchema = {
     united_way_approval: {
       type: 'boolean',
       title: 'United Way Approval',
+      default: false,
     },
     additional_information: {
       type: 'string',

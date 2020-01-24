@@ -76,7 +76,7 @@ const ProviderAdmin = (props) => {
                   <Form.Control
                     value={filterText}
                     onChange={handleFilterTextChange}
-                    placeholder='Filter categories'
+                    placeholder='Filter providers'
                   />
                 </Col>
                 <Col sm='auto'>

@@ -156,6 +156,8 @@ const ProviderEdit = (props) => {
             uiSchema={ProviderUiSchema}
             formData={providerToEdit}
             onSubmit={doSubmit}
+            omitExtraData={true}
+            liveOmit={true}
             ref={(form) => {
               providerForm = form;
             }}

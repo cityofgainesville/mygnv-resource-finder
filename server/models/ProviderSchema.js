@@ -45,7 +45,10 @@ const providerSchema = new Schema({
     sunday: String,
   },
   appointment: {
-    is_required: Boolean,
+    is_required: {
+      type: Boolean,
+      required: true,
+    },
     phone: String,
     website: String,
     email: String,
@@ -53,9 +56,18 @@ const providerSchema = new Schema({
   },
   walk_ins: String,
   application: {
-    is_required: Boolean,
-    apply_online: Boolean,
-    apply_in_person: Boolean,
+    is_required: {
+      type: Boolean,
+      required: true,
+    },
+    apply_online: {
+      type: Boolean,
+      required: true,
+    },
+    apply_in_person: {
+      type: Boolean,
+      required: true,
+    },
     phone: String,
     website: String,
     email: String,
@@ -63,7 +75,10 @@ const providerSchema = new Schema({
   },
   cost_info: String,
   translation_available: String,
-  united_way_approval: Boolean,
+  united_way_approval: {
+    type: Boolean,
+    required: true,
+  },
   additional_information: String,
 });
 
