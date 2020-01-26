@@ -24,7 +24,7 @@ const App = (props) => {
       <NavBar />
       <Title />
       <Switch>
-        <Route path={paths.adminPath} render={() => <AdminPortal />} />
+        <Route path={paths.adminPath} component={AdminPortal} />
         <Route exact path={paths.mainPath} component={MainPage} />
         <Route exact path={paths.searchPath} component={Search} />
         <Route
