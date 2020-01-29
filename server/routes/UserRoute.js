@@ -2,7 +2,7 @@ const userController = require('../controllers/UserController');
 const express = require('express');
 const router = new express.Router();
 
-// Path is /api/users/login,
+// Path is /api/users/login
 // POST with correct email and password field
 // will login and start session
 router.route('/login').post(userController.login);
@@ -28,14 +28,14 @@ router
 
 // Path is /api/users/register
 // POST
-// Will create new user if request is from authenticated user
+// Will create new user if current user has role === 'Owner'
 router
   .route('/register')
   .post(userController.isAuthenticated, userController.register);
 
 // Path is /api/users/update/:userId
 // POST
-// Complete user editing control if res.user.role === 'Owner'
+// Complete user editing control if current user has role === 'Owner'
 // If no userId passed in then logged in user is updated
 router
   .route('/update/:userId?')

@@ -8,12 +8,20 @@ https://mygnv.herokuapp.com/
 
 1. Clone the repo
 2. `cd mygnv-team-10d`
-3. Configure the .env file with the DB_URI, rename from `.env.sample` to `.env`
+3. Configure the .env file with the DB_URI, PORT, and SESSION_SECRET, rename from `.env.sample` to `.env`
 4. `npm install`
 5. `npm run dev`
 6. Navigate to `localhost:8080`
 
-## Deploying to Heroku
+## Auto Deploy Info
+
+Pushing to master will auto build and deploy to https://mygnv.herokuapp.com/
+
+Only push known good code to master.
+
+## Manually Deploying to Heroku
+
+> This shouldn't be needed due to the auto deploy set up discussed above.
 
 Instructions to deploy on Heroku are as follows:
 
@@ -28,54 +36,92 @@ Instructions to deploy on Heroku are as follows:
 
 ## Api Documentation
 
-`/api/category`  
-`GET` will return JSON of all categories  
-`POST` will create category if user authenticated  
+### Categories
 
-`/api/category/topLevelCategory`  
-`GET` will return JSON of all top level categories  
+```
+/api/categories/list
+GET will return JSON of all categories
 
-`/api/category/subCategory/:categoryId`  
-`GET` will return list of subCategories under parent category's id  
+/api/categories/create
+POST will create category if user authenticated
 
-`/api/category/:categoryId`  
-`GET` will return category  
-`POST` will update category if authenticated  
-`DELETE` will delete category if authenticated  
+/api/categories/listTopLevel
+GET will return JSON of all top level categories
 
-`/api/provider`  
-`GET` will return JSON of all providers  
-`POST` will create provider if user authenticated  
+/api/categories/:categoryId
+GET will return category
+/* 
+  GET Accepts query parameters in this format
+  children=true // or false or undefined
+  providers=true // or false or undefined
+  True will populate the array, false will leave it as an array of ObjectIDs.
+*/
 
-`/api/provider/:providerId`  
-`GET` will return provider  
-`POST` will update provider if authenticated  
-`DELETE` will delete provider if authenticated  
+/api/categories/update/:categoryId
+POST will update category if authenticated
 
-`/api/provider/subCategory/:categoryId`  
-`GET` will return list of providers under subcategory id  
+/api/categories/delete/:categoryId
+DELETE will delete category if authenticated
+```
 
-`/api/user/login`  
-`POST` with correct email and password field  
-will login and start session  
+### Providers
 
-`/api/user/logout`  
-`POST` will end session if there in an active session 
+```
+/api/providers/list
+GET will return JSON of all providers
 
-`/api/user/isLoggedIn`  
-`POST` will return status: true in JSON if logged in  
+//POST will create provider if user authenticated
 
-`/api/user/register`  
-`POST` with email and password field  
-Will create new user if request is from authenticated user  
+/api/providers/create
+POST will create provider if user authenticated
+
+/api/providers/:providerId
+GET will return provider
+
+/api/providers/update/:providerId
+POST will update provider if authenticated
+
+/api/providers/delete/:providerId
+DELETE will update provider if authenticated
+```
+
+### Users
+```
+/api/users/login
+POST with correct email and password field
+will login and start session
+
+/api/users/logout
+POST will end session if there in an active session
+
+/api/users/isLoggedIn
+POST will return status: true in JSON if logged in
+
+/api/users/:userId
+GET to read user by id
+```
+
+/api/users/register
+POST
+Will create new user if current user has role === 'Owner'
+
+/api/users/update/:userId
+POST
+Complete user editing control if current user has role === 'Owner'
+If no userId passed in then logged in user is updated
+
+/api/users/delete/:userId
+DELETE to delete user by id
 
 ## Linting your Code
 
 Before making a pull request, please lint and fix your code.
+ESlint will run prettier as well to check for code formatting.
 
 1. `npm run lint`
 
 The linter can automatically fix some (not all) issues with the below command.
+This command will also auto format all project files.
 
 2. `npm run lint:fix`
 
@@ -90,29 +136,27 @@ The linter can automatically fix some (not all) issues with the below command.
 When starting a new feature, work in a feature branch.
 
 1. `git pull`
-2. `git checkout -b initials/featureName`
+2. `git checkout -b featureName`
 
 Now you can add commits and check in the branch.
 
 3. `git add whatever_needs_to_be_added`
 4. `git commit -m "commit message"`
-5. `git push origin initials/featureName`
-
-If you have any merge conflicts when pulling and you have issues ask for help ASAP.
+5. `git push origin featureName`
 
 ## Bring your feature branch up to date with master
 
 1. `git checkout master`
 2. `git fetch -p origin`
 3. `git merge origin/master`
-4. `git checkout initials/featureName`
+4. `git checkout featureName`
 5. `git merge master`
 
-If there are merge conflicts a text editor may open. VScode is great for this since it shows the diffs and changes clearly. Edit the merge commit to fix issues and commit your updated branch with `git push origin initials/featureName`.
+If there are merge conflicts a text editor may open. VScode is great for this since it shows the diffs and changes clearly. Edit the merge commit to fix issues and commit your updated branch with `git push origin featureName`.
 
 ## Make Pull, Push & Merge Requests
 
-When you want to integrate your feature into master, make a pull request on github from your branch and wait until it is reviewed and merged by a team member.
+When you want to integrate your feature into master, make a pull request on github from your branch.
 
 To prevent merge conflicts, talk with team members before making large changes. Bring your feature branch up with master often to prevent merge conflicts when trying to merge pull requests.
 
@@ -120,34 +164,17 @@ To prevent merge conflicts, talk with team members before making large changes. 
 
 More dependency information can be found in package.json.
 
-- MongoDB
-- Express
-- React
-- Node.js
-- Bootstrap
+- [MongoDB](https://www.mongodb.com/cloud/atlas)
+- [Express](https://expressjs.com/)
+- [React](https://reactjs.org/)
+- [Sass](https://sass-lang.com)
+- [Node.js](https://nodejs.org)
+- [Bootstrap](https://getbootstrap.com/)
+    - [React Bootstrap](https://react-bootstrap.github.io/)
 
-## Feature List
-
-Proposed
-- Users accounts and log-ins
-- Administrator side 
-- Admin can modify providers list
-- Admin can modify categories and sub-categories for providers
-- Email/Text capability so that anonymous users can save information
-- Ability to filter out and search results from the providers list that is connected to database
-- Ability to filter out and search results from providers list based on categories and subcategories which are dynamically updated
-- Users can view providers list and view individual providers
-- Individual provider will display information 
-
-Completed
-- Users accounts and log-ins
-- Administrator side 
-- Admin can modify providers list
-- Admin can modify categories and sub-categories for providers
-- Ability to filter out and search results from the providers list that is connected to database
-- Ability to filter out and search results from providers list based on categories and subcategories which are dynamically updated
-- Users can view providers list and view individual providers
-- Individual provider will display information
+- Form dependencies
+    - [React Select](https://github.com/JedWatson/react-select)
+    - [react-jsonschema-form-bs4](https://github.com/peterkelly/react-jsonschema-form-bs4)
 
 ## Screenshots
 
@@ -162,7 +189,3 @@ Provider search: Users can search for any provider if they already know what the
 
 Login: If a user has an admin account, they may login to the admin portal using a secure password and login.
 ![](./example_img/login.png)
-
-Category admin page: Admins can search for providers to delete and edit. They can edit categories, subcategories, icons, and names of every provider. This effectively allows any admin to control the entire database of providers. 
-![](./example_img/cat_admin.png)
-![](./example_img/cat_admin_edit.png)

@@ -3,6 +3,7 @@
     "google",
     "plugin:react/recommended",
     "plugin:prettier/recommended",
+    "babel",
     "prettier",
     "prettier/babel",
     "prettier/react"
@@ -32,7 +33,7 @@
     "prettier"
   ],
   "rules": {
-    "prettier/prettier": "error",
+    "prettier/prettier": "warn",
     "require-jsdoc": "off",
     "no-eval": "error",
     "no-console": "off",
