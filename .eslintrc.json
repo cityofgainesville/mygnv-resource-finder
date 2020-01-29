@@ -3,7 +3,6 @@
     "google",
     "plugin:react/recommended",
     "plugin:prettier/recommended",
-    "babel",
     "prettier",
     "prettier/babel",
     "prettier/react"

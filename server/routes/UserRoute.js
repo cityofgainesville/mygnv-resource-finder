@@ -18,6 +18,12 @@ router.route('/isLoggedIn').post(userController.isLoggedIn);
 // Path is /api/users/list
 // GET to list users
 // Only user with role === 'Owner' can do this
+/* 
+  Accepts query parameters in this format
+  categories=true // or false
+  providers=true // or false
+  True will populate the array, false will leave it as an array of ObjectIDs.
+*/
 router.route('/list').get(userController.isAuthenticated, userController.list);
 
 // Path is /api/users/:userId

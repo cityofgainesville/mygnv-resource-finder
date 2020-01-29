@@ -6,12 +6,13 @@ https://mygnv.herokuapp.com/
 
 ## Getting Started Locally
 
-1. Clone the repo
-2. `cd mygnv-team-10d`
+0. Install [Node.js](https://nodejs.org)
+1. `git clone https://github.com/cityofgainesville/mygnv-resource-finder`
+2. `cd mygnv-resource-finder`
 3. Configure the .env file with the DB_URI, PORT, and SESSION_SECRET, rename from `.env.sample` to `.env`
 4. `npm install`
 5. `npm run dev`
-6. Navigate to `localhost:8080`
+6. Navigate to `localhost:8080` in a browser
 
 ## Auto Deploy Info
 
@@ -36,17 +37,31 @@ Instructions to deploy on Heroku are as follows:
 
 ## Api Documentation
 
+> Database schema can be found at "server/models".
+
 ### Categories
 
 ```
 /api/categories/list
 GET will return JSON of all categories
+/* 
+  Accepts query parameters in this format
+  children=true // or false
+  providers=true // or false
+  True will populate the array, false will leave it as an array of ObjectIDs.
+*/
 
 /api/categories/create
 POST will create category if user authenticated
 
 /api/categories/listTopLevel
 GET will return JSON of all top level categories
+/* 
+  Accepts query parameters in this format
+  children=true // or false
+  providers=true // or false
+  True will populate the array, false will leave it as an array of ObjectIDs.
+*/
 
 /api/categories/:categoryId
 GET will return category
@@ -86,6 +101,7 @@ DELETE will update provider if authenticated
 ```
 
 ### Users
+
 ```
 /api/users/login
 POST with correct email and password field
@@ -97,9 +113,18 @@ POST will end session if there in an active session
 /api/users/isLoggedIn
 POST will return status: true in JSON if logged in
 
+/api/users/list
+GET to list users
+Only user with role === 'Owner' can do this
+/* 
+  Accepts query parameters in this format
+  categories=true // or false
+  providers=true // or false
+  True will populate the array, false will leave it as an array of ObjectIDs.
+*/
+
 /api/users/:userId
 GET to read user by id
-```
 
 /api/users/register
 POST
@@ -112,6 +137,7 @@ If no userId passed in then logged in user is updated
 
 /api/users/delete/:userId
 DELETE to delete user by id
+```
 
 ## Linting your Code
 
@@ -178,7 +204,7 @@ More dependency information can be found in package.json.
 
 ## Screenshots
 
-Category view: Each user can search for a provider based on a category they choose. These categories can go several layers.
+Category view: Each user can search for a provider based on a category they choose.
 ![](./example_img/categories.png)
 
 Provider info: When each provider is selected, it pulls information from the database, supplying the user with a description, location, contacts information and more.
