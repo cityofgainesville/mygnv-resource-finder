@@ -2,6 +2,7 @@ import React, { useGlobal } from 'reactn';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
+import './Login.scss';
 
 import axios from 'axios';
 
@@ -24,10 +25,10 @@ const AuthButton = (props) => {
 
   const handleLogout = () => {
     logout();
-    props.history.push('/');
+    props.history.push('/home');
   };
 
-  return currentUser ? <Button onClick={handleLogout}>Log Out</Button> : null;
+  return currentUser ? <Button variant='light' className='login-menu-button' onClick={handleLogout}>Log Out</Button> : null;
 };
 
 AuthButton.propTypes = {

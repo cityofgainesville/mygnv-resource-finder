@@ -1,0 +1,33 @@
+@import '../../index.scss';
+@import './Menu.scss';
+@import './ProviderList.scss';
+
+
+.form-group {
+    display: flex; 
+    justify-content: center; 
+    margin-top: 1rem;
+}
+
+.form-control{
+    border-radius: 20px;
+    text-align:center;
+}
+
+.search {
+    border-right:none;
+}
+
+.input-group-text {
+    border-top-right-radius: 20px !important;
+    border-bottom-right-radius: 20px !important;
+    border-left: none;
+    background: none;
+}
+
+.body {
+    margin-top: 155px; 
+    position:relative;
+    
+}
+

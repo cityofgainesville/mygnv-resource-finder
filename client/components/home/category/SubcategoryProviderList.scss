@@ -1,0 +1,17 @@
+@import '../../../index.scss';
+@import '../Menu.scss';
+@import '../ProviderList.scss';
+@import '../Search.scss';
+
+.subcat-provider-div {
+  white-space: pre-wrap;
+}
+
+.subcat-provider-h5 {
+  color: black;
+  font-weight: bold;
+}
+
+.subcat-provider-address {
+  color: black;
+}

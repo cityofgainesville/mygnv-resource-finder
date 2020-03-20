@@ -1,0 +1,51 @@
+@import '../../index.scss';
+@import './Menu.scss';
+@import './Search.scss';
+
+#main-info {
+    border: 1px solid #1E83C6;
+}
+
+.btn-info {
+    background-color: #074b69;
+    border-color: #074b69;
+}
+
+.description-title {
+    color: #074b69;
+}
+
+#left {
+    width: 50%;
+
+}
+
+#right {
+    width: 50%;
+    
+}
+
+.col {
+    float: left;
+}
+
+.united-way {
+    color: #1E83C6;
+    float: right;
+    width: 100%;
+    text-align: right;
+    font-size: small;
+}
+
+.translation {
+    width: 100%;
+    font-size: medium;
+}
+
+.card-body {
+    padding-top: 0;
+}
+
+.card-title {
+    margin-bottom: 0;
+}

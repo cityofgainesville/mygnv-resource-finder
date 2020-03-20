@@ -1,0 +1,23 @@
+@import '../../index.scss';
+
+.menu-container {
+    position:fixed; 
+    z-index: 100000;
+}
+
+.exit-container {
+    width:25%;
+    position:fixed;
+    margin-top: 53px;
+    z-index:100000;
+}
+
+.menu-buttons {
+    border: none;
+    background:none;
+    outline: none;
+}
+
+.exit {
+    float:right;
+}

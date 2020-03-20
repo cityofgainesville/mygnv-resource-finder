@@ -3,6 +3,7 @@ import { Button, Form, Modal, Alert } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import Select from 'react-select';
+import '../AdminPortal.scss';
 
 // Modal style register component
 // Communicates with backend, see backend comments for api docs
@@ -437,13 +438,13 @@ const CurrentUserEdit = (props) => {
 
   return (
     <React.Fragment>
-      <Button variant='primary' onClick={openModal} style={props.style}>
+      <Button variant='light' className='login-menu-button' onClick={openModal} style={props.style}>
         {props.buttonName}
       </Button>
       <Modal show={modalIsDisplayed} onHide={closeModal} size='lg'>
         <Modal.Header closeButton>
           <Modal.Title>
-            Edit {currentUser ? currentUser.email : 'current user'}
+            Settings {currentUser ? currentUser.email : 'current user'}
             {currentUser ? (
               <>
                 <br />

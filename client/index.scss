@@ -9,12 +9,22 @@ $black-100: #000000;
 $blue-cool-30v: #59b9de;
 $indigo-50: #676cc8;
 $red-50v: #e52207;
+$menu-gray-bg: #FDFDFD;
+$lines: #FBFBFB;
 
 body {
   font-family: 'Open Sans', sans-serif;
   font-size: 100%;
   -webkit-font-smoothing: subpixel-antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.lines {
+  border-color: #FBFBFB;
+}
+
+.menu-gray-bg {
+  background-color: #FDFDFD;
 }
 
 .white-0 {
@@ -64,4 +74,83 @@ body {
 }
 .red-50v-bg {
   background-color: $red-50v;
+}
+
+.menuButton {
+    border-radius: 8px;
+    color: $blue-cool-70v;
+    border-color: $blue-cool-70v;
+    width: 80%;
+    margin: .5em;
+}
+
+.menuButton:hover {
+  color: $white-0;
+  background-color: $blue-cool-70v;
+  border-color: $blue-cool-70v;
+  
+}
+
+.menuButton:hover {
+  color: $white-0;
+  background-color: $blue-cool-70v;
+  border-color: $blue-cool-70v;
+  
+}
+
+#exit {
+  float: right;
+}
+
+.menu {
+  height: 100vh;
+  width: 25%;
+  margin-top: 53px;
+  margin-left: auto;
+  margin-right: auto;
+  float: left;
+  border: none;
+  border-right: 1px solid #DBDBDB;
+  border-radius: 0;
+  z-index:10000;
+  position: fixed;
+  padding-left: .75rem;
+  padding-right: .75rem;
+}
+
+.menu-title {
+  padding:1em auto;
+}
+
+.phrase {
+  bottom: 0em; 
+  text-align: center; 
+  margin-top:2em;
+}
+
+hr {
+  border-top-color:#dbdbdb !important;
+}
+
+.disabled{
+  color: gray !important;
+}
+
+.disabled:hover{
+  background: none;
+  outline: none;
+  color: gray;
+  cursor: default;
+}
+
+.disabled:active{
+  background: none;
+  outline: none;
+  color: gray;
+}
+.disabled:focus{
+  background: none;
+  outline: none;
+  box-shadow:none;
+  color: gray;
 }

@@ -5,12 +5,13 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-import RedirectButton from '../RedirectButton';
+import RedirectButton from '../home/RedirectButton';
 import Login from '../auth/Login';
 import UserAdmin from './user';
 import CategoryAdmin from './category';
 import ProviderAdmin from './provider';
 import paths from '../../RouterPaths';
+import './AdminPortal.scss';
 
 // Either prompts user to login or displays logout button
 // And buttons for the different admin portal sections
@@ -166,7 +167,7 @@ const AdminPortal = (props) => {
       />
       {currentUser ? (
         <>
-          {renderLoggedIn()}
+          {/*renderLoggedIn()*/}
           <Switch>
             {currentUser.role === 'Owner' ? (
               <Route

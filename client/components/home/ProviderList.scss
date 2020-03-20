@@ -1,0 +1,45 @@
+@import '../../index.scss';
+
+.tags {
+    background: none ; 
+    border-radius: 12px ; 
+    padding: 5px 10px;
+}
+
+#translationTag {
+    border: 2px solid #59b9de;
+}
+
+#exampleTag {
+    background: #dbdbdb;
+
+}
+
+.providersList {
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-radius: 0;
+    margin: 0 0;
+    border-bottom: 1px solid #dbdbdb;
+      
+}
+
+.tagsContainer {
+    white-space: pre-wrap;
+    padding: 12px 20px;
+}
+
+.providerName { 
+    color: #074b69; 
+    font-weight: bold;
+    //width: fit-content;
+}
+
+.providerCard-container {
+    -webkit-box-shadow: 0px 0px 6px -1px rgba(0,0,0,0.25);
+    -moz-box-shadow: 0px 0px 6px -1px rgba(0,0,0,0.25);
+    box-shadow: 0px 0px 6px -1px rgba(0,0,0,0.25);
+    margin: 2rem 0;
+    margin-bottom: 0;
+}

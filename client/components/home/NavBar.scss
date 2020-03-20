@@ -1,0 +1,43 @@
+@import '../../index.scss';
+
+.navbar-active {
+  color: white !important;
+  border-bottom: 5px solid #1DC2AE;
+}
+
+.nav-link:hover {
+  color: #dedede !important;
+}
+
+
+#responsive-navbar-nav {
+  justify-content: flex-end;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: #ACACAC ;
+}
+
+.navbar {
+  padding-bottom: 0;
+}
+
+.mr-auto {
+  margin-right: 0 !important;
+}
+
+.nav-container { 
+  width: 100%; 
+  position:fixed; 
+  z-index: 100; 
+  top:0;
+}
+
+img {
+  padding-right: 0.25em;
+}
+
+.link-container {
+  margin: 0 0; 
+  padding: 0 0;
+}

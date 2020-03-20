@@ -1,0 +1,29 @@
+@import '../../../index.scss';
+
+.cat-card-border {
+  border: 2px solid $blue-cool-70v;
+  border-radius: 8em;
+}
+
+.cat-card-border-active {
+  border: 2px solid $indigo-50;
+  border-radius: 8em;
+}
+
+.cat-card-button {
+  width: 3.75em;
+  height: 3.75em;
+  margin-bottom: 1em;
+  padding: 5px 5px;
+}
+
+.cat-card-i {
+  display: block;
+  margin: auto;
+}
+
+.cat-card-div {
+  align-items: center;
+  text-align: center;
+}
+

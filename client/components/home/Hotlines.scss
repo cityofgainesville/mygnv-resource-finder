@@ -1,0 +1,21 @@
+@import '../../index.scss';
+@import './Menu.scss';
+@import './ProviderList.scss';
+@import './Search.scss';
+
+.form-label {
+    text-align: center;
+    width: 100%;
+}
+
+.provider-phoneNumber {
+    color: #074b69;
+    font-weight: bold;
+    width: fit-content;
+}
+
+.subcat-provider-div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
