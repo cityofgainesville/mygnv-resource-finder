@@ -17,7 +17,7 @@ const RedirectButton = (props) => {
     <React.Fragment>
       <Button
         onClick={doRedirect}
-        className={props.className}
+        className={props.className + " " + props.active}
         variant={props.variant}
       >
         {props.children}
@@ -32,6 +32,7 @@ RedirectButton.propTypes = {
   children: PropTypes.any,
   className: PropTypes.string,
   variant: PropTypes.string,
+  active: PropTypes.string
 };
 
 RedirectButton.defaultProps = {

@@ -9,6 +9,7 @@ import './CategoryCard.scss';
 
 const CategoryCard = (props) => {
   const [className, setClassName] = useState('cat-card-border');
+  const [icolor, setColor] = useState('#074b69');
 
   const handleClick = () => {
     setClassName('cat-card-border-active');
@@ -18,14 +19,16 @@ const CategoryCard = (props) => {
   // Change color on hover
   const startHover = () => {
     setClassName('cat-card-border-active');
+    setColor('white');
   };
   const endHover = () => {
     setClassName('cat-card-border');
+    setColor('#074b69');
   };
 
   // Renders the tile button for a top level category
   return (
-    <div style={{margin: '0 .25em', width: '4em'}}>
+    <div className="catCard-con">
     <Button
       onClick={handleClick}
       onMouseEnter={startHover}

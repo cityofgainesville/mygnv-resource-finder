@@ -63,8 +63,32 @@ const Login = (props) => {
         console.log(err);
       });
   };
+   const alreadyLoggedIn = () => {
+    if (!currentUser) return null;
+    else
+      return (
+        <Row className='justify-content-md-center' style={{ margin: 'auto', marginTop: '155px' }}>
+          <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
+            <span>{`Logged in as: ${currentUser.email}`}</span>
+          </Col>
+          <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
+            <CurrentUserEdit
+              categories={props.categories}
+              providers={props.providers}
+              refreshDataCallback={props.refreshDataCallback}
+              buttonName='Edit Current User'
+            />
+          </Col>
+          <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
+            <LogoutButton />
+          </Col>
+        </Row>
+      );
+  };
+  
+//NEW - IN DEVELOPMENT
 
-  const alreadyLoggedIn = () => {
+  /*const alreadyLoggedIn = () => {
     
     if (!currentUser) return null;
     else
@@ -133,7 +157,7 @@ const Login = (props) => {
         </Container>
       );
       
-  };
+  };*/
 
   const needsLogin = (
     <Container className='justify-content-md-center login-container'>
@@ -163,7 +187,7 @@ const Login = (props) => {
             </Alert>
           ) : null}
       <Form className='justify-content-md-center'>
-            <Form.Group controlId='formBasicEmail'>
+            <Form.Group controlId='formBasicEmail' className='search-form-group'>
               <Form.Control
                 value={email}
                 onChange={handleEmailChange}
@@ -172,7 +196,7 @@ const Login = (props) => {
                 className = 'login'
               />
             </Form.Group>
-            <Form.Group controlId='formBasicPassword'>
+            <Form.Group controlId='formBasicPassword' className='search-form-group'>
               <Form.Control
                 value={password}
                 onChange={handlePasswordChange}

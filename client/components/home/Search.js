@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'reactn';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { ListGroup, Container, Form, InputGroup,} from 'react-bootstrap';
+import { ListGroup, Container, Form, InputGroup, Button} from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import paths from '../../RouterPaths';
 import Homepage from './Title';
 import '../../index.scss';
 import './Search.scss';
+import IndivProvider from './IndivProvider';
+import TopLevelCategory from './category/TopLevelCategory.js';
+import CategoryView from './category/CategoryView.js';
 
 // Search component for all providers,
 // When provider is clicked redirects to
@@ -17,22 +20,7 @@ const Search = (props) => {
   const [filterText, setFilterText] = useState('');
   const [visible, setVisible] = useState(false);
   //const [translation, setTranslation] = useState(false);
-  const [myStyle, setMyStyle] = useState({
-    margins: 'auto auto',
-    //maxWidth: '60em',
-    zIndex: '0',
-    padding: '0',
-    margin: '0',
-    width: '75%',
-    float: 'right',
-  });
-  const [formStyle, setFormStyle] = useState({
-    width: '75%', 
-    borderBottom : '1px solid #DBDBDB', 
-    position:'fixed', 
-    zIndex:'100', 
-    marginTop:'53px'
-  });
+  const [myStyle, setStyle] = useState ({borderColor: 'default'});
   let filteredItems = providers;
 
   // Loads in all providers for filtering through
@@ -90,20 +78,27 @@ const Search = (props) => {
               {provider.name}
              
             </h5>
-            <i class="fas fa-map-marker-alt"></i>
-            {provider.addresses.map((addresses) => (
-              
-              <span key={`${provider._id}_address`} style={{ color: 'black' }}>
+            
+            {provider.addresses !== undefined &&
+                provider.addresses.length > 0
+                  ? provider.addresses.map((addresses) => (
+                    <div>
+                    <i class="fas fa-map-marker-alt" style={{marginRight: ".5rem", color:'black'}}></i>
+              <span key={`${provider._id}_address`}>
                 {addresses.line_1}
                 {/*{'\n'}
                 {addresses.state} {addresses.zipcode}*/}
               </span>
-            ))}
-            <p>
-              {provider.services_provided}
+              </div>
+            )): ''}
+            <p className="services">
+              {provider.services_provided !== '' &&
+                provider.services_provided !== undefined
+                  ? provider.services_provided
+                  : 'Services not listed'}
               {'\n'}
             </p>
-            <p>
+            <p className="updated">
               {'Updated '}
               {provider.updated_at.substring(5,7) + '/' + provider.updated_at.substring(8,10)+ '/' + provider.updated_at.substring(0,4)}
               {'\n'}
@@ -130,76 +125,50 @@ const Search = (props) => {
       e.preventDefault();
       setVisible(!visible);
       console.log(visible);
-      /*if(visible){
-        setMyStyle({
-          margins: 'auto auto',
-          //maxWidth: '60em',
-          zIndex: '0',
-          padding: '0',
-          margin: '0',
-          width: '75%',
-          float: 'right',
-        });
-        setFormStyle({
-          width: '75%', 
-          borderBottom : '1px solid #DBDBDB', 
-          position:'fixed', 
-          zIndex:'100', 
-          marginTop:'53px'
-        });
-      }
-        
-      else{
-        setMyStyle({
-          margins: 'auto auto',
-          //maxWidth: '60em',
-          zIndex: '0',
-          padding: '0',
-          margin: '0',
-          width: '100%',
-          float: 'right',
-        });
-        setFormStyle({
-          width: '100%', 
-          borderBottom : '1px solid #DBDBDB', 
-          position:'fixed', 
-          zIndex:'100', 
-          marginTop:'53px'
-        });
-      } */
-        
-  
   }
+
+  const handleFocusRequest = (e) => {
+    e.preventDefault();
+    setStyle({border: '3px solid #007bff40'});
+    console.log(myStyle);
+}
+
+const handleBlurRequest = (e) => {
+  e.preventDefault();
+  setStyle({border: '1px solid #ced4da'});
+  console.log(myStyle);
+}
     
   return (
     <React.Fragment>
-      <div>
-      
-      <div
-        style={myStyle}
-      >
-          <Form className= 'white-0-bg' style={formStyle}>
-            <Form.Group controlId='formFilterText'>
-              <Container style={{margin:'0 0'}}>
+      <div className='scroll'>
+      <div  className='search-con' >
+          <Form className= 'white-0-bg search-form'>
+            <Form.Group className='search-form-group' controlId='formFilterText'>
+              <Container className = 'mobile-con' style={{margin:'0 0'}}>
               <InputGroup>
               <Form.Control
                 value={filterText}
                 onChange={handleFilterChange}
+                onFocus={(e)=>handleFocusRequest(e)}
+                onBlur={(e)=>handleBlurRequest(e)}
                 placeholder='Search for a resource'
                 className='search'
               />
               <InputGroup.Prepend>
-                    <InputGroup.Text>
+                    <InputGroup.Text style={myStyle}>
                       <i class="fal fa-search"></i>
                     </InputGroup.Text>
                 </InputGroup.Prepend>
               </InputGroup>
               </Container>
             </Form.Group>
+            <div className='search-cat-con'><p className='search-cat'>Categories <Button onClick={(e)=>handleEntailmentRequest(e)} className='search-cat-button' style={{display: !visible ? '' : 'none'}}><i class="fal fa-chevron-down" style={{color:'black !important'}}></i></Button><Button onClick={(e)=>handleEntailmentRequest(e)} className='search-cat-button' style={{display: visible ? '' : 'none'}}><i class="fal fa-chevron-up"></i></Button></p><div style={{display: visible ? '' : 'none'}}><CategoryView/></div></div>
           </Form>
-          <Container className='body'>
+          <Container className='body searchb'>
           {/*<button className='tags' id='exampleTag'>Click a tag to filter <i class="fal fa-times fa-1x"></i></button>*/}
             {providerList}
+
           </Container>
           </div>
           </div>

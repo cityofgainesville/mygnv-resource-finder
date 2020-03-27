@@ -1,9 +1,136 @@
 @import '../../index.scss';
 
-.menu-container {
-    position:fixed; 
-    z-index: 100000;
+
+/* Mobile Styles */
+@media only screen and (max-width: 767px) {
+
+
+  .menu {
+    //height: 100vh;
+    width: 100vw;
+    margin-top: 110px;
+    margin-left: 0;
+    margin-right: 0;
+    float: left;
+    border: none;
+    //@debug: 1px solid #DBDBDB;
+    border-radius: 0;
+    z-index:0;
+    position: absolute;
+    padding-left: 0;
+    padding-right: 0;
+    background-color: #FDFDFD;
+    padding-top: 1em;
+    overflow: scroll;
+
+  }
+  .menu-title {
+    padding: 1em auto;
+    font-size: 18px;
+    color: black;
+    padding-bottom: 1em;
+  }
+
+  
 }
+
+/* Tablet Styles */
+@media only screen and (min-width: 401px) and (max-width: 1024px) {
+ 
+
+  .menu {
+    //height: 100vh;
+    width: 100vw;
+    margin-top: 89px;
+    margin-left: 0;
+    margin-right: 0;
+    float: left;
+    border: none;
+    //@debug: 1px solid #DBDBDB;
+    border-radius: 0;
+    z-index:0;
+    position: absolute;
+    padding-left: 0;
+    padding-right: 0;
+    background-color: #FDFDFD;
+    padding-top: 1em;
+    overflow: scroll;
+
+  }
+  .menu-title {
+    padding: 1em auto;
+    font-size: 18px;
+    color: black;
+    padding-bottom: 1em;
+  }
+}
+
+
+@media only screen and (max-width: 767px) and (min-width: 426px) {
+
+  .menu {
+    //height: 100vh;
+    width: 100vw;
+    margin-top: 89px;
+    margin-left: 0;
+    margin-right: 0;
+    float: left;
+    border: none;
+    //@debug: 1px solid #DBDBDB;
+    border-radius: 0;
+    z-index:0;
+    position: absolute;
+    padding-left: 0;
+    padding-right: 0;
+    background-color: #FDFDFD;
+    padding-top: 1em;
+    overflow: scroll;
+
+  }
+  .menu-title {
+    padding: 1em auto;
+    font-size: 18px;
+    color: black;
+    padding-bottom: 1em;
+  }
+}
+
+
+/* Desktop Styles */
+@media only screen and (min-width: 1025px) {
+
+  .menu {
+    height: 100vh;
+    width: 25%;
+    margin-top: 89px;
+    margin-left: auto;
+    margin-right: auto;
+    float: left;
+    border: none;
+    border-right: 1px solid #DBDBDB;
+    border-radius: 0;
+    z-index:0;
+    position: fixed;
+    padding-left: .75rem;
+    padding-right: .75rem;
+    background-color: #FDFDFD;
+    padding-top: 1em;
+  }
+
+  .menu-container {
+    position:fixed; 
+    z-index: 0;
+  }
+  .menu-title {
+    padding: 1em auto;
+    font-size: 1.2em;
+    color: black;
+    padding-bottom: 1em;
+  }
+}
+
+
+
 
 .exit-container {
     width:25%;
@@ -20,4 +147,50 @@
 
 .exit {
     float:right;
+}
+
+
+
+
+
+.menuButton {
+    border-radius: 8px;
+    color: $blue-cool-70v;
+    border-color: $blue-cool-70v;
+    width: 80%;
+    margin: .5em;
+}
+
+.menuButton:hover {
+  color: $white-0;
+
+  background-color: $blue-cool-70v !important;
+  border-color: $blue-cool-70v !important;
+  
+}
+
+.menuButton:active {
+  color: $white-0;
+  background-color: $blue-cool-70v !important;
+  border-color: $blue-cool-70v !important;
+  
+}
+
+.covid {
+    width: 80%;
+    margin: .5em;
+    border-radius: 8px;
+    margin-top: 0;
+}
+
+.phrase {
+    bottom: 0em; 
+    text-align: center; 
+    margin-top:1em;
+    font-size: .9em;
+    color:black;
+  }
+  
+.menu-name {
+    margin-left: .55em;
 }

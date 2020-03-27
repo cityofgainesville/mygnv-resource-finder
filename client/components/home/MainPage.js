@@ -10,6 +10,7 @@ import Homepage from './Title';
 
 const MainPage = (props) => {
   return (
+    
     <Redirect to="/home/search"></Redirect>
     /*<React.Fragment>
       <Homepage></Homepage>

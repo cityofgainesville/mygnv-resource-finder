@@ -43,25 +43,26 @@ const SubcategoryProviderList = (props) => {
       >
         <div className='subcat-provider-div'>
           <h5 className='subcat-provider-h5 providerName'>{provider.name}</h5>
-          <p>
-            {provider.services_provided}
-          </p>
-          <i class="fas fa-map-marker-alt"></i>
-          {provider.addresses.map((addresses) => (
-            <span
-              key={`${provider._id}_address`}
-              className='subcat-provider-address' style={{ color: 'black'}}
-            >
-              {addresses.line_1}
-              {/*{'\n'}
-              {addresses.state} {addresses.zipcode}*/}
-            </span>
-          ))}
-          <p>
-              {provider.services_provided}
+          {provider.addresses !== undefined &&
+                provider.addresses.length > 0
+                  ? provider.addresses.map((addresses) => (
+                    <div>
+                    <i class="fas fa-map-marker-alt" style={{marginRight: ".5rem", color:'black'}}></i>
+              <span key={`${provider._id}_address`}>
+                {addresses.line_1}
+                {/*{'\n'}
+                {addresses.state} {addresses.zipcode}*/}
+              </span>
+              </div>
+            )): ''}
+            <p className="services">
+              {provider.services_provided !== '' &&
+                provider.services_provided !== undefined
+                  ? provider.services_provided
+                  : 'Services not listed'}
               {'\n'}
             </p>
-            <p>
+            <p className="updated">
               {'Updated '}
               {provider.updated_at.substring(5,7) + '/' + provider.updated_at.substring(8,10)+ '/' + provider.updated_at.substring(0,4)}
               {'\n'}
@@ -86,58 +87,21 @@ const SubcategoryProviderList = (props) => {
 		e.preventDefault();
 		setVisible(!visible);
 		console.log(visible);
-		if(visible){
-		  setMyStyle({
-			margins: 'auto auto',
-			//maxWidth: '60em',
-			zIndex: '0',
-			padding: '0',
-			margin: '0',
-			width: '75%',
-			float: 'right',
-		  });
-		  setFormStyle({
-			width: '75%', 
-			borderBottom : '1px solid #DBDBDB', 
-			position:'fixed', 
-			zIndex:'100', 
-			marginTop:'53px'
-		  });
-		}
-		  
-		else{
-		  setMyStyle({
-			margins: 'auto auto',
-			//maxWidth: '60em',
-			zIndex: '0',
-			padding: '0',
-			margin: '0',
-			width: '100%',
-			float: 'right',
-		  });
-		  setFormStyle({
-			width: '100%', 
-			borderBottom : '1px solid #DBDBDB', 
-			position:'fixed', 
-			zIndex:'100', 
-			marginTop:'53px'
-		  });
-		} 
-		  
 	
-	}
+  }
+  console.log(props.subcategory.name);
   return( 
     <React.Fragment>
-      <div>
+      <div className = 'scroll'>
       <div
-        style={myStyle}
+        className='search-con'
       >
-          <Form className= 'white-0-bg' style={formStyle}>
-            <Form.Group controlId='formFilterText'>
+          <Form className= 'white-0-bg search-form'>
+            <Form.Group className='search-form-group' controlId='formFilterText'>
               
               <Container style={{margin:'0 0'}}>
-			  <Form.Label>
-       
+			  <Form.Label className='form-label-n'>
+                {props.subcategory.name}
               </Form.Label>
               </Container>
             </Form.Group>
@@ -153,6 +117,7 @@ const SubcategoryProviderList = (props) => {
 };
 
 SubcategoryProviderList.propTypes = {
+  subcategory: PropTypes.instanceOf(Object).isRequired,
   providers: PropTypes.instanceOf(Array).isRequired,
   history: PropTypes.instanceOf(Object).isRequired
 };

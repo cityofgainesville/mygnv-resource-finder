@@ -3,19 +3,238 @@
 @import './ProviderList.scss';
 @import './Search.scss';
 
+/* Mobile Styles */
+@media only screen and (max-width: 767px) {
+    .mobile-phone {
+        display: block;
+    }
+
+    .mobile-phone .btn {
+        width: 100%;
+        margin-top:.5rem;
+        font-weight: 600;
+        color: #137e71;
+        border: 2px solid #1fc2ae;
+    }
+
+    .phone {
+        display: none;
+    }
+    .body-hotline {
+        margin-top: 170px; 
+        position:relative;
+        //background-color: white;
+        width: 100%;
+        padding: 0;
+    }
+    
+    .hotline-con {
+        //height: 100vh;
+        background-color: white;
+        margin: auto auto;
+        //maxWidth: '60em',
+        z-index: 0;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        float: right;
+        margin-bottom: 3rem;
+    }
+    
+    .hotline-pname {
+        color: #074b69 !important;
+        font-size: large;
+        font-weight: normal !important;
+        text-align: center;
+        width: 100%;
+    }
+
+    .provider-phoneNumber {
+        color: #074b69;
+        font-weight: normal;
+        width: 100%;
+        margin-bottom: 0;
+        text-align: center;
+    }
+    
+  }
+
+   /* Tablet Styles */
+   @media only screen and (min-width: 401px) and (max-width: 1024px) {
+    .mobile-phone {
+        display: none;
+    }
+
+    .phone {
+        display: block;
+    }
+    .body-hotline {
+        margin-top: 145px; 
+        position:relative;
+        //background-color: white;
+        width: 90%;
+        padding: 0 15px;
+    }
+    
+    .hotline-con {
+        min-height: 100vh;
+        background-color: white;
+        margin: auto auto;
+        //maxWidth: '60em',
+        z-index: 0;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        float: right;
+        //margin-bottom: 3rem;
+    }
+    
+    .hotline-pname {
+        color: #074b69 !important;
+        font-size: large;
+        font-weight: normal !important;
+        text-align: left;
+    }
+
+    .provider-phoneNumber {
+        color: #074b69;
+        font-weight: normal;
+        width: fit-content;
+        margin-bottom: 0;
+        text-align: right;
+    }
+
+  }
+  
+  @media only screen and (max-width: 767px) and (min-width: 426px) {
+    .mobile-phone {
+        display: block;
+    }
+
+    .phone {
+        display: none;
+    }
+
+    .body-hotline {
+        margin-top: 145px; 
+        position:relative;
+        //background-color: white;
+        width: 100%;
+        padding: 0;
+    
+    }
+    
+    .hotline-con {
+        //height: 100vh;
+        background-color: white;
+        margin: auto auto;
+        //maxWidth: '60em',
+        z-index: 0;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        float: right;
+        margin-bottom: 3rem;
+    }
+    
+    .hotline-pname {
+        color: #074b69 !important;
+        font-size: large;
+        width: 100%;
+        font-weight: normal !important;
+        text-align: center;
+    }
+
+    .provider-phoneNumber {
+        color: #074b69;
+        font-weight: normal;
+        width: 100%;
+        margin-bottom: 0;
+        text-align: center;
+    }
+  }
+  
+ 
+  
+  /* Desktop Styles */
+  @media only screen and (min-width: 1025px) {
+    .phone {
+        display: block;
+    }
+    .mobile-phone {
+        display: none;
+    }
+    .body-hotline {
+        margin-top: 145px; 
+        position:relative;
+        //background-color: white;
+        width: 90%;
+        padding: 0 15px;
+    }
+    
+    .hotline-con {
+        min-height: 100vh;
+        background-color: white;
+        margin: auto auto;
+        //maxWidth: '60em',
+        z-index: 0;
+        padding: 0;
+        margin: 0;
+        width: 75%;
+        float: right;
+        //margin-bottom: 3rem;
+    }
+    
+    .hotline-pname {
+        color: #074b69 !important;
+        font-size: large;
+        font-weight: normal !important;
+        text-align: left;
+    }
+
+    .provider-phoneNumber {
+        color: #074b69;
+        font-weight: normal;
+        width: fit-content;
+        margin-bottom: 0;
+        text-align: right;
+    }
+    
+  }
+
 .form-label {
     text-align: center;
     width: 100%;
+    font-size: 1.1rem;
 }
 
-.provider-phoneNumber {
-    color: #074b69;
-    font-weight: bold;
-    width: fit-content;
-}
 
 .subcat-provider-div {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 }
+
+.provider-hotline {
+    align-items: center;
+}
+
+.hotline-card-container {
+    box-shadow: none !important;
+    border: none;
+    border-bottom: 1px solid #dbdbdb ;
+    margin: 0 !important;
+    padding: 2rem 2rem;
+}
+
+.hotline-card-container:first-child {
+    border-radius: 0 !important;
+}
+
+.hotline-card-container:last-child {
+    border-radius: 0 !important;
+    border: none;
+}
+
+
+

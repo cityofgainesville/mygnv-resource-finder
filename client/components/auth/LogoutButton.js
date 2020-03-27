@@ -28,7 +28,7 @@ const AuthButton = (props) => {
     props.history.push('/home');
   };
 
-  return currentUser ? <Button variant='light' className='login-menu-button' onClick={handleLogout}>Log Out</Button> : null;
+  return currentUser ? <Button variant='primary' className='login-menu-button' onClick={handleLogout}>Log Out</Button> : null;
 };
 
 AuthButton.propTypes = {

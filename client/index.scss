@@ -1,6 +1,6 @@
 // Font and colors from design document
 
-@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600&display=swap');
 
 $white-0: #ffffff;
 $mint-cool-30v: #1dc2ae;
@@ -17,6 +17,48 @@ body {
   font-size: 100%;
   -webkit-font-smoothing: subpixel-antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #FBFBFB;
+}
+
+/* Mobile Styles */
+@media only screen and (max-width: 767px) {
+  /*body {
+    background-color: #F09A9D !important; // Red
+  }*/
+  .noDisplay{
+    display: none;
+  }
+}
+
+/* Tablet Styles */
+@media only screen and (min-width: 401px) and (max-width: 1024px) {
+  /*body {
+    background-color: #F5CF8E !important; // Yellow 
+  }*/
+  .noDisplay{
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 767px) and (min-width: 426px) {
+  /*body {
+    background-color: black !important; // Black
+  }*/
+  .noDisplay{
+    display: none;
+  }
+}
+
+
+
+/* Desktop Styles */
+@media only screen and (min-width: 1025px) {
+  /*body {
+    background-color: #B2D6FF !important; // Blue 
+  }*/
+  .noDisplay{
+    display: "";
+  }
 }
 
 .lines {
@@ -76,57 +118,12 @@ body {
   background-color: $red-50v;
 }
 
-.menuButton {
-    border-radius: 8px;
-    color: $blue-cool-70v;
-    border-color: $blue-cool-70v;
-    width: 80%;
-    margin: .5em;
-}
 
-.menuButton:hover {
-  color: $white-0;
-  background-color: $blue-cool-70v;
-  border-color: $blue-cool-70v;
-  
-}
-
-.menuButton:hover {
-  color: $white-0;
-  background-color: $blue-cool-70v;
-  border-color: $blue-cool-70v;
-  
-}
 
 #exit {
   float: right;
 }
 
-.menu {
-  height: 100vh;
-  width: 25%;
-  margin-top: 53px;
-  margin-left: auto;
-  margin-right: auto;
-  float: left;
-  border: none;
-  border-right: 1px solid #DBDBDB;
-  border-radius: 0;
-  z-index:10000;
-  position: fixed;
-  padding-left: .75rem;
-  padding-right: .75rem;
-}
-
-.menu-title {
-  padding:1em auto;
-}
-
-.phrase {
-  bottom: 0em; 
-  text-align: center; 
-  margin-top:2em;
-}
 
 hr {
   border-top-color:#dbdbdb !important;
@@ -153,4 +150,12 @@ hr {
   outline: none;
   box-shadow:none;
   color: gray;
+}
+
+label {
+  margin-bottom: 0;
+}
+
+.form-label-n {
+  font-weight: 600;
 }

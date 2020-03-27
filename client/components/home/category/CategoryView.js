@@ -68,7 +68,7 @@ const CategoryView = (props) => {
       return <TopLevelCategory categories={categories} />;
     } else if (category) {
       if (shouldRenderProviders(category)) {
-        return <SubcategoryProviderList providers={category.providers} />;
+        return <SubcategoryProviderList providers={category.providers} subcategory={category}/>;
       } else {
         return <SubcategoryChildren category={category} />;
       }
