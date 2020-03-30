@@ -1,0 +1,128 @@
+@import '../../../index.scss';
+@import '../Menu.scss';
+@import '../Search.scss';
+
+
+
+/* Mobile Styles */
+@media only screen and (max-width: 767px) {
+
+.subcat-children-container-width {
+  width: 100%;
+  background-color: white !important;
+  margin-top: 180px !important;
+}
+
+.subcat {
+  font-size: medium;
+  padding: .75rem 1.25rem;
+  color: #074b69;
+  border-left: none;
+  border-right: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cat-icon {
+  float: right;
+  font-size: 1.5em;
+}
+
+.subcat:first-child {
+  border-radius: 0 !important;
+  border-top: none;
+}
+
+.subcat:last-child {
+  border-radius: 0 !important;
+  border: none;
+}
+
+}
+
+/* Tablet Styles */
+@media only screen and (min-width: 401px) and (max-width: 1024px) {
+  .subcat-children-container-width {
+    max-width: 40em;
+    margin-top: 190px;
+  }
+
+  .subcat-container {
+    background-color: #fbfbfb !important;
+  }
+  
+  .subcat {
+    font-size:large;
+    padding: 1.25rem 1.75rem;
+    color: #074b69;
+  }
+
+  .cat-icon {
+    display: none;
+  }
+
+}
+
+@media only screen and (max-width: 767px) and (min-width: 426px) {
+  .subcat-children-container-width {
+    width: 100%;
+    background-color: white !important;
+    margin-top: 160px !important;
+  }
+
+  .cat-icon {
+    display: block;
+  }
+  
+  .subcat-container {
+    background-color: white !important;
+  }
+
+  .subcat {
+    font-size: medium;
+    padding: .75rem 1.25rem;
+    color: #074b69;
+    border-left: none;
+    border-right: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .cat-icon {
+    float: right;
+    font-size: 1.5em;
+  }
+  
+  .subcat:first-child {
+    border-radius: 0 !important;
+    border-top: none;
+  }
+  
+  .subcat:last-child {
+    border-radius: 0 !important;
+    border: none;
+  }
+}
+
+
+
+/* Desktop Styles */
+@media only screen and (min-width: 1025px) {
+
+.subcat-children-container-width {
+  max-width: 40em;
+}
+
+.subcat {
+  font-size:large;
+  padding: 1.25rem 1.75rem;
+  color: #074b69;
+}
+
+.cat-icon {
+  display: none;
+}
+}
+
