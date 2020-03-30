@@ -1,6 +1,6 @@
 // Font and colors from design document
 
-@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600&display=swap');
 
 $white-0: #ffffff;
 $mint-cool-30v: #1dc2ae;
@@ -9,12 +9,64 @@ $black-100: #000000;
 $blue-cool-30v: #59b9de;
 $indigo-50: #676cc8;
 $red-50v: #e52207;
+$menu-gray-bg: #FDFDFD;
+$lines: #FBFBFB;
 
 body {
   font-family: 'Open Sans', sans-serif;
   font-size: 100%;
   -webkit-font-smoothing: subpixel-antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #FBFBFB;
+}
+
+/* Mobile Styles */
+@media only screen and (max-width: 767px) {
+  /*body {
+    background-color: #F09A9D !important; // Red
+  }*/
+  .noDisplay{
+    display: none;
+  }
+}
+
+/* Tablet Styles */
+@media only screen and (min-width: 401px) and (max-width: 1024px) {
+  /*body {
+    background-color: #F5CF8E !important; // Yellow 
+  }*/
+  .noDisplay{
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 767px) and (min-width: 426px) {
+  /*body {
+    background-color: black !important; // Black
+  }*/
+  .noDisplay{
+    display: none;
+  }
+}
+
+
+
+/* Desktop Styles */
+@media only screen and (min-width: 1025px) {
+  /*body {
+    background-color: #B2D6FF !important; // Blue 
+  }*/
+  .noDisplay{
+    display: "";
+  }
+}
+
+.lines {
+  border-color: #FBFBFB;
+}
+
+.menu-gray-bg {
+  background-color: #FDFDFD;
 }
 
 .white-0 {
@@ -64,4 +116,46 @@ body {
 }
 .red-50v-bg {
   background-color: $red-50v;
+}
+
+
+
+#exit {
+  float: right;
+}
+
+
+hr {
+  border-top-color:#dbdbdb !important;
+}
+
+.disabled{
+  color: gray !important;
+}
+
+.disabled:hover{
+  background: none;
+  outline: none;
+  color: gray;
+  cursor: default;
+}
+
+.disabled:active{
+  background: none;
+  outline: none;
+  color: gray;
+}
+.disabled:focus{
+  background: none;
+  outline: none;
+  box-shadow:none;
+  color: gray;
+}
+
+label {
+  margin-bottom: 0;
+}
+
+.form-label-n {
+  font-weight: 600;
 }

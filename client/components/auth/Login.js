@@ -14,6 +14,11 @@ import PropTypes from 'prop-types';
 import LogoutButton from './LogoutButton';
 import CurrentUserEdit from '../admin/user/CurrentUserEdit';
 
+import homeIcon from '../../images/myGNVrf.png';
+import './Login.scss';
+import paths from '../../RouterPaths';
+import RedirectButton from '../home/RedirectButton';
+
 // Modal style login component
 // Communicates with backend, see backend comments for api docs
 
@@ -58,12 +63,11 @@ const Login = (props) => {
         console.log(err);
       });
   };
-
-  const alreadyLoggedIn = () => {
+   const alreadyLoggedIn = () => {
     if (!currentUser) return null;
     else
       return (
-        <Row className='justify-content-md-center' style={{ margin: 'auto' }}>
+        <Row className='justify-content-md-center' style={{ margin: 'auto', marginTop: '155px' }}>
           <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
             <span>{`Logged in as: ${currentUser.email}`}</span>
           </Col>
@@ -81,23 +85,96 @@ const Login = (props) => {
         </Row>
       );
   };
+  
+//NEW - IN DEVELOPMENT
+
+  /*const alreadyLoggedIn = () => {
+    
+    if (!currentUser) return null;
+    else
+      return (
+        <Container className ='admin-container'>
+        <Row className='justify-content-md-left'>
+          <Col md='auto' className='name'>
+            <span><strong>{`${currentUser.first_name.toUpperCase()} ${currentUser.last_name.toUpperCase()}`}</strong></span>
+          </Col>
+        </Row>
+        <Row className='justify-content-md-left'>
+        {currentUser.role === 'Owner' ? (
+          <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
+            <RedirectButton
+              exact
+              path={paths.categoriesAdminPath}
+              variant='light'
+              className ='login-menu-button'
+            >
+              Categories
+            </RedirectButton>
+          </Col>
+        ) : null}
+        </Row>
+        <Row className='justify-content-md-left'>
+        <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
+          <RedirectButton
+            exact
+            path={paths.providersAdminPath}
+            variant='light'
+            className ='login-menu-button'
+          >
+            Resources
+          </RedirectButton>
+        </Col>
+        </Row>
+        <Row className='justify-content-md-left'>
+        {currentUser.role === 'Owner' ? (
+          <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
+            <RedirectButton
+              exact
+              path={paths.usersAdminPath}
+              variant='light'
+              className ='login-menu-button'
+            >
+              Users & Permissions
+            </RedirectButton>
+          </Col>
+        ) : null}
+      </Row>
+          <Row className='justify-content-md-left'>
+          <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
+            <CurrentUserEdit
+              categories={props.categories}
+              providers={props.providers}
+              refreshDataCallback={props.refreshDataCallback}
+              buttonName='Settings'
+            />
+          </Col>
+          </Row>
+          <Row className='justify-content-md-left'>
+          <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
+            <LogoutButton />
+          </Col>
+        </Row>
+        </Container>
+      );
+      
+  };*/
 
   const needsLogin = (
-    <Row className='justify-content-md-center' style={{ margin: 'auto' }}>
-      <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
-        <span>Welcome, please login to access the admin portal.</span>
-      </Col>
-      <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
-        <Button variant='primary' onClick={openModal}>
-          Login
-        </Button>
-      </Col>
-      <Modal show={modalIsDisplayed} onHide={closeModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Login</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {invalidAttempt ? (
+    <Container className='justify-content-md-center login-container'>
+      <Row className='justify-content-md-center'>
+          <img
+        src={homeIcon}
+        height='100'
+        className='d-inline-block align-top login-img'
+      ></img>
+    </Row>
+      <Row md='auto' className='justify-content-md-center login-title'>
+        <span><strong>myGNV Resource Directory</strong></span>
+      </Row>
+      <Row md='auto' className='justify-content-md-center login-description'>
+        <span>ADMIN PORTAL</span>
+      </Row>
+      {invalidAttempt ? (
             <Alert
               variant='danger'
               style={{
@@ -109,48 +186,39 @@ const Login = (props) => {
               Invalid email or password. Please try again.
             </Alert>
           ) : null}
-          <Form>
-            <Form.Group controlId='formBasicEmail'>
-              <Form.Label>Email</Form.Label>
+      <Form className='justify-content-md-center'>
+            <Form.Group controlId='formBasicEmail' className='search-form-group'>
               <Form.Control
                 value={email}
                 onChange={handleEmailChange}
                 type='Email'
                 placeholder='Email'
+                className = 'login'
               />
             </Form.Group>
-            <Form.Group controlId='formBasicPassword'>
-              <Form.Label>Password</Form.Label>
+            <Form.Group controlId='formBasicPassword' className='search-form-group'>
               <Form.Control
                 value={password}
                 onChange={handlePasswordChange}
                 type='password'
                 placeholder='Password'
+                className = 'login'
               />
             </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant='secondary' onClick={closeModal}>
-            Close
+      </Form>
+      <Row md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }} className='justify-content-md-center'>
+        <Button onClick={doLogin} variant='outline-primary' type='submit'>
+            LOGIN
           </Button>
-          <Button onClick={doLogin} variant='primary' type='submit'>
-            Log In
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </Row>
+      </Row>
+    </Container>
   );
 
   return (
-    <Container
-      style={{
-        margins: 'auto auto',
-        maxWidth: '60em',
-      }}
+    <React.Fragment
     >
       {currentUser ? alreadyLoggedIn() : needsLogin}
-    </Container>
+    </React.Fragment>
   );
 };
 

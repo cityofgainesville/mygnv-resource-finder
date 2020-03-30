@@ -1,0 +1,51 @@
+@import '../../index.scss';
+@import './Menu.scss';
+@import './ProviderList.scss';
+@import './Search.scss';
+
+#safeplace-body-left {
+    width: 50%;
+    float: left;
+}
+
+.safeplace-instructions {
+    text-align: center;
+}
+
+.provider-phone-location {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.safeplace-map-button {
+    width: 100%;
+}
+
+.safeplace-map-button-container {
+    width: 100%;
+}
+
+.dropdown {
+    background: none;
+    border: none;
+    outline: none;
+}
+
+.dropdown:active {
+    outline: none;
+}
+
+#instructions {
+    text-align: left;
+    padding: 10px;
+}
+
+#nsp {
+    width: 100%;
+}
+
+#safeplaces-items {
+    border-right: none;
+    border-left: none;
+}
