@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'reactn';
 import { Alert, Jumbotron} from 'react-bootstrap';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
-import '../../css/all.css';
-import '../../js//all.js';
 import RedirectButton from './RedirectButton';
 import paths from '../../RouterPaths';
 import CategoryView from './category/CategoryView.js';
 import TopLevelCategory from './category/TopLevelCategory.js';
 import '../../index.scss';
+import './Search.scss';
 
 // Title component, displays blue bar with icon and text
 
@@ -34,7 +33,7 @@ const Homepage = (props) => {
         <div class='menu-container' >
         <Alert
           variant='primary'
-          className='menu'
+          className='menu scroll'
         >
           <Row className='justify-content-center menu-title'>
                 Menu
@@ -44,30 +43,30 @@ const Homepage = (props) => {
             <i class="fal fa-phone" ></i>
               Call a hotline
   </NavLink>*/}
-            <RedirectButton className='covid' variant="outline-info" path={paths.covidPath} active={hotline} >
-              COVID-19
-              </RedirectButton>
+            <Button className='covid' variant="outline-info" target='_blank' href='https://alachuacounty.us/covid-19/Pages/default.aspx?'>
+              COVID-19 Info
+              </Button>
           </Row>
           <Row className='justify-content-center'>
             {/*<NavLink to={paths.hotlinesPath} className='menuButton' activeClassName='navbar-active active'>
             <i class="fal fa-phone" ></i>
               Call a hotline
   </NavLink>*/}
-            <RedirectButton className='menuButton' path={paths.hotlinesPath} active={hotline} >
+            <RedirectButton className='menuButton menu-hotline' path={paths.hotlinesPath} active={hotline} >
               <i class="far fa-phone" ></i>
               <span className="menu-name">Call a hotline</span>
               </RedirectButton>
           </Row>
-          <Row className='justify-content-center'>
-          {/*<NavLink to={paths.safeplacesPath} onClick={(e)=>handleClick(e)} className='menuButton disabled' activeClassName='navbar-active active'>
-          <i class="fal fa-hands-heart"></i>
-              Locate my nearest safe place
-</NavLink>*/}
+          {/*<Row className='justify-content-center'>
+          <NavLink to={paths.safeplacesPath} onClick={(e)=>handleClick(e)} className='menuButton disabled' activeClassName='navbar-active active'>
+                    <i class="fal fa-hands-heart"></i>
+                        Locate my nearest safe place
+          </NavLink>
             <RedirectButton className='menuButton disabled'>
               <i class="far fa-hands-heart"  ></i>
               <span className="menu-name">Locate my nearest safe place</span>
-            </RedirectButton>
-          </Row>
+          </RedirectButton>
+          </Row>*/}
           <Row className='justify-content-center'>
           {/*<NavLink to={paths.searchPath} className='menuButton' activeClassName='navbar-active active'>
           <i class="fal fa-search"></i>

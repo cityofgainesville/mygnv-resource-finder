@@ -69,10 +69,10 @@ const Hotlines = (props) => {
 	return (
 		<React.Fragment>
 		
-      <div className = 'scroll'>
+      <div >
       
       <div
-        className='hotline-con'
+        className='hotline-con scroll'
       >
           <Form className= 'white-0-bg search-form'>
             <Form.Group className='search-form-group' controlId='formFilterText'>
@@ -108,12 +108,41 @@ const Hotlines = (props) => {
 				className = 'providerCard-container hotline-card-container'
 			>
 				<div className='subcat-provider-div provider-hotline'>
-				<h5 className='hotline-pname providerName '>Coronavirus Information Line</h5>
+				<h5 className='hotline-pname providerName '>Compliance Issue Reports</h5>
 				<p className ='provider-phoneNumber mobile-phone'>
-					<Button href='tel:+18667796121' variant='outline-info'>866-779-6121</Button>
+				<Button href='tel:+13529551818' variant='outline-info'>352-955-1818</Button>
 				</p>
 				<p className ='provider-phoneNumber phone'>
-					866-779-6121
+					352-955-1818
+				</p>
+                
+				</div>
+			</ListGroup.Item>
+			
+			<ListGroup.Item
+				className = 'providerCard-container hotline-card-container'
+			>
+				<div className='subcat-provider-div  provider-hotline'>
+				<h5 className=' hotline-pname providerName'>COVID-19 Rumor Control</h5>
+				<p className ='provider-phoneNumber mobile-phone'>
+					<Button href='tel:311' variant='outline-info'>311</Button>
+				
+				</p>
+				<p className ='provider-phoneNumber phone'>
+				311
+				</p>
+				</div>
+			</ListGroup.Item>
+			<ListGroup.Item
+				className = 'providerCard-container hotline-card-container'
+			>
+				<div className='subcat-provider-div  provider-hotline'>
+				<h5 className='hotline-pname providerName '>Crisis Center Line</h5>
+				<p className ='provider-phoneNumber mobile-phone'>
+				<Button href='tel:+13522646789' variant='outline-info'>352-264-6789</Button>
+				</p>
+				<p className ='provider-phoneNumber phone'>
+				352-264-6789
 				</p>
 				</div>
 			</ListGroup.Item>
@@ -140,6 +169,19 @@ const Hotlines = (props) => {
 				</p>
 				<p className ='provider-phoneNumber phone'>
 				1-800-352-2437
+				</p>
+				</div>
+			</ListGroup.Item>
+			<ListGroup.Item
+				className = 'providerCard-container hotline-card-container'
+			>
+				<div className='subcat-provider-div provider-hotline'>
+				<h5 className='hotline-pname providerName '>State of Florida's Coronavirus Information Line</h5>
+				<p className ='provider-phoneNumber mobile-phone'>
+					<Button href='tel:+18667796121' variant='outline-info'>866-779-6121</Button>
+				</p>
+				<p className ='provider-phoneNumber phone'>
+					866-779-6121
 				</p>
 				</div>
 			</ListGroup.Item>

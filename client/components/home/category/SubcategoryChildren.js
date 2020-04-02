@@ -49,10 +49,10 @@ const SubcategoryChildren = (props) => {
   return (
     <React.Fragment>
       
-      <div className = 'scroll'>
+      <div >
       
       <div
-        className='search-con subcat-container'
+        className='search-con subcat-container scroll'
       >
           <Form className= 'white-0-bg search-form'>
             <Form.Group className='search-form-group' controlId='formFilterText'>

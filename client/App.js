@@ -14,7 +14,7 @@ import IndivProvider from './components/home/IndivProvider';
 import Search from './components/home/Search';
 import Hotlines from './components/home/Hotlines';
 import Safeplaces from './components/home/Safeplaces';
-import Covid from './components/home/Covid19';
+//import Covid from './components/home/Covid19';
 import './index.scss';
 
 
@@ -35,7 +35,7 @@ const App = (props) => {
         <Route exact path={paths.searchPath} component={Search}><div className="noDisplay"><Title/></div><Search/></Route>
         <Route exact path={paths.safeplacesPath} component={Safeplaces}><div className="noDisplay"><Title/></div><Safeplaces/></Route>
         <Route exact path={paths.hotlinesPath} component={Hotlines}><div className="noDisplay"><Title/></div><Hotlines/></Route>
-        <Route exact path={paths.covidPath} component={Covid}><div className="noDisplay"><Title/></div><Covid/></Route>
+        {/*<Route exact path={paths.covidPath} component={Covid}><div className="noDisplay"><Title/></div><Covid/></Route>*/}
         <Route exact path={paths.defaultPath} component={MainPage}></Route>
         <Route exact path={paths.menuPath} component={Title}></Route>
         <Route

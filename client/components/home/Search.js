@@ -21,7 +21,7 @@ const Search = (props) => {
   const [visible, setVisible] = useState(false);
   //const [translation, setTranslation] = useState(false);
   const [myStyle, setStyle] = useState ({borderColor: 'default'});
-  let filteredItems = providers;
+  //let filteredItems = providers;
 
   // Loads in all providers for filtering through
   useEffect(() => {
@@ -59,14 +59,13 @@ const Search = (props) => {
       return (
         provider.name.toLowerCase().includes(filterText.toLowerCase()) ||
         provider._id.includes(filterText)
-        /*provider.cost_info.cost_type.includes(filterText) ||
-        provider.demographics_eligible.includes(filterText)*/
       );
     })
+    .sort((a, b) => (a.name > b.name) ? 1 : -1)
     .map((provider) => {
       return (
         <React.Fragment>
-        <div className='providerCard-container'>
+        <div className='providerCard-container' key={provider._id}>
         <ListGroup.Item
           key={provider._id}
           action
@@ -141,8 +140,8 @@ const handleBlurRequest = (e) => {
     
   return (
     <React.Fragment>
-      <div className='scroll'>
-      <div  className='search-con' >
+      <div >
+      <div  className='search-con scroll' >
           <Form className= 'white-0-bg search-form'>
             <Form.Group className='search-form-group' controlId='formFilterText'>
               <Container className = 'mobile-con' style={{margin:'0 0'}}>

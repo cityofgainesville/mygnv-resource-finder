@@ -192,6 +192,7 @@
         width: 75%;
         float: right;
         padding-bottom: 3rem;
+        height:100vh;
     }
     
     .search-form {
@@ -250,7 +251,7 @@
 }
 
 .scroll {
-    overflow: scroll;
+    overflow-y: scroll;
 }
 
 .search-cat-button {
