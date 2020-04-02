@@ -69,10 +69,12 @@ const Hotlines = (props) => {
 	return (
 		<React.Fragment>
 		
+
       <div >
       
       <div
         className='hotline-con scroll'
+
       >
           <Form className= 'white-0-bg search-form'>
             <Form.Group className='search-form-group' controlId='formFilterText'>
@@ -108,6 +110,7 @@ const Hotlines = (props) => {
 				className = 'providerCard-container hotline-card-container'
 			>
 				<div className='subcat-provider-div provider-hotline'>
+
 				<h5 className='hotline-pname providerName '>Compliance Issue Reports</h5>
 				<p className ='provider-phoneNumber mobile-phone'>
 				<Button href='tel:+13529551818' variant='outline-info'>352-955-1818</Button>
@@ -172,6 +175,7 @@ const Hotlines = (props) => {
 				</p>
 				</div>
 			</ListGroup.Item>
+
 			<ListGroup.Item
 				className = 'providerCard-container hotline-card-container'
 			>
@@ -185,6 +189,7 @@ const Hotlines = (props) => {
 				</p>
 				</div>
 			</ListGroup.Item>
+
           </Container>
           </div>
           </div>

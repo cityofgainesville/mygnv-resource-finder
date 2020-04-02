@@ -43,6 +43,7 @@ const Homepage = (props) => {
             <i class="fal fa-phone" ></i>
               Call a hotline
   </NavLink>*/}
+
             <Button className='covid' variant="outline-info" target='_blank' href='https://alachuacounty.us/covid-19/Pages/default.aspx?'>
               COVID-19 Info
               </Button>
@@ -52,6 +53,7 @@ const Homepage = (props) => {
             <i class="fal fa-phone" ></i>
               Call a hotline
   </NavLink>*/}
+
             <RedirectButton className='menuButton menu-hotline' path={paths.hotlinesPath} active={hotline} >
               <i class="far fa-phone" ></i>
               <span className="menu-name">Call a hotline</span>

@@ -112,9 +112,11 @@ const IndivProvider = (props) => {
   return (
     <React.Fragment>
       
+
       <div >
       <div
         className='search-con indiv-container scroll'
+
       >
           {/*<Form className= 'white-0-bg' className='search-form'>
             <Form.Group controlId='formFilterText'>

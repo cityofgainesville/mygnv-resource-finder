@@ -33,6 +33,7 @@ const SubcategoryProviderList = (props) => {
   // Renders a list of provider in subcategory, provides summary and
   // address quick view
   console.log(props.providers);
+  
   const providerList = props.providers.sort((a, b) => (a.name > b.name) ? 1 : -1).map((provider) => {
     return (
       <div className='providerCard-container'>

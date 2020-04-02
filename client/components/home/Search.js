@@ -61,7 +61,9 @@ const Search = (props) => {
         provider._id.includes(filterText)
       );
     })
+
     .sort((a, b) => (a.name > b.name) ? 1 : -1)
+
     .map((provider) => {
       return (
         <React.Fragment>
@@ -140,8 +142,10 @@ const handleBlurRequest = (e) => {
     
   return (
     <React.Fragment>
+
       <div >
       <div  className='search-con scroll' >
+
           <Form className= 'white-0-bg search-form'>
             <Form.Group className='search-form-group' controlId='formFilterText'>
               <Container className = 'mobile-con' style={{margin:'0 0'}}>
