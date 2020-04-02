@@ -31,12 +31,21 @@
     padding-bottom: 1em;
   }
 
+
+  .menu-hotline, .covid {
+    display: none;
+  }
+
   
 }
 
 /* Tablet Styles */
 @media only screen and (min-width: 401px) and (max-width: 1024px) {
- 
+
+  .menu-hotline, .covid {
+    display: none;
+  }
+
 
   .menu {
     //height: 100vh;
@@ -67,6 +76,10 @@
 
 
 @media only screen and (max-width: 767px) and (min-width: 426px) {
+
+  .menu-hotline, .covid {
+    display: none;
+  }
 
   .menu {
     //height: 100vh;
@@ -100,7 +113,9 @@
 @media only screen and (min-width: 1025px) {
 
   .menu {
-    height: 100vh;
+
+    height: 90vh;
+
     width: 25%;
     margin-top: 89px;
     margin-left: auto;
@@ -189,6 +204,9 @@
     margin-top:1em;
     font-size: .9em;
     color:black;
+
+    padding-bottom: 2rem;
+
   }
   
 .menu-name {

@@ -24,12 +24,18 @@ const NavBar = (props) => {
     <div className='black-100-bg nav-container' >
         <Navbar collapseOnSelect sticky='top' expand='sm' variant='light'>
           <Navbar.Brand>
+
+            <a href={paths.mainPath} class='nav-home-brand'>
+
             <img
               src={homeIcon}
               height='30'
               className='d-inline-block align-top'
             ></img>
             <span className='white-0 title' >myGNV Resource Directory</span>
+
+            </a>
+
           </Navbar.Brand>
           <RedirectButton className='mobile-nav-buttons' path={paths.menuPath}><i class="fal fa-home-lg-alt nav-i" style={{color: 'white', }}></i></RedirectButton>
           {/*<Button className='mobile-nav-buttons' onClick = {(e)=>handleEntailmentRequest(e)}  style={{color: 'white', display: !visible ? '' : 'none'}}> <i class="fal fa-bars nav-i" ></i></Button>

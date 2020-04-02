@@ -1,6 +1,48 @@
 @import '../../../index.scss';
 
 
+/* Mobile Styles */
+@media only screen and (max-width: 767px) {
+  /*body {
+    background-color: #F09A9D !important; // Red
+  }*/
+  .toplevel-row{
+    width:80%;
+  }
+}
+
+/* Tablet Styles */
+@media only screen and (min-width: 401px) and (max-width: 1024px) {
+  /*body {
+    background-color: #F5CF8E !important; // Yellow 
+  }*/
+  .toplevel-row{
+    width:80%;
+  }
+}
+
+@media only screen and (max-width: 767px) and (min-width: 426px) {
+  /*body {
+    background-color: black !important; // Black
+  }*/
+  .toplevel-row{
+    width:80%;
+  }
+}
+
+
+
+/* Desktop Styles */
+@media only screen and (min-width: 1025px) {
+  /*body {
+    background-color: #B2D6FF !important; // Blue 
+  }*/
+  .toplevel-row{
+    width: 100%;
+  }
+}
+
+
 .toplevel-container {
   max-width: 30em;
   margin: auto auto;
