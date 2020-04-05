@@ -204,8 +204,18 @@ const ProviderSchema = {
       },
     },
     cost_info: {
-      type: 'string',
+      type: 'object',
       title: 'Cost Information',
+      properties: {
+        cost_type: {
+          type: 'string',
+          title: 'Cost Type',
+        },
+        other_info: {
+          type: 'string',
+          title: 'Other Info',
+        },
+      },
     },
     translation_available: {
       type: 'string',
@@ -219,6 +229,20 @@ const ProviderSchema = {
     additional_information: {
       type: 'string',
       title: 'Additional Information',
+    },
+    demographics_eligible: {
+      type: 'string',
+      title: 'Demographics Eligible',
+    },
+    hotline: {
+      type: 'boolean',
+      title: 'Hotline',
+      default: false,
+    },
+    safeplace: {
+      type: 'boolean',
+      title: 'Safe Place',
+      default: false,
     },
   },
 };
