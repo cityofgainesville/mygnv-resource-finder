@@ -88,14 +88,17 @@ exports.isProviderUpdateAllowed = async (req, res, next) => {
 
 // Update a provider
 exports.update = (req, res) => {
-  // TODO: UPDATE FIELDS FROM BODY?
   const provider = req.provider;
   const infoToUpdate = req.body;
 
   for (const key in infoToUpdate) {
     if (
       Object.prototype.hasOwnProperty.call(infoToUpdate, key) &&
-      provider[key] !== infoToUpdate[key]
+      provider[key] !== infoToUpdate[key] &&
+      key != 'updated_at' &&
+      key != 'created_at' &&
+      key != '_id' &&
+      key != '__v'
     ) {
       provider[key] = infoToUpdate[key];
     }
