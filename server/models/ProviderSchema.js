@@ -5,7 +5,6 @@ const Schema = mongoose.Schema;
 // A schema for holding provider information
 const providerSchema = new Schema({
   name: { type: String, required: true },
-  category: {type: String, required: true },
   services_provided: String,
   eligibility_criteria: String,
   service_area: String,
@@ -84,18 +83,23 @@ const providerSchema = new Schema({
     required: true,
   },
   additional_information: String,
-  updated_at: {
-        type: Date,
-        default: Date.now(),
-  },
   demographics_eligible: String,
   hotline: Boolean,
   safeplace: Boolean,
+  updated_at: {
+    type: Date,
+    default: Date.now(),
+  },
+  created_at: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
 // Add updated_at and created_at fields
 providerSchema.pre('save', function(next) {
   const currDate = new Date();
+
   // Update the updated_at property
   /* eslint-disable babel/no-invalid-this */
   this.updated_at = currDate;
