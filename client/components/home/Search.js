@@ -99,11 +99,11 @@ const Search = (props) => {
                   : 'Services not listed'}
               {'\n'}
             </p>
-            <p className="updated">
+           {/*<p className="updated">
               {'Updated '}
               {provider.updated_at.substring(5,7) + '/' + provider.updated_at.substring(8,10)+ '/' + provider.updated_at.substring(0,4)}
               {'\n'}
-            </p>
+            </p>*/}
             
           </div>
         </ListGroup.Item>

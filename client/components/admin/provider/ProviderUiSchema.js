@@ -76,16 +76,10 @@ const ProviderUiSchema = {
     email: { 'ui:widget': 'text' },
     other_info: { 'ui:widget': 'textarea' },
   },
-  cost_info: {
-    cost_type: { 'ui:widget': 'textarea' },
-    other_info: { 'ui:widget': 'textarea' },
-  },
+  cost_info: { 'ui:widget': 'textarea' },
   translation_available: { 'ui:widget': 'text' },
   united_way_approval: { 'ui:widget': 'radio' },
   additional_information: { 'ui:widget': 'textarea' },
-  demographics_eligible: { 'ui:widget': 'textarea' },
-  hotline: { 'ui:widget': 'radio' },
-  safeplace: { 'ui:widget': 'radio' },
 };
 
 export default ProviderUiSchema;
