@@ -73,37 +73,22 @@ const providerSchema = new Schema({
     email: String,
     other_info: String,
   },
-  cost_info: {
-    cost_type: String,
-    other_info: String,
-  },
+  cost_info: String,
   translation_available: String,
   united_way_approval: {
     type: Boolean,
     required: true,
   },
   additional_information: String,
-  demographics_eligible: String,
-  hotline: Boolean,
-  safeplace: Boolean,
-  updated_at: {
-    type: Date,
-    default: Date.now(),
-  },
-  created_at: {
-    type: Date,
-    default: Date.now(),
-  },
+ 
 });
 
 // Add updated_at and created_at fields
 providerSchema.pre('save', function(next) {
   const currDate = new Date();
-
   // Update the updated_at property
   /* eslint-disable babel/no-invalid-this */
   this.updated_at = currDate;
-
   // If created_at is not present then create it
   /* eslint-disable babel/no-invalid-this */
   if (!this.created_at) this.created_at = currDate;
