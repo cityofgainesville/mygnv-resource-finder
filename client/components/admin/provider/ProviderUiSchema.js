@@ -84,10 +84,7 @@ const ProviderUiSchema = {
     email: { 'ui:widget': 'text' },
     other_info: { 'ui:widget': 'textarea' },
   },
-  cost_info: {
-    cost_type: { 'ui:widget': 'textarea' },
-    other_info: { 'ui:widget': 'textarea' },
-  },
+  cost_info: { 'ui:widget': 'textarea', 'ui:emptyValue': '' },
   translation_available: { 'ui:widget': 'text', 'ui:emptyValue': '' },
   united_way_approval: { 'ui:widget': 'radio' },
   additional_information: { 'ui:widget': 'textarea', 'ui:emptyValue': '' },

@@ -74,10 +74,7 @@ const providerSchema = new Schema(
       email: String,
       other_info: String,
     },
-    cost_info: {
-      cost_type: String,
-      other_info: String,
-    },
+    cost_info: String,
     translation_available: String,
     united_way_approval: {
       type: Boolean,
