@@ -190,7 +190,7 @@ const IndivProvider = (props) => {
               
               <Card.Text>
                 {provider.phone_numbers && provider.phone_numbers.length > 0
-                  ?(<div><i class="fas fa-phone" style={{marginRight: ".5rem"}}></i><span><strong className="subtitle">Phone Number(s):</strong><br></br>{provider.phone_numbers[0].number}</span></div>)
+                  ?(<div><i class="fas fa-phone" style={{marginRight: ".5rem"}}></i><span><strong className="subtitle">Phone Number(s):</strong><br></br><a href={(`tel:${provider.phone_numbers[0].number}`)} target='_blank' className="call-link"> {provider.phone_numbers[0].number}</a></span></div>)
                   : null}
                 {provider.phone_numbers &&
                 provider.phone_numbers.length > 0 &&
@@ -214,7 +214,7 @@ const IndivProvider = (props) => {
              { provider.phone_numbers && provider.phone_numbers.length > 0
                   ?(<span><Button href={(`tel:${provider.phone_numbers[0].number}`)} target='_blank' variant='info' className="provider-buttons call">Call</Button></span>):null}
                 {provider.website[0] !== undefined && provider.website[0] !== ''
-                  ? ( <span>
+             ? ( <span>
                   
                   <Button href={provider.website[0]} target='_blank' variant='info' className="provider-buttons website">Go to Website</Button></span>) : ''}
                   {provider.addresses !== undefined &&

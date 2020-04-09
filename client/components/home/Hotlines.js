@@ -195,13 +195,20 @@ const Hotlines = (props) => {
 			>
 				<div className='subcat-provider-div provider-hotline'>
 				<h5 className='hotline-pname providerName '>United Way</h5>
-				<p className ='provider-phoneNumber mobile-phone'>
+				<p className ='provider-phoneNumber mobile-phone'> 
+				Available 24/7<br></br>
+				Call
 					<Button href='tel:+1211' variant='outline-info'>2-1-1</Button>
-				</p>
-				<p className ='provider-phoneNumber mobile-phone'>
-					<Button href='tel:+13523324636' variant='outline-info'>352-332-4636</Button>
+				
+					<Button href='tel:+13523324636' variant='outline-info' style={{width: '100%',marginBottom: '16px'}}>352-332-4636</Button>
+				
+				<br></br>
+				Text
+					<Button href='sms:+13523324636' variant='outline-info'>898-211</Button>
 				</p>
 				<p className ='provider-phoneNumber phone'>
+					Available 24/7
+					<br></br>
 					Call 2-1-1 or 352-332-4636
 				<br></br>
 					Text your zip code to 898-211
