@@ -4,6 +4,7 @@
 
 /* Mobile Styles */
 @media only screen and (max-width: 767px) {
+   
     #right {
         width: fit-content;
         display: none;
@@ -458,7 +459,6 @@
     .call {
         display: none;
     }
-
     #right {
         width: fit-content;
         //min-width: 30%;
