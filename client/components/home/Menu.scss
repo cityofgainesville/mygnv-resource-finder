@@ -32,19 +32,11 @@
   }
 
 
-  .menu-hotline, .covid {
-    display: none;
-  }
-
   
 }
 
 /* Tablet Styles */
 @media only screen and (min-width: 401px) and (max-width: 1024px) {
-
-  .menu-hotline, .covid {
-    display: none;
-  }
 
 
   .menu {
@@ -76,10 +68,6 @@
 
 
 @media only screen and (max-width: 767px) and (min-width: 426px) {
-
-  .menu-hotline, .covid {
-    display: none;
-  }
 
   .menu {
     //height: 100vh;

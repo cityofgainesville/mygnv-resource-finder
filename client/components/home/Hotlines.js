@@ -190,6 +190,25 @@ const Hotlines = (props) => {
 				</div>
 			</ListGroup.Item>
 
+			<ListGroup.Item
+				className = 'providerCard-container hotline-card-container'
+			>
+				<div className='subcat-provider-div provider-hotline'>
+				<h5 className='hotline-pname providerName '>United Way</h5>
+				<p className ='provider-phoneNumber mobile-phone'>
+					<Button href='tel:+1211' variant='outline-info'>2-1-1</Button>
+				</p>
+				<p className ='provider-phoneNumber mobile-phone'>
+					<Button href='tel:+13523324636' variant='outline-info'>352-332-4636</Button>
+				</p>
+				<p className ='provider-phoneNumber phone'>
+					Call 2-1-1 or 352-332-4636
+				<br></br>
+					Text your zip code to 898-211
+				</p>
+				</div>
+			</ListGroup.Item>
+
           </Container>
           </div>
           </div>

@@ -81,13 +81,13 @@ const Homepage = (props) => {
           </Row>
             <hr></hr>
           <Row className='justify-content-center menu-title'>
-            Categories
+            Browse by Category
           </Row>
           <CategoryView></CategoryView>
           <Row className='justify-content-center' style={{ margin: 'auto' }}>
             <Col xs={11} className='phrase'>
               <div>
-                Life can get tough sometimes. We get it. We’re here to help.
+                Life can get tough sometimes. We’re here to help.
                 Find resources here.
               </div>
             </Col>

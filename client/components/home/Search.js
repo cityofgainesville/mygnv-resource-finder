@@ -155,7 +155,7 @@ const handleBlurRequest = (e) => {
                 onChange={handleFilterChange}
                 onFocus={(e)=>handleFocusRequest(e)}
                 onBlur={(e)=>handleBlurRequest(e)}
-                placeholder='Search for a resource'
+                placeholder='Search by Provider Name'
                 className='search'
               />
               <InputGroup.Prepend>
@@ -166,7 +166,7 @@ const handleBlurRequest = (e) => {
               </InputGroup>
               </Container>
             </Form.Group>
-            <div className='search-cat-con'><p className='search-cat'>Categories <Button onClick={(e)=>handleEntailmentRequest(e)} className='search-cat-button' style={{display: !visible ? '' : 'none'}}><i class="fal fa-chevron-down" style={{color:'black !important'}}></i></Button><Button onClick={(e)=>handleEntailmentRequest(e)} className='search-cat-button' style={{display: visible ? '' : 'none'}}><i class="fal fa-chevron-up"></i></Button></p><div style={{display: visible ? '' : 'none'}}><CategoryView/></div></div>
+            <div className='search-cat-con'><p className='search-cat'>Browse by Category<Button onClick={(e)=>handleEntailmentRequest(e)} className='search-cat-button' style={{display: !visible ? '' : 'none'}}><i class="fal fa-chevron-down" style={{color:'black !important'}}></i></Button><Button onClick={(e)=>handleEntailmentRequest(e)} className='search-cat-button' style={{display: visible ? '' : 'none'}}><i class="fal fa-chevron-up"></i></Button></p><div style={{display: visible ? '' : 'none'}}><CategoryView/></div></div>
           </Form>
           <Container className='body searchb'>
           {/*<button className='tags' id='exampleTag'>Click a tag to filter <i class="fal fa-times fa-1x"></i></button>*/}

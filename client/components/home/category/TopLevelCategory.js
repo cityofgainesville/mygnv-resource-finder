@@ -12,12 +12,12 @@ const TopLevelCategory = (props) => {
 
   const categoryRowList = [];
   let categoryCol = <React.Fragment></React.Fragment>;
-  // Have the grid be max 3col wide
-  props.categories.sort((a, b) => (a.name > b.name) ? 1 : -1).forEach((category, i) => {
-    if (i % numIcons == 0 && i != 0) {
+  props.categories.forEach((category, i) => {
+    /*if (i % numIcons == 0 && i != 0) {
       categoryRowList.push(categoryCol);
       categoryCol = <React.Fragment></React.Fragment>;
-    }
+    }*/
+    if(category.name == "COVID-19"){
     categoryCol = (
       <React.Fragment>
         {categoryCol}
@@ -31,6 +31,56 @@ const TopLevelCategory = (props) => {
         </Col>
       </React.Fragment>
     );
+    }
+    /*if (i == props.categories.length - 1) {
+      categoryRowList.push(categoryCol);
+    }*/
+  });
+  // Have the grid be max 3col wide
+  props.categories.sort((a, b) => (a.name > b.name ) ? 1 : -1).forEach((category, i) => {
+    if (i+1 % numIcons == 0 && i != 0) {
+      categoryRowList.push(categoryCol);
+      categoryCol = <React.Fragment></React.Fragment>;
+    }
+    if(category.name != "Other" && category.name != "COVID-19"){
+    categoryCol = (
+      <React.Fragment>
+        {categoryCol}
+        <Col className='toplevel-col'>
+          <CategoryCard
+            iconName={category.icon_name}
+            iconSize={iconSize}
+            categoryName={category.name}
+            path={`${paths.categoryPath}/${category._id}`}
+          />
+        </Col>
+      </React.Fragment>
+    );
+    }
+    /*if (i == props.categories.length - 1) {
+      categoryRowList.push(categoryCol);
+    }*/
+  });
+  props.categories.forEach((category, i) => {
+    /*if (i % numIcons == 0 && i != 0) {
+      categoryRowList.push(categoryCol);
+      categoryCol = <React.Fragment></React.Fragment>;
+    }*/
+    if(category.name == "Other" ){
+    categoryCol = (
+      <React.Fragment>
+        {categoryCol}
+        <Col className='toplevel-col'>
+          <CategoryCard
+            iconName={category.icon_name}
+            iconSize={iconSize}
+            categoryName={category.name}
+            path={`${paths.categoryPath}/${category._id}`}
+          />
+        </Col>
+      </React.Fragment>
+    );
+    }
     if (i == props.categories.length - 1) {
       categoryRowList.push(categoryCol);
     }
