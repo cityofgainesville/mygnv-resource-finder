@@ -33,6 +33,7 @@
     "react-bootstrap": "^1.0.0",
     "react-bootstrap-typeahead": "^3.4.7",
     "react-dom": "^16.13.1",
+    "react-ga": "^2.7.0",
     "react-jsonschema-form-bs4": "^1.7.1",
     "react-router-dom": "^5.1.2",
     "react-select": "^3.1.0",
