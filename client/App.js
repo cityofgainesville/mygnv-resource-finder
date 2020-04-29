@@ -1,4 +1,6 @@
 import ReactGA from 'react-ga';
+ReactGA.initialize('UA-163304507-1');
+ReactGA.pageview(window.location.pathname + window.location.search);
 import { hot } from 'react-hot-loader/root';
 import React, { useState, useEffect } from 'reactn';
 import PropTypes from 'prop-types';
