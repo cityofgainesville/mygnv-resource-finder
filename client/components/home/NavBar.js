@@ -25,7 +25,7 @@ const NavBar = (props) => {
         <Navbar collapseOnSelect sticky='top' expand='sm' variant='light'>
           <Navbar.Brand>
 
-            <a href={paths.mainPath} class='nav-home-brand'>
+            <a href='/' class='nav-home-brand'>
 
             <img
               src={homeIcon}
