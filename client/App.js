@@ -17,7 +17,6 @@ import IndivProvider from './components/home/IndivProvider';
 import Search from './components/home/Search';
 import Hotlines from './components/home/Hotlines';
 import Safeplaces from './components/home/Safeplaces';
-
 //import Covid from './components/home/Covid19';
 
 import './index.scss';
