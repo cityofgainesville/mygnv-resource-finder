@@ -16,7 +16,8 @@ import Homepage from './Title';
 
 const MainPage = (props) => {
   return (
-    <React.Fragment>
+    <Redirect to="/home/search"></Redirect>
+    /*<React.Fragment>
 
     <div >
     <div  className='search-con scroll'>
@@ -85,7 +86,7 @@ const MainPage = (props) => {
          </div>
          </div>
           </div>
-    </React.Fragment>
+    </React.Fragment>*/
     /*<React.Fragment>
       <Homepage></Homepage>
       <Container
