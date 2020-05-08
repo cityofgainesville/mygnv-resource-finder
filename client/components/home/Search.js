@@ -172,8 +172,9 @@ const handleBlurRequest = (e) => {
           {/*<button className='tags' id='exampleTag'>Click a tag to filter <i class="fal fa-times fa-1x"></i></button>*/}
             {providerList}
 
-          </Container>
-          </div>
+  </Container>
+
+         </div>
           </div>
     </React.Fragment>
   );

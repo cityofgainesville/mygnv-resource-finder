@@ -46,7 +46,7 @@ const App = (props) => {
         <Route exact path={paths.hotlinesPath} component={Hotlines}><div className="noDisplay"><Title/></div><Hotlines/></Route>
 
         {/*<Route exact path={paths.covidPath} component={Covid}><div className="noDisplay"><Title/></div><Covid/></Route>*/}
-        <Route exact path={paths.defaultPath} component={MainPage}></Route>
+        <Route exact path={paths.defaultPath} component={MainPage}><div className="noDisplay"><Title/></div><MainPage/></Route>
         <Route exact path={paths.menuPath} component={Title}></Route>
         <Route
           exact
