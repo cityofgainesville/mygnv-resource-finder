@@ -59,7 +59,7 @@ const SubcategoryProviderList = (props) => {
             <p className="services">
               {provider.services_provided !== '' &&
                 provider.services_provided !== undefined
-                  ? provider.services_provided
+                  ? (provider.services_provided.includes('●') || provider.services_provided.includes('•') || provider.services_provided.includes('*')? provider.services_provided.split(/['●'||'•'||'*']/).map((line)=> {return(line !== "" && line !== "\n" ? (<span>{`• ${line.trim()}`}<br></br></span>) : null)}) : provider.services_provided)
                   : 'Services not listed'}
               {'\n'}
             </p>

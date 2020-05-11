@@ -16,16 +16,17 @@ import Homepage from './Title';
 
 const MainPage = (props) => {
   return (
-    <Redirect to="/home/search"></Redirect>
-    /*<React.Fragment>
+    /*<Redirect to="/home/search"></Redirect>*/
+
+    <React.Fragment>
 
     <div >
     <div  className='search-con scroll'>
       <div className= 'white-0-bg homepage-form'>
       <Container className = 'mobile-con' style={{margin:'0 0'}}>
       <div className='descriptionRF'>
-        <h4 className='homepage-title'>Finding the resources you need shouldn't be so hard.</h4>
-        <div  >
+        <div className='homepage-title menu-title'>Finding the resources you need shouldn't be so hard.</div>
+        <div  style={{fontSize: '1.1em'}}>
         All of your resources in one place:<br></br>
           • National Programs <br></br>
           • State of Florida <br></br>
@@ -41,11 +42,11 @@ const MainPage = (props) => {
 
         <div className='description-box-container'>
           <div className='description-box'>
-              <h5>Search for a Provider</h5>
+              <div className='menu-title'>Search for a Provider</div>
               <div>If you know the name of the provider you are looking for, you can find them by typing their name into the search bar.</div>
           </div>
           <div  className='description-box'>
-              <h5>Browse by Category</h5>
+              <div className='menu-title'>Browse by Category</div>
               <div>If you are looking for a particular service but don't know who offers it, you can use "Browse by Category".</div>
           </div>
         </div>
@@ -86,7 +87,7 @@ const MainPage = (props) => {
          </div>
          </div>
           </div>
-    </React.Fragment>*/
+    </React.Fragment>
     /*<React.Fragment>
       <Homepage></Homepage>
       <Container

@@ -44,7 +44,9 @@
     }
 
     .search-cat {
-        padding-left: 2rem;
+        //padding-left: 2rem;
+        display: flex;
+        justify-content: center;
         padding-top: .5rem;
         border-top: 1px solid #dbdbdb;
         margin-bottom: 0;
@@ -103,7 +105,9 @@
     }
 
     .search-cat {
-        padding-left: 2rem;
+        //padding-left: 2rem;
+        display: flex;
+        justify-content: center;
         padding-top: .5rem;
         border-top: 1px solid #dbdbdb;
         margin-bottom: 0;
@@ -161,7 +165,9 @@
     }
 
     .search-cat {
-        padding-left: 2rem;
+        //padding-left: 2rem;
+        display: flex;
+        justify-content: center;
         padding-top: .5rem;
         border-top: 1px solid #dbdbdb;
         margin-bottom: 0;
@@ -294,7 +300,7 @@
 
   .homepage-title {
       text-align: center;
-      margin-bottom: 2rem;
+      //margin-bottom: 2rem;
   }
 
   .descriptionRF {
@@ -308,7 +314,7 @@
   .description-box {
       width: 45%;
       text-align: center;
-      border: 1px solid #dbdbdb;
+      border: 1px solid #adadad;
       //border-radius: 8px;
       padding: 2rem 2rem;
   }
@@ -327,12 +333,28 @@
 
   .homepage-subtitle {
     margin-bottom: 1rem;
+    font-size:1.1em;
   }
 
   .feedback-buttons {
     width: 200px;
     padding: .75rem 2rem;
+    background-color: #074b69;
+    border:none;
+    margin-top: 1rem;
   }
+
+  .feedback-buttons:hover {
+      background-color: #053246;
+  }
+
+  .feedback-buttons:active {
+    background-color: #053246;
+}
+
+.feedback-buttons:focus {
+    background-color: #053246;
+}
 
   .homepage-form {
     width: 75%;

@@ -73,8 +73,9 @@ const IndivProvider = (props) => {
   const renderHours = () => {
     return (
       <Card.Text>
-        <i class="fas fa-clock hours-mobile" style={{marginRight: ".5rem"}}></i>
-        {provider.hours !== undefined ? (<strong className="subtitle hours-mobile">Hours:<br></br></strong>) : ''}
+        <div><i class="fas fa-clock hours-mobile" style={{marginRight: ".5rem"}}></i><strong className="subtitle hours-mobile">Hours:<br></br></strong></div>
+        {provider.hours == undefined || provider.hours == '' || ((provider.hours.monday == undefined || provider.hours.monday == '') && (provider.hours.tuesday == undefined || provider.hours.tuesday == '') && (provider.hours.wednesday == undefined ||
+        provider.hours.wednesday == '') && (provider.hours.thursday == undefined || provider.hours.thursday == '') && (provider.hours.friday == undefined || provider.hours.friday == '') && (provider.hours.saturday == undefined || provider.hours.saturday == '') && (provider.hours.sunday == undefined || provider.hours.sunday == '')) ? 'No hours listed.': '' }
         {provider.hours.monday !== undefined && provider.hours.monday !== ''
           ?( <div>Monday: {provider.hours.monday}<br></br><br></br></div>)
           : ''}
@@ -152,11 +153,13 @@ const IndivProvider = (props) => {
             
               <div id='left'>
             <Card.Text>
+            <div><i class="fas fa-map-marker-alt" style={{marginRight: ".5rem"}}></i><span><strong className="subtitle">Location(s):</strong><br></br></span></div>
                 {provider.addresses !== undefined &&
                 provider.addresses.length > 0
-                  ? (<div><i class="fas fa-map-marker-alt" style={{marginRight: ".5rem"}}></i><span><strong className="subtitle">Location(s):</strong><br></br></span></div>)
-                  : null}
-                
+                  ? ''
+                  : 'No address listed.'}
+                {provider.addresses[0] !== undefined && provider.addresses !== undefined &&
+                provider.addresses.length > 0 ? (<a href={(`https://www.google.com/maps/place/${provider.addresses[0].line_1}+${provider.addresses[0].city !== undefined && provider.addresses[0].city !== '' ? provider.addresses[0].city : 'Gainesville'}+FL+${provider.addresses[0].zipcode}/`)} target='_blank' className="call-link">
                 {provider.addresses[0] !== undefined
                   ? provider.addresses[0].line_1
                   : ''}
@@ -180,6 +183,7 @@ const IndivProvider = (props) => {
                 provider.addresses[0].zipcode !== ''
                   ? ', ' + provider.addresses[0].zipcode
                   : ''}
+                </a>) : ''}
                   <Card.Text className='bus'>
                 {provider.bus_routes[0] !== undefined &&
                 provider.bus_routes[0] !== ''
@@ -201,7 +205,7 @@ const IndivProvider = (props) => {
               </Card.Text>
               <Card.Text>
                 {provider.email[0] !== undefined && provider.email[0] !== ''
-                  ? (<div><i class="fas fa-envelope" style={{marginRight: ".5rem"}}></i> <span><strong className="subtitle">Email(s):</strong><br></br>{provider.email[0]}</span></div>)
+                  ? (<div><i class="fas fa-envelope" style={{marginRight: ".5rem"}}></i> <span><strong className="subtitle">Email(s):</strong><br></br><a href = {(`mailto: ${provider.email[0]}`)}>{provider.email[0]}</a></span></div>)
                   : ''}
               </Card.Text>
               <Card.Text class='translation'>
@@ -224,7 +228,7 @@ const IndivProvider = (props) => {
               </Card.Text>
               </div>
               <div id='right'>
-              {provider.hours ? renderHours() : null}
+              {provider.hours  &&  provider.hours !== '' ? renderHours() : null}
               <br></br>
               </div>
             </Card.Body>
@@ -240,7 +244,8 @@ const IndivProvider = (props) => {
 
 
             <div className='mobile-indiv'>
-            {!provider ? null : (
+            {!provider || (provider.hours == '' ||
+                provider.hours == undefined)? null : (
             <Card className="providerCard-container indiv-con hours-con" style={{display:!hours ? 'none' : ''}}>
             <Card.Title className='text-left p-3 description-title'>Hours</Card.Title>
               <Card.Body>
@@ -255,14 +260,15 @@ const IndivProvider = (props) => {
               </Card>
             )}
 
-{!provider ? null : (
+{!provider || (provider.services_provided == '' ||
+                provider.services_provided  == undefined) ? null : (
             <Card className="providerCard-container indiv-con" style={{display:!services ? 'none' : ''}}>
             <Card.Title className='text-left p-3 description-title'>Services</Card.Title>
               <Card.Body>
               <Card.Text >
                 {provider.services_provided !== '' &&
                 provider.services_provided !== undefined
-                  ? provider.services_provided
+                  ? (provider.services_provided.includes('●') || provider.services_provided.includes('•') || provider.services_provided.includes('*')? provider.services_provided.split(/['●'||'•'||'*']/).map((line)=> {return(line !== "" && line !== "\n" ? (<span>{`• ${line.trim()}`}<br></br></span>) : null)}) : provider.services_provided)
                   : 'Services not listed'}
               </Card.Text>
               
@@ -270,31 +276,31 @@ const IndivProvider = (props) => {
               </Card>
             )}
               
-              {!provider && !appt ? null : (
+              {!appt && (!provider || ((provider.eligibility_criteria == '' || provider.eligibility_criteria == undefined) && (provider.service_area == '' || provider.service_area == undefined) && (provider.cost_info == undefined || provider.cost_info == '') && (provider.walk_ins == undefined || provider.walk_ins == '') && (provider.appointment == undefined || provider.appointment == '') && ((provider.application == undefined || provider.application == "") || (!provider.application.is_required && !provider.application.apply_in_person && !provider.application.apply_online && (provider.application.phone == '' || provider.application.phone == undefined) && (provider.application.website == '' || provider.application.website == undefined)  && (provider.application.email == '' || provider.application.email == undefined) && (provider.application.other_info == '' || provider.application.other_info == undefined))))) ? null : (
               <Card className="providerCard-container indiv-con" style={{display:!appt ? 'none' : ''}}>
               <Card.Title className='text-left p-3 description-title'>Appointment</Card.Title>
                 <Card.Body>
-                <Card.Text>
-                {provider.eligibility_criteria !== ''
-                  ? (<span><strong className="subtitle appt">Eligibility / Requirements</strong><br></br>{provider.eligibility_criteria}</span>)
+                
+                {provider.eligibility_criteria !== '' && provider.eligibility_criteria !== undefined
+                  ? (<Card.Text><span><strong className="subtitle appt">Eligibility / Requirements</strong><br></br>{(provider.eligibility_criteria.includes('●') || provider.eligibility_criteria.includes('•') || provider.eligibility_criteria.includes('*')? provider.eligibility_criteria.split(/['●'||'•'||'*']/).map((line)=> {return(line !== "" && line !== "\n" ? (<span>{`• ${line.trim()}`}<br></br></span>) : null)}) : provider.eligibility_criteria)}</span></Card.Text>)
                   : ''}
-                {provider.service_area !== '' ? provider.serve_area : ''}
-              </Card.Text>
-              <Card.Text>
+                {provider.service_area !== '' && provider.service_area !== undefined ? (<Card.Text><span><strong className="subtitle appt">Service Area</strong><br></br>{provider.service_area}</span></Card.Text>) : ''}
+              
+              
                 {provider.cost_info !== undefined && provider.cost_info !== ''
-                  ? (<span><strong className="subtitle appt">Cost</strong><br></br>{provider.cost_info}</span>)
+                  ? (<Card.Text><span><strong className="subtitle appt">Cost</strong><br></br>{provider.cost_info}</span></Card.Text>)
                   : ''}
-              </Card.Text>
-              <Card.Text>
+              
+              
                 {provider.walk_ins !== undefined && provider.walk_ins !== ''
                   ? provider.walk_ins === 'Y' || provider.walk_ins === 'y'
-                    ? 'Walk ins welcomed.'
+                    ? (<Card.Text>'Walk ins welcomed.'</Card.Text>)
                     : ''
                   : ''}
-              </Card.Text>
+              
               <Card.Text>
-                {provider.appointment !== undefined ? (<span><strong className="subtitle appt">Appointment Information</strong><br></br></span>): ''}
-                {provider.appointment !== undefined
+                {provider.appointment !== undefined && provider.appointment !== '' ? (<span><strong className="subtitle appt">Appointment Information</strong><br></br></span>): ''}
+                {provider.appointment !== undefined && provider.appointment !== ''
                   ? (provider.appointment.is_required !== undefined
                       ? provider.appointment.is_required
                         ? 'Appointment is required.'
@@ -303,19 +309,19 @@ const IndivProvider = (props) => {
                     +
                     (provider.appointment.phone !== undefined
                       ? provider.appointment.phone !== ''
-                        ? 'Call here: ' + provider.appointment.phone
+                        ? (<div>'Call here: ' + <a href={(`tel:${provider.appointment.phone}`)} target='_blank' className="call-link"> {provider.appointment.phone}</a></div>)
                         : ''
                       : '') +
                     '\n' +
                     (provider.appointment.website !== undefined
                       ? provider.appointment.website !== ''
-                        ? 'Click here: ' + provider.appointment.website
+                        ? (<div>'Click here: ' +  <a href={provider.appointment.website} target='_blank'>{provider.appointment.website}</a></div>)
                         : ''
                       : '') +
                     '\n' +
                     (provider.appointment.email !== undefined
                       ? provider.appointment.email !== ''
-                        ? 'Email here: ' + provider.appointment.email
+                        ? (<div>'Email here: ' + <a href = {(`mailto: ${provider.appointment.email}`)}>{provider.appointment.email}</a></div>)
                         : ''
                       : '') +
                     '\n' +
@@ -328,8 +334,8 @@ const IndivProvider = (props) => {
                   : ''}
               </Card.Text>
               <Card.Text>
-              {provider.application !== undefined || provider.application !== "" ? (<span><strong className="subtitle appt" >Application Information</strong><br></br></span>): ''}
-                {provider.application !== undefined
+              {(provider.application == undefined || provider.application == "") || (!provider.application.is_required && !provider.application.apply_in_person && !provider.application.apply_online && (provider.application.phone == '' || provider.application.phone == undefined) && (provider.application.website == '' || provider.application.website == undefined)  && (provider.application.email == '' || provider.application.email == undefined) && (provider.application.other_info == '' || provider.application.other_info == undefined)) ? '' : (<span><strong className="subtitle appt" >Application Information</strong><br></br></span>)}
+                {provider.application !== undefined && provider.application !== "" 
                   ? (provider.application.is_required !== undefined
                       ? provider.application.is_required
                         ? 'Application is required.'
@@ -350,19 +356,19 @@ const IndivProvider = (props) => {
                     '\n' +
                     (provider.application.phone !== undefined
                       ? provider.application.phone !== ''
-                        ? 'Call here to apply: ' + provider.application.phone
+                        ? (<div>'Call here to apply: ' + <a href={(`tel:${provider.application.phone}`)} target='_blank' className="call-link"> {provider.application.phone}</a></div>)
                         : ''
                       : '') +
                     '\n' +
                     (provider.application.website !== undefined
                       ? provider.application.website !== ''
-                        ? 'Apply here: ' + provider.applcation.website
+                        ? (<div>'Apply here: ' +  <a href={provider.application.website} target='_blank'>{provider.application.website}</a></div>)
                         : ''
                       : '') +
                     '\n' +
                     (provider.application.email !== undefined
                       ? provider.application.email !== ''
-                        ? 'Email here to apply: ' + provider.application.email
+                        ? (<div>'Email here to apply: ' + <a href = {(`mailto: ${provider.application.email}`)}>{provider.application.email}</a></div>)
                         : ''
                       : '') +
                     '\n' +
@@ -388,7 +394,7 @@ const IndivProvider = (props) => {
               <Card.Text>
                 {provider.additional_information !== undefined &&
                 provider.additional_information !== ''
-                  ? provider.additional_information
+                  ? (provider.additional_information.includes('●') || provider.additional_information.includes('•') || provider.additional_information.includes('*')? provider.additional_information.split(/['●'||'•'||'*']/).map((line)=> {return(line !== "" && line !== "\n" ? (<span>{`• ${line.trim()}`}<br></br></span>) : null)}) : provider.additional_information)
                   : ''}
               </Card.Text>
             </Card.Body>
@@ -400,14 +406,15 @@ const IndivProvider = (props) => {
 
 
            <div className='desktop-indiv'>
-            {!provider ? null : (
+            {!provider || (provider.services_provided == '' ||
+                provider.services_provided == undefined) ? null : (
             <Card className="providerCard-container indiv-con">
             <Card.Title className='text-left p-3 description-title'>Services</Card.Title>
               <Card.Body>
               <Card.Text >
                 {provider.services_provided !== '' &&
                 provider.services_provided !== undefined
-                  ? provider.services_provided
+                ? (provider.services_provided.includes('●') || provider.services_provided.includes('•') || provider.services_provided.includes('*')? provider.services_provided.split(/['●'||'•'||'*']/).map((line)=> {return(line !== "" && line !== "\n" ? (<span>{`• ${line.trim()}`}<br></br></span>) : null)}) : provider.services_provided)
                   : 'Services not listed'}
               </Card.Text>
               
@@ -415,30 +422,30 @@ const IndivProvider = (props) => {
               </Card>
             )}
               
-              {!provider ? null : (
+              {!provider || ((provider.eligibility_criteria == '' || provider.eligibility_criteria == undefined) && (provider.service_area == '' || provider.service_area == undefined) && (provider.cost_info == undefined || provider.cost_info == '') && (provider.walk_ins == undefined || provider.walk_ins == '') && (provider.appointment == undefined || provider.appointment == '') && ((provider.application == undefined || provider.application == "") || (!provider.application.is_required && !provider.application.apply_in_person && !provider.application.apply_online && (provider.application.phone == '' || provider.application.phone == undefined) && (provider.application.website == '' || provider.application.website == undefined)  && (provider.application.email == '' || provider.application.email == undefined) && (provider.application.other_info == '' || provider.application.other_info == undefined)))) ? null : (
               <Card className="providerCard-container indiv-con">
               <Card.Title className='text-left p-3 description-title'>Appointment</Card.Title>
                 <Card.Body>
-                <Card.Text>
-                {provider.eligibility_criteria !== ''
-                  ? (<span><strong className="subtitle appt">Eligibility / Requirements</strong><br></br>{provider.eligibility_criteria}</span>)
+                
+                {provider.eligibility_criteria !== '' && provider.eligibility_criteria !== undefined
+                  ? (<Card.Text><span><strong className="subtitle appt">Eligibility / Requirements</strong><br></br>{(provider.eligibility_criteria.includes('●') || provider.eligibility_criteria.includes('•') || provider.eligibility_criteria.includes('*')? provider.eligibility_criteria.split(/['●'||'•'||'*']/).map((line)=> {return(line !== "" && line !== "\n" ? (<span>{`• ${line.trim()}`}<br></br></span>) : null)}) : provider.eligibility_criteria)}</span></Card.Text>)
                   : ''}
-                {provider.service_area !== '' ? provider.serve_area : ''}
-              </Card.Text>
-              <Card.Text>
+                {provider.service_area !== '' && provider.service_area !== undefined ? (<Card.Text><span><strong className="subtitle appt">Service Area</strong><br></br>{provider.service_area}</span></Card.Text>) : ''}
+              
+              
                 {provider.cost_info !== undefined && provider.cost_info !== ''
-                  ? (<span><strong className="subtitle appt">Cost</strong><br></br>{provider.cost_info}</span>)
+                  ? (<Card.Text><span><strong className="subtitle appt">Cost</strong><br></br>{provider.cost_info}</span></Card.Text>)
                   : ''}
-              </Card.Text>
-              <Card.Text>
+              
+              
                 {provider.walk_ins !== undefined && provider.walk_ins !== ''
                   ? provider.walk_ins === 'Y' || provider.walk_ins === 'y'
-                    ? 'Walk ins welcomed.'
+                    ? <Card.Text>'Walk ins welcomed.'</Card.Text>
                     : ''
                   : ''}
-              </Card.Text>
+              
               <Card.Text>
-                {provider.appointment !== undefined ? (<span><strong className="subtitle appt">Appointment Information</strong><br></br></span>): ''}
+                {provider.appointment == undefined || provider.appointment == '' ? '' : (<span><strong className="subtitle appt">Appointment Information</strong><br></br></span>)}
                 {provider.appointment !== undefined
                   ? (provider.appointment.is_required !== undefined
                       ? provider.appointment.is_required
@@ -448,19 +455,19 @@ const IndivProvider = (props) => {
                     +
                     (provider.appointment.phone !== undefined
                       ? provider.appointment.phone !== ''
-                        ? 'Call here: ' + provider.appointment.phone
+                        ? (<div>'Call here: ' + <a href={(`tel:${provider.appointment.phone}`)} target='_blank' className="call-link"> {provider.appointment.phone}</a></div>)
                         : ''
                       : '') +
                     '\n' +
                     (provider.appointment.website !== undefined
                       ? provider.appointment.website !== ''
-                        ? 'Click here: ' + provider.appointment.website
+                        ? (<div>'Click here: ' +  <a href={provider.appointment.website} target='_blank'>{provider.appointment.website}</a></div>)
                         : ''
                       : '') +
                     '\n' +
                     (provider.appointment.email !== undefined
                       ? provider.appointment.email !== ''
-                        ? 'Email here: ' + provider.appointment.email
+                        ? (<div>'Email here: ' + <a href = {(`mailto: ${provider.appointment.email}`)}>{provider.appointment.email}</a></div>)
                         : ''
                       : '') +
                     '\n' +
@@ -473,7 +480,7 @@ const IndivProvider = (props) => {
                   : ''}
               </Card.Text>
               <Card.Text>
-              {provider.application !== undefined || provider.application !== "" ? (<span><strong className="subtitle appt" >Application Information</strong><br></br></span>): ''}
+              {(provider.application == undefined || provider.application == "") || (!provider.application.is_required && !provider.application.apply_in_person && !provider.application.apply_online && (provider.application.phone == '' || provider.application.phone == undefined) && (provider.application.website == '' || provider.application.website == undefined)  && (provider.application.email == '' || provider.application.email == undefined) && (provider.application.other_info == '' || provider.application.other_info == undefined)) ? '':(<span><strong className="subtitle appt" >Application Information</strong><br></br></span>)}
                 {provider.application !== undefined
                   ? (provider.application.is_required !== undefined
                       ? provider.application.is_required
@@ -495,19 +502,19 @@ const IndivProvider = (props) => {
                     '\n' +
                     (provider.application.phone !== undefined
                       ? provider.application.phone !== ''
-                        ? 'Call here to apply: ' + provider.application.phone
+                        ? (<div>'Call here to apply: ' + <a href={(`tel:${provider.application.phone}`)} target='_blank' className="call-link"> {provider.application.phone}</a></div>)
                         : ''
                       : '') +
                     '\n' +
                     (provider.application.website !== undefined
                       ? provider.application.website !== ''
-                        ? 'Apply here: ' + provider.applcation.website
+                        ? (<div>'Apply here: ' +  <a href={provider.application.website} target='_blank'>{provider.application.website}</a></div>)
                         : ''
                       : '') +
                     '\n' +
                     (provider.application.email !== undefined
                       ? provider.application.email !== ''
-                        ? 'Email here to apply: ' + provider.application.email
+                        ? (<div>'Email here to apply: ' + <a href = {(`mailto: ${provider.application.email}`)}>{provider.application.email}</a></div>)
                         : ''
                       : '') +
                     '\n' +
@@ -533,7 +540,7 @@ const IndivProvider = (props) => {
               <Card.Text>
                 {provider.additional_information !== undefined &&
                 provider.additional_information !== ''
-                  ? provider.additional_information
+                  ? (provider.additional_information.includes('●') || provider.additional_information.includes('•') || provider.additional_information.includes('*')? provider.additional_information.split(/['●'||'•'||'*']/).map((line)=> {return(line !== "" && line !== "\n" ? (<span>{`• ${line.trim()}`}<br></br></span>) : null)}) : provider.additional_information)
                   : ''}
               </Card.Text>
             </Card.Body>
