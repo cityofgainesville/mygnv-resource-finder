@@ -95,7 +95,7 @@ const Search = (props) => {
             <p className="services">
               {provider.services_provided !== '' &&
                 provider.services_provided !== undefined
-                  ? provider.services_provided
+                  ? (provider.services_provided.includes('●') || provider.services_provided.includes('•') || provider.services_provided.includes('*')? provider.services_provided.split(/['●'||'•'||'*']/).map((line)=> {return(line !== "" && line !== "\n" ? (<span>{`• ${line.trim()}`}<br></br></span>) : null)}) : provider.services_provided)
                   : 'Services not listed'}
               {'\n'}
             </p>
@@ -166,7 +166,7 @@ const handleBlurRequest = (e) => {
               </InputGroup>
               </Container>
             </Form.Group>
-            <div className='search-cat-con'><p className='search-cat'>Browse by Category<Button onClick={(e)=>handleEntailmentRequest(e)} className='search-cat-button' style={{display: !visible ? '' : 'none'}}><i class="fal fa-chevron-down" style={{color:'black !important'}}></i></Button><Button onClick={(e)=>handleEntailmentRequest(e)} className='search-cat-button' style={{display: visible ? '' : 'none'}}><i class="fal fa-chevron-up"></i></Button></p><div style={{display: visible ? '' : 'none'}}><CategoryView/></div></div>
+            <div className='search-cat-con'><p className='search-cat'><Button onClick={(e)=>handleEntailmentRequest(e)} className='search-cat-button' style={{display: !visible ? '' : 'none'}}>Browse by Category <i class="fal fa-chevron-down" style={{color:'black !important'}}></i></Button><Button onClick={(e)=>handleEntailmentRequest(e)} className='search-cat-button' style={{display: visible ? '' : 'none'}}>Browse by Category <i class="fal fa-chevron-up"></i></Button></p><div style={{display: visible ? '' : 'none'}}><CategoryView/></div></div>
           </Form>
           <Container className='body searchb'>
           {/*<button className='tags' id='exampleTag'>Click a tag to filter <i class="fal fa-times fa-1x"></i></button>*/}
