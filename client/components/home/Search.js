@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'reactn';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { ListGroup, Container, Form, InputGroup, Button} from 'react-bootstrap';
+import { ListGroup, Container, Form, InputGroup, Button, Modal} from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import paths from '../../RouterPaths';
 import Homepage from './Title';
@@ -19,9 +19,10 @@ const Search = (props) => {
   const [providers, setProviders] = useState([]);
   const [filterText, setFilterText] = useState('');
   const [visible, setVisible] = useState(false);
-  //const [translation, setTranslation] = useState(false);
+  const [translation, setTranslation] = useState(false);
+  const [cost, setCost] = useState(false);
   const [myStyle, setStyle] = useState ({borderColor: 'default'});
-  //let filteredItems = providers;
+  const [clicked, setClicked] = useState(false);
 
   // Loads in all providers for filtering through
   useEffect(() => {
@@ -38,17 +39,24 @@ const Search = (props) => {
   const handleFilterChange = (event) => {
     setFilterText(event.target.value);
   };
-  /*const handleFilterChange2 = (value) => {
+  const handleFilterChange2 = (value) => {
+    console.log(value);
+    setClicked(true);
     if(value == "Translation Available")
       setTranslation(true);
-    else
-      setTranslation(false);
+
+
+    if(value == "Free")
+      setCost(true);
+  
     
-    if(translation)
-     filteredItems = providers.filter((provider)=> provider.translation_available != undefined ||
+    //console.log(translation);
+    /*if(translation)
+      setFI(providers.filter((provider)=> provider.translation_available != undefined ||
     provider.translation_available != '' ||
-    provider.translation_available != 'No');
-  };*/
+    provider.translation_available != 'No' ||
+    provider.translation_available != 'N'));*/
+  };
 
   const doRedirect = (providerId) => {
     props.history.push(`${paths.providerPath}/${providerId}`);
@@ -56,9 +64,22 @@ const Search = (props) => {
 
   const providerList = providers
     .filter((provider) => {
-      return (
-        provider.name.toLowerCase().includes(filterText.toLowerCase()) ||
-        provider._id.includes(filterText)
+      return (translation ? 
+        (cost ? ((provider.name.toLowerCase().includes(filterText.toLowerCase()) ||
+        provider._id.includes(filterText)) && (provider.translation_available != undefined &&
+          provider.translation_available != '' &&
+          !provider.translation_available.includes('No') &&
+          provider.translation_available != 'N') && (provider.cost_info != undefined &&
+            provider.cost_info != '' &&
+            (provider.cost_info.includes('free') || provider.cost_info.includes('Free')))) : ((provider.name.toLowerCase().includes(filterText.toLowerCase()) ||
+        provider._id.includes(filterText)) && (provider.translation_available != undefined &&
+          provider.translation_available != '' &&
+          !provider.translation_available.includes('No') &&
+          provider.translation_available != 'N'))) : ( cost ? ((provider.name.toLowerCase().includes(filterText.toLowerCase()) ||
+          provider._id.includes(filterText)) && (provider.cost_info != undefined &&
+            provider.cost_info != '' &&
+            (provider.cost_info.includes('free') || provider.cost_info.includes('Free')))) : (provider.name.toLowerCase().includes(filterText.toLowerCase()) ||
+        provider._id.includes(filterText)))
       );
     })
 
@@ -108,13 +129,14 @@ const Search = (props) => {
           </div>
         </ListGroup.Item>
         {/*<div className='tagsContainer'>
-        {provider.cost_info.cost_type == undefined ||
-            provider.cost_info.cost_type == '' ? null : (<button value={provider.cost_info.cost_type} className='tags'>{provider.cost_info.cost_type}</button>)}
+        {provider.cost_info !== undefined &&
+            provider.cost_info !== '' &&  (provider.cost_info.includes('free') || provider.cost_info.includes('Free'))  ? (<button value="Free" className='tags'  onClick={(e)=> handleFilterChange2("Free")}>Free</button>): null}
         
           {provider.translation_available == undefined ||
             provider.translation_available == '' ||
-            provider.translation_available == 'No' ? null : (<button value="Translation Available" className='tags' id='translationTag'>Translation Available</button>)}
-           {provider.demographics_eligible == undefined ||
+            provider.translation_available.includes('No') ||
+            provider.translation_available == 'N' ? null : (<button value="Translation Available" className='tags' id='translationTag' onClick={(e)=> handleFilterChange2("Translation Available")}>Translation Available</button>)}
+           {/*{provider.demographics_eligible == undefined ||
             provider.demographics_eligible == '' ? null : (<button className='tags'>{provider.demographics_eligible}</button>)}
            </div>*/}
         </div>
@@ -127,6 +149,21 @@ const Search = (props) => {
       setVisible(!visible);
       console.log(visible);
   }
+
+  const handleClickedRequest = (e) => {
+    e.preventDefault();
+    setClicked(true);
+}
+
+const handleExitTranslationRequest = (e) => {
+  e.preventDefault();
+  setTranslation(false);
+}
+
+const handleExitCostRequest = (e) => {
+  e.preventDefault();
+  setCost(false);
+}
 
   const handleFocusRequest = (e) => {
     e.preventDefault();
@@ -169,7 +206,10 @@ const handleBlurRequest = (e) => {
             <div className='search-cat-con'><p className='search-cat'><Button onClick={(e)=>handleEntailmentRequest(e)} className='search-cat-button' style={{display: !visible ? '' : 'none'}}>Browse by Category <i class="fal fa-chevron-down" style={{color:'black !important'}}></i></Button><Button onClick={(e)=>handleEntailmentRequest(e)} className='search-cat-button' style={{display: visible ? '' : 'none'}}>Browse by Category <i class="fal fa-chevron-up"></i></Button></p><div style={{display: visible ? '' : 'none'}}><CategoryView/></div></div>
           </Form>
           <Container className='body searchb'>
-          {/*<button className='tags' id='exampleTag'>Click a tag to filter <i class="fal fa-times fa-1x"></i></button>*/}
+          {/*<button className='tags' id='exampleTag' style={{display: !clicked ? '' : 'none'}} onClick={(e)=>handleClickedRequest(e)}>Click a tag to filter <i class="fal fa-times fa-1x"></i></button>
+          <button className='tags' id='exampleTag' style={{display: cost ? '' : 'none'}} onClick={(e)=>handleExitCostRequest(e)}>Free <i class="fal fa-times fa-1x"></i></button>
+  <button className='tags' id='exampleTag' style={{display: translation ? '' : 'none'}} onClick={(e)=>handleExitTranslationRequest(e)}>Translation Available <i class="fal fa-times fa-1x"></i></button>*/}
+          
             {providerList}
 
   </Container>

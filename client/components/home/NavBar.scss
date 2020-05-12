@@ -6,7 +6,7 @@
   .nav-container { 
     width: 100vw; 
     position:fixed; 
-    z-index: 100; 
+    z-index: 2000; 
     top:0;
   }
 
@@ -24,7 +24,7 @@
   }
 
   .nav-i {
-    font-size: 1.5em;
+    font-size: 1.2em;
     vertical-align: 0;
   }
 
@@ -86,10 +86,14 @@
 
 /* Tablet Styles */
 @media only screen and (min-width: 401px) and (max-width: 1024px) {
+  .ipad {
+    display: block !important;
+  }
+
   .nav-container { 
     width: 100vw; 
     position:fixed; 
-    z-index: 100; 
+    z-index: 2000; 
     top:0;
   }
 
@@ -107,7 +111,7 @@
   }
 
   .nav-i {
-    font-size: 1.5em;
+    font-size: 1.2em;
     vertical-align: 0;
   }
 
@@ -171,7 +175,7 @@
   .nav-container { 
     width: 100vw; 
     position:fixed; 
-    z-index: 100; 
+    z-index: 2000; 
     top:0;
   }
 
@@ -189,7 +193,7 @@
   }
 
   .nav-i {
-    font-size: 1.5em;
+    font-size: 1.2em;
     vertical-align: 0;
   }
 
@@ -282,6 +286,10 @@
     font-weight: 600;
     text-align: center;
   }
+
+  .navbar{
+    //padding-bottom: 0;
+  }
 }
 
 .navbar-active {
@@ -333,4 +341,12 @@
   outline: none;
   text-decoration: none;
 
+}
+
+.modal-dialog {
+  margin: 0 !important;
+}
+
+.modal-content {
+  border: none !important;
 }

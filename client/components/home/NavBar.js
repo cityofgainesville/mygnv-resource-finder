@@ -1,5 +1,5 @@
 import React, { useState, useEffect }  from 'reactn';
-import { Navbar, Nav, Container, Button } from 'react-bootstrap';
+import { Navbar, Nav, Container, Button, Modal } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import homeIcon from '../../images/myGNVrf.png';
 import paths from '../../RouterPaths';
@@ -37,12 +37,13 @@ const NavBar = (props) => {
             </a>
 
           </Navbar.Brand>
-          <RedirectButton className='mobile-nav-buttons' path={paths.menuPath}><i class="fal fa-home-lg-alt nav-i" style={{color: 'white', }}></i></RedirectButton>
+          {/*<RedirectButton className='mobile-nav-buttons' path={paths.menuPath} style={{ display: visible ? '' : 'none'}}><i class="fal fa-bars nav-i" style={{color: 'white', }}></i></RedirectButton>
+          <RedirectButton className='mobile-nav-buttons' path={window.history.back()} style={{display: !visible ? '' : 'none'}}><i class="fal fa-times nav-i" style={{color: 'white', }}></i></RedirectButton>*/}
           {/*<Button className='mobile-nav-buttons' onClick = {(e)=>handleEntailmentRequest(e)}  style={{color: 'white', display: !visible ? '' : 'none'}}> <i class="fal fa-bars nav-i" ></i></Button>
           <Button className='mobile-nav-buttons'  onClick = {(e)=>handleEntailmentRequest(e)} style={{color: 'white', display: visible ? '' : 'none'}}> <i class="fal fa-times nav-i"  ></i><i class="fal fa-bars" style={{display: visible ? '' : 'none'}}></i></Button>*/}
-          {/*<Navbar.Toggle onClick = {(e)=>handleEntailmentRequest(e)} aria-controls='mobile-menu-nav' style={{color: 'white', display: visible ? '' : 'none'}}> <i class="fal fa-bars nav-i" ></i></Navbar.Toggle>
-          <Navbar.Toggle onClick = {(e)=>handleEntailmentRequest(e)} aria-controls='mobile-menu-nav'  style={{color: 'white', display: !visible ? '' : 'none'}}> <i class="fal fa-times nav-i"  ></i><i class="fal fa-bars" style={{display: visible ? '' : 'none'}}></i></Navbar.Toggle>
-          <Navbar.Collapse id='responsive-navbar-nav'>
+          <Navbar.Toggle className='ipad' onClick = {(e)=>handleEntailmentRequest(e)} aria-controls='mobile-menu-nav' > <div style={{color: 'white', display: !visible  ? '' : 'none'}}><i class="fal fa-bars nav-i" ></i></div><div style={{color: 'white', display: visible  ? '' : 'none'}}><i class="fal fa-times nav-i"   ></i></div></Navbar.Toggle>
+          {/*<Navbar.Toggle className='ipad' onClick = {(e)=>handleEntailmentRequest(e)} aria-controls='mobile-menu-nav' > </Navbar.Toggle>*/}
+          {/*<Navbar.Collapse id='responsive-navbar-nav'>
               <Nav className='mr-auto'>
               
               <Nav.Link className='link-container'>
@@ -68,7 +69,7 @@ const NavBar = (props) => {
         </Navbar>
         <div id='feedback'>Help us improve the myGNV Resource Directory by giving us <a href='https://cityofgainesville.iad1.qualtrics.com/jfe/form/SV_74157YeIb6ttlYx' target='_blank' id='feedback-link'>feedback</a>. Do you have a resource to add? <a href='https://cityofgainesville.iad1.qualtrics.com/jfe/form/SV_bNMcXknvBcVfxoV' target='_blank' id='feedback-link'>Let us know.</a> </div>
     </div>
-        {/*<div id='mobile-menu' style={{display: visible ? '' : 'none'}}><Title/></div>*/}
+        <div id='mobile-menu' style={{display: visible ? '' : 'none'}}><Modal show={visible}><Title/></Modal></div>
     </React.Fragment>
   );
 };

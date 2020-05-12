@@ -14,6 +14,7 @@ const CategoryCard = (props) => {
   const handleClick = () => {
     setClassName('cat-card-border-active');
     props.history.push(props.path);
+    window.location.reload(false);
   };
 
   // Change color on hover

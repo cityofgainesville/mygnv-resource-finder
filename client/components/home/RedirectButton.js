@@ -11,6 +11,7 @@ import { withRouter } from 'react-router-dom';
 const RedirectButton = (props) => {
   const doRedirect = () => {
     props.history.push(props.path);
+    window.location.reload(false);
   };
 
   return (
