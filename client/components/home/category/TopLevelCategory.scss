@@ -8,6 +8,7 @@
   }*/
   .toplevel-row{
     width:80%;
+    margin-top: 1em;
   }
 }
 
@@ -18,7 +19,9 @@
   }*/
   .toplevel-row{
     width:80%;
+    margin-top: 1em;
   }
+  
 }
 
 @media only screen and (max-width: 767px) and (min-width: 426px) {
@@ -27,7 +30,9 @@
   }*/
   .toplevel-row{
     width:80%;
+    margin-top: 1em;
   }
+ 
 }
 
 
@@ -39,6 +44,12 @@
   }*/
   .toplevel-row{
     width: 100%;
+  }
+  .toplevel-row {
+    margin: auto;
+    justify-content: center;
+    margin-bottom: 1em;
+    margin-top: auto;
   }
 }
 
@@ -52,11 +63,7 @@
   flex-wrap: wrap;
 }
 
-.toplevel-row {
-  margin: auto;
-  justify-content: center;
-  margin-bottom: 1em;
-}
+
 
 .toplevel-col {
   padding: 0 0;

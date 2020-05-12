@@ -23,10 +23,10 @@ const MainPage = (props) => {
     <div >
     <div  className='search-con scroll'>
       <div className= 'white-0-bg homepage-form'>
-      <Container className = 'mobile-con' style={{margin:'0 0'}}>
+      <Container className = 'mobile-con' style={{margin:'0 auto'}}>
       <div className='descriptionRF'>
         <div className='homepage-title menu-title'>Finding the resources you need shouldn't be so hard.</div>
-        <div  style={{fontSize: '1.1em'}}>
+        <div  style={{fontSize: '1em'}}>
         All of your resources in one place:<br></br>
           • National Programs <br></br>
           • State of Florida <br></br>
@@ -52,7 +52,7 @@ const MainPage = (props) => {
         </div>
       </div>
 
-      <div className='descriptionRF extra'>
+      <div className='descriptionRF extra sponsor-logos'>
         <div className='homepage-subtitle'>The Resource Finder is created in collaboration with:</div>
         <div  className='sponsor-icons'>
         <div className='sponsors-container'>

@@ -10,7 +10,7 @@
 .subcat-children-container-width {
   width: 100%;
   background-color: white !important;
-  margin-top: 180px !important;
+  margin-top: 5px !important;
 }
 
 .subcat {
@@ -45,7 +45,7 @@
 @media only screen and (min-width: 401px) and (max-width: 1024px) {
   .subcat-children-container-width {
     max-width: 40em;
-    margin-top: 190px;
+    margin-top: 40px !important;
   }
 
   .subcat-container {
@@ -68,7 +68,7 @@
   .subcat-children-container-width {
     width: 100%;
     background-color: white !important;
-    margin-top: 160px !important;
+    margin-top: 5px !important;
   }
 
   .cat-icon {

@@ -15,14 +15,14 @@
     border: none;
     //@debug: 1px solid #DBDBDB;
     border-radius: 0;
-    z-index:0;
+    z-index:1050;
     position: absolute;
     padding-left: 0;
     padding-right: 0;
     background-color: #FDFDFD;
     padding-top: 1em;
     overflow: scroll;
-
+    margin-bottom: 0;
   }
   .menu-title {
     padding: 1em auto;
@@ -41,6 +41,7 @@
 
   .menu {
     //height: 100vh;
+    min-height: 90vh;
     width: 100vw;
     margin-top: 110px;
     margin-left: 0;
@@ -49,14 +50,14 @@
     border: none;
     //@debug: 1px solid #DBDBDB;
     border-radius: 0;
-    z-index:0;
+    z-index:1050;
     position: absolute;
     padding-left: 0;
     padding-right: 0;
     background-color: #FDFDFD;
     padding-top: 1em;
     overflow: scroll;
-
+    margin-bottom: 0;
   }
   .menu-title {
     padding: 1em auto;
@@ -79,14 +80,14 @@
     border: none;
     //@debug: 1px solid #DBDBDB;
     border-radius: 0;
-    z-index:0;
+    z-index:1050;
     position: absolute;
     padding-left: 0;
     padding-right: 0;
     background-color: #FDFDFD;
     padding-top: 1em;
     overflow: scroll;
-
+    margin-bottom: 0;
   }
   .menu-title {
     padding: 1em auto;
@@ -103,7 +104,7 @@
   .menu {
 
     height: 90vh;
-
+    margin-bottom: auto;
     width: 25%;
     margin-top: 89px;
     margin-left: auto;

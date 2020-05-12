@@ -220,6 +220,20 @@ const ProviderSchema = {
       type: 'string',
       title: 'Additional Information',
     },
+    demographics_eligible: {
+      type: 'string',
+      title: 'Demographics Eligible',
+    },
+    hotline: {
+      type: 'boolean',
+      title: 'Hotline',
+      default: false,
+    },
+    safeplace: {
+      type: 'boolean',
+      title: 'Safeplace',
+      default: false,
+    },
   },
 };
 
