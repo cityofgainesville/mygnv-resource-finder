@@ -81,7 +81,21 @@ const providerSchema = new Schema(
       required: true,
     },
     additional_information: String,
-    demographics_eligible: String,
+    demographics_eligible: {
+      child: {
+        type: Boolean,
+        required: false,
+      },
+      women: {
+        type: Boolean,
+        required: false,
+      },
+      veterans: {
+        type: Boolean,
+        required: false,
+      },
+
+    },
     hotline: Boolean,
     safeplace: Boolean,
     updated_at: {

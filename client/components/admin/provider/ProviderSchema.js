@@ -221,8 +221,22 @@ const ProviderSchema = {
       title: 'Additional Information',
     },
     demographics_eligible: {
-      type: 'string',
+      type: 'object',
       title: 'Demographics Eligible',
+      properties: {
+        child: {
+          type: 'boolean',
+          title: 'Child (0-17)',
+        },
+        women: {
+          type: 'boolean',
+          title: 'Women',
+        },
+        veterans: {
+          type: 'boolean',
+          title: 'Veterans',
+        },
+      },
     },
     hotline: {
       type: 'boolean',

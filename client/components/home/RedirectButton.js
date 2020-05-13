@@ -1,7 +1,7 @@
 import React,  { useState, useEffect } from 'reactn';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-
+import NavBar from './NavBar';
 import { withRouter } from 'react-router-dom';
 
 // A bootstrap button that redirects on click
@@ -10,8 +10,10 @@ import { withRouter } from 'react-router-dom';
 
 const RedirectButton = (props) => {
   const doRedirect = () => {
+    
     props.history.push(props.path);
-    window.location.reload(false);
+    if(!props.path.includes("admin"))
+      window.location.reload(false);
   };
 
   return (
