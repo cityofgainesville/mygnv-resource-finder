@@ -116,19 +116,22 @@ const Search = (props) => {
             <p className="services">
               {provider.services_provided !== '' &&
                 provider.services_provided !== undefined
-                  ? (provider.services_provided.includes('●') || provider.services_provided.includes('•') || provider.services_provided.includes('*')? provider.services_provided.split(/['●'||'•'||'*']/).map((line)=> {return(line !== "" && line !== "\n" ? (<span>{`• ${line.trim()}`}<br></br></span>) : null)}) : provider.services_provided)
-                  : 'Services not listed'}
-              {'\n'}
+                  ? (provider.services_provided.includes('●') || provider.services_provided.includes('•') || provider.services_provided.includes('*')? provider.services_provided.split(/['●'||'•'||'*']/).map((line)=> {return(line !== "" && line !== "\n" ? ('• '+ line.trim() +'\n') : null)}) : `${provider.services_provided} \n`)
+                  : 'Services not listed'} 
             </p>
-           {/*<p className="updated">
+           <p className="updated">
               {'Updated '}
               {provider.updated_at.substring(5,7) + '/' + provider.updated_at.substring(8,10)+ '/' + provider.updated_at.substring(0,4)}
               {'\n'}
-            </p>*/}
+            </p>
             
           </div>
         </ListGroup.Item>
-        {/*<div className='tagsContainer'>
+        {/*{(provider.cost_info !== undefined &&
+            provider.cost_info !== '' &&  (provider.cost_info.includes('free') || provider.cost_info.includes('Free')) ) && !(provider.translation_available == undefined ||
+              provider.translation_available == '' ||
+              provider.translation_available.includes('No') ||
+              provider.translation_available == 'N') && !(provider.demographics_eligible == undefined && provider.demographics_eligible.women !== undefined) ? (<div className='tagsContainer'>
         {provider.cost_info !== undefined &&
             provider.cost_info !== '' &&  (provider.cost_info.includes('free') || provider.cost_info.includes('Free'))  ? (<button value="Free" className='tags'  onClick={(e)=> handleFilterChange2("Free")}>Free</button>): null}
         
@@ -136,9 +139,8 @@ const Search = (props) => {
             provider.translation_available == '' ||
             provider.translation_available.includes('No') ||
             provider.translation_available == 'N' ? null : (<button value="Translation Available" className='tags' id='translationTag' onClick={(e)=> handleFilterChange2("Translation Available")}>Translation Available</button>)}
-           {/*{provider.demographics_eligible == undefined ||
-            provider.demographics_eligible == '' ? null : (<button className='tags'>{provider.demographics_eligible}</button>)}
-           </div>*/}
+           {provider.demographics_eligible == undefined ? null : (provider.demographics_eligible !== undefined ? (<button value="Women" className='tags'>Women</button>): null)}
+          </div>) : null}*/}
         </div>
         </React.Fragment>
       );

@@ -88,7 +88,9 @@ const ProviderUiSchema = {
   translation_available: { 'ui:widget': 'text', 'ui:emptyValue': '' },
   united_way_approval: { 'ui:widget': 'radio' },
   additional_information: { 'ui:widget': 'textarea', 'ui:emptyValue': '' },
-  demographics_eligible: { 'ui:widget': 'textarea', 'ui:emptyValue': '' },
+  demographics_eligible: { 
+   
+  },
   hotline: { 'ui:widget': 'radio' },
   safeplace: { 'ui:widget': 'radio' },
 };
