@@ -21,6 +21,9 @@ const Search = (props) => {
   const [visible, setVisible] = useState(false);
   const [translation, setTranslation] = useState(false);
   const [cost, setCost] = useState(false);
+  const [women, setWomen] = useState(false);
+  const [child, setChild] = useState(false);
+  const [veterans, setVeterans] = useState(false);
   const [myStyle, setStyle] = useState ({borderColor: 'default'});
   const [clicked, setClicked] = useState(false);
 
@@ -48,7 +51,13 @@ const Search = (props) => {
 
     if(value == "Free")
       setCost(true);
-  
+
+      if(value == "Women")
+      setWomen(true);
+      if(value == "Child")
+      setChild(true);
+      if(value == "Veterans")
+      setVeterans(true);
     
     //console.log(translation);
     /*if(translation)
@@ -64,22 +73,39 @@ const Search = (props) => {
 
   const providerList = providers
     .filter((provider) => {
+      return ( provider.name.toLowerCase().includes(filterText.toLowerCase()) ||
+                     provider._id.includes(filterText)
+      );
+    })
+    .filter((provider) => {
       return (translation ? 
-        (cost ? ((provider.name.toLowerCase().includes(filterText.toLowerCase()) ||
-        provider._id.includes(filterText)) && (provider.translation_available != undefined &&
-          provider.translation_available != '' &&
-          !provider.translation_available.includes('No') &&
-          provider.translation_available != 'N') && (provider.cost_info != undefined &&
-            provider.cost_info != '' &&
-            (provider.cost_info.includes('free') || provider.cost_info.includes('Free')))) : ((provider.name.toLowerCase().includes(filterText.toLowerCase()) ||
-        provider._id.includes(filterText)) && (provider.translation_available != undefined &&
-          provider.translation_available != '' &&
-          !provider.translation_available.includes('No') &&
-          provider.translation_available != 'N'))) : ( cost ? ((provider.name.toLowerCase().includes(filterText.toLowerCase()) ||
-          provider._id.includes(filterText)) && (provider.cost_info != undefined &&
-            provider.cost_info != '' &&
-            (provider.cost_info.includes('free') || provider.cost_info.includes('Free')))) : (provider.name.toLowerCase().includes(filterText.toLowerCase()) ||
-        provider._id.includes(filterText)))
+         (provider.name.toLowerCase().includes(filterText.toLowerCase()) ||
+              provider._id.includes(filterText)) && (provider.translation_available != undefined &&
+              provider.translation_available != '' &&
+              !provider.translation_available.includes('No') &&
+              provider.translation_available != 'N') : provider
+      );
+    })
+    .filter((provider) => {
+      return (cost ? 
+            (provider.cost_info != undefined &&
+              provider.cost_info != '' &&
+              (provider.cost_info.includes('free') || provider.cost_info.includes('Free'))) : provider
+      );
+    })
+    .filter((provider) => {
+      return (child ?
+        (provider.demographics_eligible!== undefined ? provider.demographics_eligible.child: null ): provider
+      );
+    })
+    .filter((provider) => {
+      return (women ?
+        (provider.demographics_eligible!== undefined ? provider.demographics_eligible.women: null ): provider
+      );
+    })
+    .filter((provider) => {
+      return (veterans ?
+        (provider.demographics_eligible!== undefined ? provider.demographics_eligible.veterans: null ): provider
       );
     })
 
@@ -128,10 +154,10 @@ const Search = (props) => {
           </div>
         </ListGroup.Item>
         {/*{(provider.cost_info !== undefined &&
-            provider.cost_info !== '' &&  (provider.cost_info.includes('free') || provider.cost_info.includes('Free')) ) && !(provider.translation_available == undefined ||
+            provider.cost_info !== '' &&  (provider.cost_info.includes('free') || provider.cost_info.includes('Free')) ) || !(provider.translation_available == undefined ||
               provider.translation_available == '' ||
               provider.translation_available.includes('No') ||
-              provider.translation_available == 'N') && !(provider.demographics_eligible == undefined && provider.demographics_eligible.women !== undefined) ? (<div className='tagsContainer'>
+              provider.translation_available == 'N') || !(provider.demographics_eligible == undefined) ? (<div className='tagsContainer'>
         {provider.cost_info !== undefined &&
             provider.cost_info !== '' &&  (provider.cost_info.includes('free') || provider.cost_info.includes('Free'))  ? (<button value="Free" className='tags'  onClick={(e)=> handleFilterChange2("Free")}>Free</button>): null}
         
@@ -139,7 +165,9 @@ const Search = (props) => {
             provider.translation_available == '' ||
             provider.translation_available.includes('No') ||
             provider.translation_available == 'N' ? null : (<button value="Translation Available" className='tags' id='translationTag' onClick={(e)=> handleFilterChange2("Translation Available")}>Translation Available</button>)}
-           {provider.demographics_eligible == undefined ? null : (provider.demographics_eligible !== undefined ? (<button value="Women" className='tags'>Women</button>): null)}
+           {provider.demographics_eligible == undefined ? null : (provider.demographics_eligible.women !== undefined ? (<button value="Women" className='tags' onClick={(e)=> handleFilterChange2("Women")}>Women</button>): null)}
+           {provider.demographics_eligible == undefined ? null : (provider.demographics_eligible.child !== undefined ? (<button value="Child" className='tags' onClick={(e)=> handleFilterChange2("Child")}>Child (0-17)</button>): null)}
+           {provider.demographics_eligible == undefined ? null : (provider.demographics_eligible.veterans !== undefined ? (<button value="Veterans" className='tags' onClick={(e)=> handleFilterChange2("Veterans")}>Veterans</button>): null)}
           </div>) : null}*/}
         </div>
         </React.Fragment>
@@ -165,6 +193,19 @@ const handleExitTranslationRequest = (e) => {
 const handleExitCostRequest = (e) => {
   e.preventDefault();
   setCost(false);
+}
+
+const handleExitChildRequest = (e) => {
+  e.preventDefault();
+  setChild(false);
+}
+const handleExitWomenRequest = (e) => {
+  e.preventDefault();
+  setWomen(false);
+}
+const handleExitVeteransRequest = (e) => {
+  e.preventDefault();
+  setVeterans(false);
 }
 
   const handleFocusRequest = (e) => {
@@ -209,8 +250,11 @@ const handleBlurRequest = (e) => {
           </Form>
           <Container className='body searchb'>
           {/*<button className='tags' id='exampleTag' style={{display: !clicked ? '' : 'none'}} onClick={(e)=>handleClickedRequest(e)}>Click a tag to filter <i class="fal fa-times fa-1x"></i></button>
+          <button className='tags' id='exampleTag' style={{display: child ? '' : 'none'}} onClick={(e)=>handleExitChildRequest(e)}>Child (0-17) <i class="fal fa-times fa-1x"></i></button>
           <button className='tags' id='exampleTag' style={{display: cost ? '' : 'none'}} onClick={(e)=>handleExitCostRequest(e)}>Free <i class="fal fa-times fa-1x"></i></button>
-  <button className='tags' id='exampleTag' style={{display: translation ? '' : 'none'}} onClick={(e)=>handleExitTranslationRequest(e)}>Translation Available <i class="fal fa-times fa-1x"></i></button>*/}
+          <button className='tags' id='exampleTag' style={{display: translation ? '' : 'none'}} onClick={(e)=>handleExitTranslationRequest(e)}>Translation Available <i class="fal fa-times fa-1x"></i></button>
+          <button className='tags' id='exampleTag' style={{display: veterans ? '' : 'none'}} onClick={(e)=>handleExitVeteransRequest(e)}>Veterans <i class="fal fa-times fa-1x"></i></button>
+  <button className='tags' id='exampleTag' style={{display: women ? '' : 'none'}} onClick={(e)=>handleExitWomenRequest(e)}>Women <i class="fal fa-times fa-1x"></i></button>*/}
           
             {providerList}
 
