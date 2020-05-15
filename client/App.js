@@ -1,6 +1,6 @@
 import ReactGA from 'react-ga';
-ReactGA.initialize('UA-163304507-1');
-ReactGA.pageview('/home/search');
+//ReactGA.initialize('UA-163304507-1');
+//ReactGA.pageview('/home/search');
 import { hot } from 'react-hot-loader/root';
 import React, { useState, useEffect } from 'reactn';
 import PropTypes from 'prop-types';
@@ -27,10 +27,7 @@ import AuthState from './components/auth/AuthState';
 const App = (props) => {
   // Handles routing admin portal, main page, search, category & provider list
   // and individual provider
-  function initializeReactGA() {
-    ReactGA.initialize('UA-163304507-1');
-    ReactGA.pageview('/homepage');
-}
+  
   const [current, setCurrent] = useState("Search");
   return (
     <React.Fragment>
