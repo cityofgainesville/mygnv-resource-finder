@@ -224,17 +224,29 @@ const ProviderSchema = {
       type: 'object',
       title: 'Demographics Eligible',
       properties: {
-        child: {
+        adults: {
           type: 'boolean',
-          title: 'Child (0-17)',
+          title: 'Adults (18+)',
+        },
+        disabled: {
+          type: 'boolean',
+          title: 'Disabled',
+        },
+        elderly: {
+          type: 'boolean',
+          title: 'Elderly',
+        },
+        veterans: {
+          type: 'boolean',
+          title: 'Veterans',
         },
         women: {
           type: 'boolean',
           title: 'Women',
         },
-        veterans: {
+        youth: {
           type: 'boolean',
-          title: 'Veterans',
+          title: 'Youths (0-17)',
         },
       },
     },

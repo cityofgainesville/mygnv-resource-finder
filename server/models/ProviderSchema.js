@@ -82,11 +82,15 @@ const providerSchema = new Schema(
     },
     additional_information: String,
     demographics_eligible: {
-      child: {
+      adults: {
         type: Boolean,
         required: false,
       },
-      women: {
+      disabled: {
+        type: Boolean,
+        required: false,
+      },
+      elderly: {
         type: Boolean,
         required: false,
       },
@@ -94,7 +98,14 @@ const providerSchema = new Schema(
         type: Boolean,
         required: false,
       },
-
+      women: {
+        type: Boolean,
+        required: false,
+      },
+      youth: {
+        type: Boolean,
+        required: false,
+      },
     },
     hotline: Boolean,
     safeplace: Boolean,
