@@ -8,7 +8,15 @@ import Homepage from '../Title';
 
 const SubcategoryProviderList = (props) => {
   const [visible, setVisible] = useState(false);
-  //const [translation, setTranslation] = useState(false);
+  const [translation, setTranslation] = useState(false);
+  const [cost, setCost] = useState(false);
+  const [women, setWomen] = useState(false);
+  const [child, setChild] = useState(false);
+  const [veterans, setVeterans] = useState(false);
+  const [adult, setAdult] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+  const [elderly, setElderly] = useState(false);
+  const [clicked, setClicked] = useState(false);
   const [myStyle, setMyStyle] = useState({
 		margins: 'auto auto',
 		//maxWidth: '60em',
@@ -30,11 +38,103 @@ const SubcategoryProviderList = (props) => {
     props.history.push(`${paths.providerPath}/${providerId}`);
   };
 
+  const handleFilterChange2 = (value) => {
+    console.log(value);
+    setClicked(true);
+    if(value == "Translation Available")
+      setTranslation(true);
+
+
+    if(value == "Free")
+      setCost(true);
+
+      if(value == "Women")
+      setWomen(true);
+      if(value == "Child")
+      setChild(true);
+      if(value == "Veterans")
+      setVeterans(true);
+
+      if(value == "Adult")
+      setAdult(true);
+      if(value == "Disabled")
+      setDisabled(true);
+      if(value == "Elderly")
+      setElderly(true);
+
+      if(window.innerWidth >= 1025){
+        location.href = "#";
+        location.href = "#topOfList";
+      }
+      else {
+        location.href = "#";
+        location.href = "#topOfListMobile";
+      }
+      /*window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });*/
+    
+    //console.log(translation);
+    /*if(translation)
+      setFI(providers.filter((provider)=> provider.translation_available != undefined ||
+    provider.translation_available != '' ||
+    provider.translation_available != 'No' ||
+    provider.translation_available != 'N'));*/
+  };
+
   // Renders a list of provider in subcategory, provides summary and
   // address quick view
   console.log(props.providers);
   
-  const providerList = props.providers.sort((a, b) => (a.name > b.name) ? 1 : -1).map((provider) => {
+  const providerList = props.providers
+  .filter((provider) => {
+    return (translation ? 
+      (provider.translation_available != undefined &&
+            provider.translation_available != '' &&
+            !provider.translation_available.includes('No') &&
+            provider.translation_available != 'N') : provider
+    );
+  })
+  .filter((provider) => {
+    return (cost ? 
+          (provider.cost_info != undefined &&
+            provider.cost_info != '' &&
+            (provider.cost_info.includes('free') || provider.cost_info.includes('Free'))) : provider
+    );
+  })
+  .filter((provider) => {
+    return (child ?
+      (provider.demographics_eligible!== undefined ? provider.demographics_eligible.youth: null ): provider
+    );
+  })
+  .filter((provider) => {
+    return (women ?
+      (provider.demographics_eligible!== undefined ? provider.demographics_eligible.women: null ): provider
+    );
+  })
+  .filter((provider) => {
+    return (veterans ?
+      (provider.demographics_eligible!== undefined ? provider.demographics_eligible.veterans: null ): provider
+    );
+  })
+  .filter((provider) => {
+    return (adult ?
+      (provider.demographics_eligible!== undefined ? provider.demographics_eligible.adults: null ): provider
+    );
+  })
+  .filter((provider) => {
+    return (disabled ?
+      (provider.demographics_eligible!== undefined ? provider.demographics_eligible.disabled: null ): provider
+    );
+  })
+  .filter((provider) => {
+    return (elderly ?
+      (provider.demographics_eligible!== undefined ? provider.demographics_eligible.elderly: null ): provider
+    );
+  })
+  .sort((a, b) => (a.name > b.name) ? 1 : -1)
+  .map((provider) => {
     return (
       <div className='providerCard-container'>
       <ListGroup.Item
@@ -63,23 +163,34 @@ const SubcategoryProviderList = (props) => {
                   : 'Services not listed'}
               {'\n'}
             </p>
-            {/*<p className="updated">
+            <p className="updated">
               {'Updated '}
               {provider.updated_at.substring(5,7) + '/' + provider.updated_at.substring(8,10)+ '/' + provider.updated_at.substring(0,4)}
               {'\n'}
-            </p>*/}
+            </p>
         </div>
       </ListGroup.Item>
-      {/*<div className='tagsContainer'>
-        {provider.cost_info.cost_type == undefined ||
-            provider.cost_info.cost_type == '' ? null : (<button value={provider.cost_info.cost_type} className='tags'>{provider.cost_info.cost_type}</button>)}
+      {(provider.cost_info !== undefined &&
+            provider.cost_info !== '' &&  (provider.cost_info.includes('free') || provider.cost_info.includes('Free')) ) || !(provider.translation_available == undefined ||
+              provider.translation_available == '' ||
+              provider.translation_available.includes('No') ||
+              provider.translation_available == 'N') || (provider.demographics_eligible !== undefined ? (provider.demographics_eligible.adults || provider.demographics_eligible.disabled || provider.demographics_eligible.elderly || provider.demographics_eligible.women || provider.demographics_eligible.veterans || provider.demographics_eligible.youth) : false) ? (<div className='tagsContainer'>
+                {provider.demographics_eligible == undefined ? null : (provider.demographics_eligible.adults !== undefined && provider.demographics_eligible.adults ? (<button value="Adult" className='tags demographicsTag' onClick={(e)=> handleFilterChange2("Adult")}>Adults (18+)</button>): null)}
+           {provider.demographics_eligible == undefined ? null : (provider.demographics_eligible.disabled !== undefined && provider.demographics_eligible.disabled ? (<button value="Disabled" className='tags demographicsTag' onClick={(e)=> handleFilterChange2("Disabled")}>Disabled</button>): null)}
+           {provider.demographics_eligible == undefined ? null : (provider.demographics_eligible.elderly !== undefined && provider.demographics_eligible.elderly ? (<button value="Elderly" className='tags demographicsTag' onClick={(e)=> handleFilterChange2("Elderly")}>Elderly</button>): null)}
+        {provider.cost_info !== undefined &&
+            provider.cost_info !== '' &&  (provider.cost_info.includes('free') || provider.cost_info.includes('Free'))  ? (<button value="Free" className='tags'  id='costTag' onClick={(e)=> handleFilterChange2("Free")}>Free</button>): null}
         
           {provider.translation_available == undefined ||
             provider.translation_available == '' ||
-            provider.translation_available == 'No' ? null : (<button value="Translation Available" className='tags' id='translationTag'>Translation Available</button>)}
-           {provider.demographics_eligible == undefined ||
-            provider.demographics_eligible == '' ? null : (<button className='tags'>{provider.demographics_eligible}</button>)}
-           </div>*/}
+            provider.translation_available.includes('No') ||
+            provider.translation_available == 'N' ? null : (<button value="Translation Available" className='tags' id='translationTag' onClick={(e)=> handleFilterChange2("Translation Available")}>Translation Available</button>)}
+            {provider.demographics_eligible == undefined ? null : (provider.demographics_eligible.veterans !== undefined && provider.demographics_eligible.veterans ? (<button value="Veterans" className='tags demographicsTag' onClick={(e)=> handleFilterChange2("Veterans")}>Veterans</button>): null)}
+           {provider.demographics_eligible == undefined ? null : (provider.demographics_eligible.women !== undefined && provider.demographics_eligible.women ? (<button value="Women" className='tags demographicsTag' onClick={(e)=> handleFilterChange2("Women")}>Women</button>): null)}
+           {provider.demographics_eligible == undefined ? null : (provider.demographics_eligible.youth !== undefined && provider.demographics_eligible.youth ? (<button value="Child" className='tags demographicsTag' onClick={(e)=> handleFilterChange2("Child")}>Youths (0-17)</button>): null)}
+           
+           
+          </div>) : null}
       </div>
     );
   });
@@ -90,11 +201,52 @@ const SubcategoryProviderList = (props) => {
 		console.log(visible);
 	
   }
-  console.log(props.subcategory.name);
+
+  const handleClickedRequest = (e) => {
+    e.preventDefault();
+    setClicked(true);
+}
+
+const handleExitTranslationRequest = (e) => {
+  e.preventDefault();
+  setTranslation(false);
+}
+
+const handleExitCostRequest = (e) => {
+  e.preventDefault();
+  setCost(false);
+}
+
+const handleExitChildRequest = (e) => {
+  e.preventDefault();
+  setChild(false);
+}
+const handleExitWomenRequest = (e) => {
+  e.preventDefault();
+  setWomen(false);
+}
+const handleExitVeteransRequest = (e) => {
+  e.preventDefault();
+  setVeterans(false);
+}
+
+const handleExitAdultRequest = (e) => {
+  e.preventDefault();
+  setAdult(false);
+}
+const handleExitDisabledRequest = (e) => {
+  e.preventDefault();
+  setDisabled(false);
+}
+const handleExitElderlyRequest = (e) => {
+  e.preventDefault();
+  setElderly(false);
+}
+  //console.log(props.subcategory.name);
   return( 
     <React.Fragment>
       <div>
-      <div
+      <div id="topOfListMobile"
         className='search-con scroll'
       >
           <Form className= 'white-0-bg search-form'>
@@ -107,8 +259,18 @@ const SubcategoryProviderList = (props) => {
               </Container>
             </Form.Group>
           </Form>
-  <Container className ='body'>
-  {/*<button className='tags' id='exampleTag'>Click a tag to filter <i class="fal fa-times fa-1x"></i></button>*/}
+  <Container id="topOfList" className ='body'>
+  <div >
+          <button className='tags exampleTag' style={{display: !clicked ? '' : 'none'}} onClick={(e)=>handleClickedRequest(e)}>Click a tag to filter <i class="fal fa-times fa-1x"></i></button>
+          <button className='tags exampleTag demoFilter' style={{display: adult ? '' : 'none'}} onClick={(e)=>handleExitAdultRequest(e)}>Adults (18+) <i class="fal fa-times fa-1x"></i></button>
+          <button className='tags exampleTag demoFilter' style={{display: disabled ? '' : 'none'}} onClick={(e)=>handleExitDisabledRequest(e)}>Disabled <i class="fal fa-times fa-1x"></i></button>
+          <button className='tags exampleTag demoFilter' style={{display: elderly ? '' : 'none'}} onClick={(e)=>handleExitElderlyRequest(e)}>Elderly <i class="fal fa-times fa-1x"></i></button>
+          <button className='tags exampleTag costFilter' style={{display: cost ? '' : 'none'}} onClick={(e)=>handleExitCostRequest(e)}>Free <i class="fal fa-times fa-1x"></i></button>
+          <button className='tags exampleTag transFilter' style={{display: translation ? '' : 'none'}} onClick={(e)=>handleExitTranslationRequest(e)}>Translation Available <i class="fal fa-times fa-1x"></i></button>
+          <button className='tags exampleTag demoFilter' style={{display: veterans ? '' : 'none'}} onClick={(e)=>handleExitVeteransRequest(e)}>Veterans <i class="fal fa-times fa-1x"></i></button>
+          <button className='tags exampleTag demoFilter' style={{display: women ? '' : 'none'}} onClick={(e)=>handleExitWomenRequest(e)}>Women <i class="fal fa-times fa-1x"></i></button>
+          <button className='tags exampleTag demoFilter' style={{display: child ? '' : 'none'}} onClick={(e)=>handleExitChildRequest(e)}>Youths (0-17) <i class="fal fa-times fa-1x"></i></button>
+          </div>
     {providerList}
     </Container>
   </div>

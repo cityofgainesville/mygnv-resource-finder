@@ -47,16 +47,42 @@
 .tags {
     background: none ; 
     border-radius: 12px ; 
-    padding: 5px 10px;
+    padding: 2px 12px;
+    font-size: 15px;
+    vertical-align: sub;
+    margin-right: .5rem;
 }
 
 #translationTag {
-    border: 2px solid #59b9de;
+    border: 1.5px solid #676cc8;
 }
 
-#exampleTag {
+#costTag {
+    border: 1.5px solid #1dc2ae;
+}
+
+.demographicsTag {
+    border: 1.5px solid #59b9de;
+}
+
+.exampleTag {
     background: #dbdbdb;
 
+}
+
+.transFilter {
+    background: #676cc8;
+    color: white;
+}
+
+.demoFilter {
+    background: #59b9de;
+    color: white;
+}
+
+.costFilter {
+    background: #1dc2ae;
+    color: white;
 }
 
 .updated {
