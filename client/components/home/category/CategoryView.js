@@ -8,6 +8,7 @@ import TopLevelCategory from './TopLevelCategory';
 
 const CategoryView = (props) => {
   const [categories, setCategories] = useState(null);
+  const [parent, setParent] = useState('');
   const [category, setCategory] = useState(null);
   const [loadingComplete, setLoadingComplete] = useState(false);
 
@@ -49,6 +50,10 @@ const CategoryView = (props) => {
             })
             .then((res) => {
               setCategory(res.data);
+              if(!res.data.is_subcategory){
+                setParent(res.data.name);
+              //console.log(res.data.name);
+              }
               setLoadingComplete(true);
             })
             .catch((err) => {
@@ -68,7 +73,7 @@ const CategoryView = (props) => {
       return <TopLevelCategory categories={categories} />;
     } else if (category) {
       if (shouldRenderProviders(category)) {
-        return <SubcategoryProviderList providers={category.providers} subcategory={category}/>;
+        return <SubcategoryProviderList providers={category.providers} subcategory={category} parentName={parent}/>;
       } else {
         return <SubcategoryChildren category={category} />;
       }

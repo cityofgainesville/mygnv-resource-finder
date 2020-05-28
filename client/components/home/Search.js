@@ -191,7 +191,7 @@ const Search = (props) => {
             
           </div>
         </ListGroup.Item>
-        {(provider.cost_info !== undefined &&
+        {/*{(provider.cost_info !== undefined &&
             provider.cost_info !== '' &&  (provider.cost_info.includes('free') || provider.cost_info.includes('Free')) ) || !(provider.translation_available == undefined ||
               provider.translation_available == '' ||
               provider.translation_available.includes('No') ||
@@ -211,7 +211,7 @@ const Search = (props) => {
            {provider.demographics_eligible == undefined ? null : (provider.demographics_eligible.youth !== undefined && provider.demographics_eligible.youth ? (<button value="Child" className='tags demographicsTag' onClick={(e)=> handleFilterChange2("Child")}>Youths (0-17)</button>): null)}
            
            
-          </div>) : null}
+          </div>) : null}*/}
         </div>
         </React.Fragment>
       );
@@ -305,7 +305,7 @@ const handleBlurRequest = (e) => {
             <div className='search-cat-con'><p className='search-cat'><Button onClick={(e)=>handleEntailmentRequest(e)} className='search-cat-button' style={{display: !visible ? '' : 'none'}}>Browse by Category <i class="fal fa-chevron-down" style={{color:'black !important'}}></i></Button><Button onClick={(e)=>handleEntailmentRequest(e)} className='search-cat-button' style={{display: visible ? '' : 'none'}}>Browse by Category <i class="fal fa-chevron-up"></i></Button></p><div style={{display: visible ? '' : 'none'}}><CategoryView/></div></div>
           </Form>
           <Container id="topOfList" className='body searchb'>
-          <div >
+          {/*<div >
           <button className='tags exampleTag' style={{display: !clicked ? '' : 'none'}} onClick={(e)=>handleClickedRequest(e)}>Click a tag to filter <i class="fal fa-times fa-1x"></i></button>
           <button className='tags exampleTag demoFilter' style={{display: adult ? '' : 'none'}} onClick={(e)=>handleExitAdultRequest(e)}>Adults (18+) <i class="fal fa-times fa-1x"></i></button>
           <button className='tags exampleTag demoFilter' style={{display: disabled ? '' : 'none'}} onClick={(e)=>handleExitDisabledRequest(e)}>Disabled <i class="fal fa-times fa-1x"></i></button>
@@ -315,7 +315,7 @@ const handleBlurRequest = (e) => {
           <button className='tags exampleTag demoFilter' style={{display: veterans ? '' : 'none'}} onClick={(e)=>handleExitVeteransRequest(e)}>Veterans <i class="fal fa-times fa-1x"></i></button>
           <button className='tags exampleTag demoFilter' style={{display: women ? '' : 'none'}} onClick={(e)=>handleExitWomenRequest(e)}>Women <i class="fal fa-times fa-1x"></i></button>
           <button className='tags exampleTag demoFilter' style={{display: child ? '' : 'none'}} onClick={(e)=>handleExitChildRequest(e)}>Youths (0-17) <i class="fal fa-times fa-1x"></i></button>
-          </div>
+          </div>*/}
             {providerList}
 
   </Container>
