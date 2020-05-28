@@ -159,9 +159,9 @@ const SubcategoryProviderList = (props) => {
             <p className="services">
               {provider.services_provided !== '' &&
                 provider.services_provided !== undefined
-                  ? (provider.services_provided.includes('●') || provider.services_provided.includes('•') || provider.services_provided.includes('*')? provider.services_provided.split(/['●'||'•'||'*']/).map((line)=> {return(line !== "" && line !== "\n" ? (<span>{`• ${line.trim()}`}<br></br></span>) : null)}) : provider.services_provided)
+                  ? (provider.services_provided.includes('●') || provider.services_provided.includes('•') || provider.services_provided.includes('*')? provider.services_provided.split(/['●'||'•'||'*']/).map((line)=> {return(line !== "" && line !== "\n" ? ('• '+ line.trim() +'\n') : null)}) : `${provider.services_provided} \n`)
                   : 'Services not listed'}
-              {'\n'}
+        
             </p>
             <p className="updated">
               {'Updated '}
@@ -170,7 +170,7 @@ const SubcategoryProviderList = (props) => {
             </p>
         </div>
       </ListGroup.Item>
-      {(provider.cost_info !== undefined &&
+      {/*{(provider.cost_info !== undefined &&
             provider.cost_info !== '' &&  (provider.cost_info.includes('free') || provider.cost_info.includes('Free')) ) || !(provider.translation_available == undefined ||
               provider.translation_available == '' ||
               provider.translation_available.includes('No') ||
@@ -190,7 +190,7 @@ const SubcategoryProviderList = (props) => {
            {provider.demographics_eligible == undefined ? null : (provider.demographics_eligible.youth !== undefined && provider.demographics_eligible.youth ? (<button value="Child" className='tags demographicsTag' onClick={(e)=> handleFilterChange2("Child")}>Youths (0-17)</button>): null)}
            
            
-          </div>) : null}
+          </div>) : null}*/}
       </div>
     );
   });
@@ -253,14 +253,13 @@ const handleExitElderlyRequest = (e) => {
             <Form.Group className='search-form-group' controlId='formFilterText'>
               
               <Container style={{margin:'0 0'}}>
-			  <Form.Label className='form-label-n'>
-                {props.subcategory.name}
+			  <Form.Label className='form-label-n'>{props.parentName} / {props.subcategory.name}
               </Form.Label>
               </Container>
             </Form.Group>
           </Form>
   <Container id="topOfList" className ='body'>
-  <div >
+  {/*<div >
           <button className='tags exampleTag' style={{display: !clicked ? '' : 'none'}} onClick={(e)=>handleClickedRequest(e)}>Click a tag to filter <i class="fal fa-times fa-1x"></i></button>
           <button className='tags exampleTag demoFilter' style={{display: adult ? '' : 'none'}} onClick={(e)=>handleExitAdultRequest(e)}>Adults (18+) <i class="fal fa-times fa-1x"></i></button>
           <button className='tags exampleTag demoFilter' style={{display: disabled ? '' : 'none'}} onClick={(e)=>handleExitDisabledRequest(e)}>Disabled <i class="fal fa-times fa-1x"></i></button>
@@ -270,7 +269,7 @@ const handleExitElderlyRequest = (e) => {
           <button className='tags exampleTag demoFilter' style={{display: veterans ? '' : 'none'}} onClick={(e)=>handleExitVeteransRequest(e)}>Veterans <i class="fal fa-times fa-1x"></i></button>
           <button className='tags exampleTag demoFilter' style={{display: women ? '' : 'none'}} onClick={(e)=>handleExitWomenRequest(e)}>Women <i class="fal fa-times fa-1x"></i></button>
           <button className='tags exampleTag demoFilter' style={{display: child ? '' : 'none'}} onClick={(e)=>handleExitChildRequest(e)}>Youths (0-17) <i class="fal fa-times fa-1x"></i></button>
-          </div>
+  </div>*/}
     {providerList}
     </Container>
   </div>
@@ -280,6 +279,7 @@ const handleExitElderlyRequest = (e) => {
 };
 
 SubcategoryProviderList.propTypes = {
+  parentName: PropTypes.string.isRequired,
   subcategory: PropTypes.instanceOf(Object).isRequired,
   providers: PropTypes.instanceOf(Array).isRequired,
   history: PropTypes.instanceOf(Object).isRequired
