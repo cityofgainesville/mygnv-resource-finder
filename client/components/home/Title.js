@@ -35,30 +35,10 @@ const Homepage = (props) => {
           variant='primary'
           className='menu scroll'
         >
-          <Row className='justify-content-center menu-title'>
-                Menu
+          <Row className='justify-content-center menu-title title-title top-title'>
+                All Resources
           </Row>
-          <Row className='justify-content-center'>
-            {/*<NavLink to={paths.hotlinesPath} className='menuButton' activeClassName='navbar-active active'>
-            <i class="fal fa-phone" ></i>
-              Call a hotline
-  </NavLink>*/}
-
-            <Button className='covid' variant="outline-info" target='_blank' href='https://alachuacounty.us/covid-19/Pages/default.aspx?'>
-              COVID-19 Info
-              </Button>
-          </Row>
-          <Row className='justify-content-center'>
-            {/*<NavLink to={paths.hotlinesPath} className='menuButton' activeClassName='navbar-active active'>
-            <i class="fal fa-phone" ></i>
-              Call a hotline
-  </NavLink>*/}
-
-            <RedirectButton className='menuButton menu-hotline' path={paths.hotlinesPath} active={hotline} >
-              <i class="far fa-phone" ></i>
-              <span className="menu-name">Call a hotline</span>
-              </RedirectButton>
-          </Row>
+         
           {/*<Row className='justify-content-center'>
           <NavLink to={paths.safeplacesPath} onClick={(e)=>handleClick(e)} className='menuButton disabled' activeClassName='navbar-active active'>
                     <i class="fal fa-hands-heart"></i>
@@ -79,17 +59,30 @@ const Homepage = (props) => {
               <span className="menu-name">Search for a resource</span>
           </RedirectButton>
           </Row>
-            <hr></hr>
-          <Row className='justify-content-center menu-title'>
+            
+          <Row className='justify-content-center menu-title title-title'>
             Browse by Category
           </Row>
           <CategoryView></CategoryView>
+          <hr></hr>
+          <Row className='justify-content-center'>
+            {/*<NavLink to={paths.hotlinesPath} className='menuButton' activeClassName='navbar-active active'>
+            <i class="fal fa-phone" ></i>
+              Call a hotline
+  </NavLink>*/}
+
+            <RedirectButton className='menuButton menu-hotline' path={paths.hotlinesPath} active={hotline} >
+              <i class="far fa-phone" ></i>
+              <span className="menu-name">Call a hotline</span>
+              </RedirectButton>
+          </Row>
           <Row className='justify-content-center' style={{ margin: 'auto' }}>
             <Col xs={11} className='phrase'>
               <div>
-                Life can get tough sometimes. We’re here to help.
-                Find resources here.
+              Spot something wrong or want to add a new resource? Let us know!
               </div>
+              <Button className='title-links top-link' variant="link" href='https://cityofgainesville.iad1.qualtrics.com/jfe/form/SV_74157YeIb6ttlYx' target='_blank'>Feedback</Button>
+              <Button className='title-links'  variant="link" href='https://cityofgainesville.iad1.qualtrics.com/jfe/form/SV_bNMcXknvBcVfxoV' target='_blank'>Add a Resource</Button>
             </Col>
           </Row>
         </Alert>

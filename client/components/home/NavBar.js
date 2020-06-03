@@ -67,7 +67,7 @@ const NavBar = (props) => {
               </Nav>
           </Navbar.Collapse>*/}
         </Navbar>
-        <div id='feedback'>Help us improve the myGNV Resource Directory by giving us <a href='https://cityofgainesville.iad1.qualtrics.com/jfe/form/SV_74157YeIb6ttlYx' target='_blank' id='feedback-link'>feedback</a>. Do you have a resource to add? <a href='https://cityofgainesville.iad1.qualtrics.com/jfe/form/SV_bNMcXknvBcVfxoV' target='_blank' id='feedback-link'>Let us know.</a> </div>
+        <div id='feedback'><a target='_blank' href='https://alachuacounty.us/covid-19/Pages/default.aspx?' id='feedback-link'>COVID-19 Community Resource Portal</a></div>
     </div>
         <div id='mobile-menu' style={{display: visible ? '' : 'none'}}><Modal id='modal-menu' show={visible}><Title/></Modal></div>
     </React.Fragment>

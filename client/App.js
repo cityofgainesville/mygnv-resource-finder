@@ -36,13 +36,13 @@ const App = (props) => {
       
       <Switch>
         <Route path={paths.adminPath} component={AdminPortal} />
-        <Route exact path={paths.mainPath} component={MainPage}><div className="noDisplay"><Title/></div><div  ><MainPage/></div></Route>
+        <Route exact path={paths.mainPath} component={MainPage}><div  ><MainPage/></div></Route>
         <Route exact path={paths.searchPath} component={Search}><div className="noDisplay"><Title/></div><Search/></Route>
         <Route exact path={paths.safeplacesPath} component={Safeplaces}><div className="noDisplay"><Title/></div><Safeplaces/></Route>
         <Route exact path={paths.hotlinesPath} component={Hotlines}><div className="noDisplay"><Title/></div><Hotlines/></Route>
 
         {/*<Route exact path={paths.covidPath} component={Covid}><div className="noDisplay"><Title/></div><Covid/></Route>*/}
-        <Route exact path={paths.defaultPath} component={MainPage}><div className="noDisplay"><Title/></div><div ><MainPage/></div></Route>
+        <Route exact path={paths.defaultPath} component={MainPage}><div ><MainPage/></div></Route>
         <Route exact path={paths.menuPath} component={Title}></Route>
         <Route
           exact
