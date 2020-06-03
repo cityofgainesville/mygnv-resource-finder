@@ -3,12 +3,12 @@
 
 /* Mobile Styles */
 @media only screen and (max-width: 767px) {
-
+  
 
   .menu {
     //height: 100vh;
     width: 100vw;
-    margin-top: 130px;
+    margin-top: 89px;
     margin-left: 0;
     margin-right: 0;
     float: left;
@@ -31,19 +31,40 @@
     padding-bottom: 1em;
   }
 
-
+  .title-title {
+    padding-top: 1rem;
+    padding-bottom: .5rem;
+  }
+  .top-title {
+    padding-top: .5rem !important;
+  }
+  .title-links {
+    width: 100%;
+    font-size: 1em;
+  }
   
+  .top-link {
+    margin-top: .5em;
+  }
+  .phrase {
+    bottom: 0em; 
+    text-align: center; 
+    margin-top:1em;
+    font-size: 1em;
+    color:black;
+
+    padding-bottom: 2rem;
+
+  }
 }
 
 /* Tablet Styles */
 @media only screen and (min-width: 401px) and (max-width: 1024px) {
-
-
   .menu {
     //height: 100vh;
-    min-height: 90vh;
+    min-height: 92vh;
     width: 100vw;
-    margin-top: 110px;
+    margin-top: 89px;
     margin-left: 0;
     margin-right: 0;
     float: left;
@@ -52,8 +73,8 @@
     border-radius: 0;
     z-index:1050;
     position: absolute;
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 20%;
+    padding-right: 20%;
     background-color: #FDFDFD;
     padding-top: 1em;
     overflow: scroll;
@@ -64,6 +85,32 @@
     font-size: 18px;
     color: black;
     padding-bottom: 1em;
+  }
+
+  .title-title {
+    padding-top: 1rem;
+    padding-bottom: .5rem;
+  }
+  .top-title {
+    padding-top: .5rem !important;
+  }
+  .title-links {
+    width: 100%;
+    font-size: 1em;
+  }
+  
+  .top-link {
+    margin-top: .5em;
+  }
+  .phrase {
+    bottom: 0em; 
+    text-align: center; 
+    margin-top:1em;
+    font-size: 1em;
+    color:black;
+
+    padding-bottom: 2rem;
+
   }
 }
 
@@ -73,7 +120,7 @@
   .menu {
     //height: 100vh;
     width: 100vw;
-    margin-top: 110px;
+    margin-top: 89px;
     margin-left: 0;
     margin-right: 0;
     float: left;
@@ -131,6 +178,32 @@
     color: black;
     padding-bottom: 1em;
   }
+  .title-title {
+    padding-top: 1rem;
+    padding-bottom: 1.5rem;
+  }
+  .top-title {
+    padding-top: 1rem !important;
+    padding-bottom: .5rem;
+  }
+  .title-links {
+    width: 100%;
+    font-size: 1em;
+  }
+  
+  .top-link {
+    margin-top: .5em;
+  }
+  .phrase {
+    bottom: 0em; 
+    text-align: center; 
+    margin-top:1em;
+    font-size: 1em;
+    color:black;
+
+    padding-bottom: 2rem;
+
+  }
 }
 
 
@@ -187,17 +260,18 @@
     margin-top: 0;
 }
 
-.phrase {
-    bottom: 0em; 
-    text-align: center; 
-    margin-top:1em;
-    font-size: .9em;
-    color:black;
 
-    padding-bottom: 2rem;
-
-  }
   
 .menu-name {
     margin-left: .55em;
 }
+
+
+
+
+
+.menu-hotline {
+  margin-top: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
