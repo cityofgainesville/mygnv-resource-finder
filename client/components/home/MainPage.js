@@ -46,7 +46,7 @@ const MainPage = (props) => {
         </div>
         <div className='angle-down'>
         <Button  variant="link" href='#how-can-we-help'>
-        <i class="fal fa-angle-down" style={{fontSize:"xxx-large", color: "black", filter: "drop-shadow(1px 3px 5px #aaa)", paddingLeft: '.4em'}}></i>
+        <i class="fal fa-angle-down" style={{fontSize:"xxx-large !important", color: "black", filter: "drop-shadow(1px 3px 5px #aaa)", paddingLeft: '.4em'}}></i>
         </Button>
         </div>
       </div>
