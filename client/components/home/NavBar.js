@@ -32,7 +32,7 @@ const NavBar = (props) => {
               height='30'
               className='d-inline-block align-top'
             ></img>
-            <span className='white-0 title' >myGNV Resource Directory</span>
+            <span className='white-0 title' >myGNV Resource Finder</span>
 
             </a>
 
