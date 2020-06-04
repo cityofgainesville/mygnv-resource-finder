@@ -153,6 +153,10 @@
         width: 100%;
         min-height: 75vh;
         border-bottom: 1px solid #DBDBDB;
+        display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: center;
     }
 
     .description-box-container {
@@ -396,6 +400,10 @@
         //width: 90%;
         width: 80%;
         min-height: 75vh;
+        display: flex;
+        flex-direction: column;
+        /* align-items: center; */
+        justify-content: center;
         border-bottom: 1px solid #DBDBDB;
     }
 
@@ -573,6 +581,10 @@
       width: 100%;
       min-height: 75vh;
       border-bottom: 1px solid #DBDBDB;
+      display: flex;
+      flex-direction: column;
+      /* align-items: center; */
+      justify-content: center;
   }
     .description-box-container {
         display: flex;
@@ -688,6 +700,10 @@
         width: 100%;
         min-height: 85vh;
         border-bottom: 1px solid #DBDBDB;
+        display: flex;
+        flex-direction: column;
+        /* align-items: center; */
+        justify-content: center;
     }
 
     .description-box-container {
