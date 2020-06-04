@@ -32,21 +32,25 @@ const MainPage = (props) => {
        Find Gainesville programs and services all in one place.
         </div>
         <div className="homepage-hero-img">
+        <img  id='hero-img' src={homeIcon}
+          
+          ></img>
+          <div className='dwcont'>
           <div className='description-words-container'>
             <div className='description-words'>Your Community</div>
             <div className='description-words bottom-word'>Your Needs</div>
           </div>
-          <img  id='hero-img' src={homeIcon}
           
-             ></img>
            <div  className='description-words-container'>
             <div className='description-words'>Your Family</div>
             <div className='description-words bottom-word'>Your Health</div>
           </div>
+          </div>
         </div>
-        <div className='angle-down'>
+        <div className='angle-down' >
+
         <Button  variant="link" href='#how-can-we-help'>
-        <i class="fal fa-angle-down" style={{fontSize:"50px", color: "black", filter: "drop-shadow(1px 3px 5px #aaa)", paddingLeft: '.4em'}}></i>
+        <i class="fal fa-angle-down" style={{fontSize:"50px", color: "black", filter: "drop-shadow(1px 3px 5px #aaa)"}}></i>
         </Button>
         </div>
       </div>
