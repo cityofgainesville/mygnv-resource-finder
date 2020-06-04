@@ -27,7 +27,7 @@ const MainPage = (props) => {
       <div className= 'white-0-bg homepage-form  '>
       <Container className = 'mobile-con  home-mobile-con' style={{margin:'0 auto', padding: '0'}}>
       <div className='descriptionRF'>
-        <div className='homepage-title'>my<span id='gnv'>GNV</span> Resource Directory</div>
+        <div className='homepage-title'>my<span id='gnv'>GNV</span> Resource Finder</div>
         <div  className='onelineDescription'>
        Find Gainesville programs and services all in one place.
         </div>
