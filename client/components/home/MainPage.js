@@ -96,7 +96,7 @@ const MainPage = (props) => {
       </div>
 
       <div className='sponsor-rf extra sponsor-logos'>
-      <div className='homepage-subtitle-2' >Our Sponsors</div>
+      <div className='homepage-subtitle-2' >Our Partners</div>
         <div className='homepage-subtitle sponsor-subtitle'>The Resource Finder is created in collaboration with:</div>
         <div  className='sponsor-icons'>
    
