@@ -95,9 +95,11 @@ const MainPage = (props) => {
         </div>
       </div>
 
-      {/*<div className='descriptionRF extra sponsor-logos'>
-        <div className='homepage-subtitle'>The Resource Finder is created in collaboration with:</div>
+      <div className='sponsor-rf extra sponsor-logos'>
+      <div className='homepage-subtitle-2' >Our Sponsors</div>
+        <div className='homepage-subtitle sponsor-subtitle'>The Resource Finder is created in collaboration with:</div>
         <div  className='sponsor-icons'>
+   
         <div className='sponsors-container'>
           <img className='sponsors' src={accrgIcon} alt='Alachua County Community Resource Guide'></img>
         </div>
@@ -107,6 +109,7 @@ const MainPage = (props) => {
         <div className='sponsors-container'>
           <img className='sponsors' src={cogIcon} alt='City of Gainesville'></img>
         </div>
+      
         <div className='sponsors-container'>
           <img className='sponsors' src={designgnvIcon} alt='designGNV'></img>
         </div>
@@ -116,8 +119,10 @@ const MainPage = (props) => {
         <div className='sponsors-container'>
           <img className='sponsors' src={mygnvIcon} alt='myGNV Resource Finder'></img>
         </div>
+        
         </div>
-  </div>*/}
+        <div className='homepage-subtitle sponsor-blurb'>The City of Gainesville is in partnership with our community partners to release this information as a benefit to the community. This information/listing is correct at the time of posting. If you find an error or would like to comment, please do so at <a href="mailto:designgnv@cityofgainesville.org">designgnv@cityofgainesville.org</a>.</div>
+  </div>
 
       <div className='extra feedback-rf'>
         <div className='homepage-subtitle'>Spot something wrong or want to add a new resource? Let us know!</div>

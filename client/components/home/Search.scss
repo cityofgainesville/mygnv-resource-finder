@@ -146,7 +146,7 @@
       .descriptionRF {
         padding-top: 2rem;
         padding-bottom: 2rem;
-        padding: 2rem 1rem;
+        padding: 4rem 1rem;
         margin-left: auto;
         margin-right: auto;
         //width: 90%;
@@ -218,7 +218,7 @@
       }
 
       .feedback-rf {
-        padding: 2rem 1rem;
+        padding: 4rem 1rem;
       }
 
       .cat-container {
@@ -236,6 +236,27 @@
         margin-left: 0;
         margin-top: .75em;
       }
+      .sponsor-rf {
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        min-height: 50vh;
+        border-bottom: 1px solid #DBDBDB;
+        display: flex;
+        flex-direction: column;
+        /* align-items: center; */
+        margin-bottom: 0;
+        justify-content: center;
+     
+    }
+    .sponsor-blurb {
+      width: 90%;
+      margin: 0 auto;
+      margin-top: 3rem;
+      font-size: medium;
+    }
    
   }
 
@@ -444,6 +465,7 @@
           flex-direction: row;
           justify-content: space-evenly;
           flex-wrap: wrap;
+          margin: 0 auto;
       }
       .sponsor-logos {
         margin-bottom: 4rem;
@@ -489,11 +511,47 @@
         margin-top: .75em;
       
       }
+      .sponsor-rf {
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+        margin-left: auto;
+        margin-right: auto;
+        width: 80%;
+        min-height: 50vh;
+        border-bottom: 1px solid #DBDBDB;
+        display: flex;
+        flex-direction: column;
+        /* align-items: center; */
+        margin-bottom: 0;
+        justify-content: center;
+     
+    }
+    .sponsor-blurb {
+      width: 90%;
+      margin: 0 auto;
+      margin-top: 3rem;
+      font-size: medium;
+    }
 
  
   }
   
   @media only screen and (max-width: 767px) and (min-width: 426px) {
+    .sponsor-rf {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+      min-height: 50vh;
+      border-bottom: 1px solid #DBDBDB;
+      display: flex;
+      flex-direction: column;
+      /* align-items: center; */
+      margin-bottom: 0;
+      justify-content: center;
+   
+  }
     .search-con {
         margin: auto auto;
         //maxWidth: '60em',
@@ -573,8 +631,8 @@
     .descriptionRF {
       padding-top: 2rem;
       margin-bottom: 0;
-      padding: 2rem 1rem;
-      padding-bottom: 2rem;
+      padding: 4rem 1rem;
+      padding-bottom: 4rem;
       margin-left: auto;
       margin-right: auto;
       //width: 90%;
@@ -615,7 +673,7 @@
           flex-wrap: wrap;
       }
       .sponsor-logos {
-        margin-bottom: 4rem;
+        margin-bottom: 0rem;
       }
       .feedback-container {
         display: flex;
@@ -629,6 +687,12 @@
         background-color: #074b69;
         border:none;
         margin-top: 1rem;
+      }
+      .sponsor-blurb {
+        width: 90%;
+        margin: 0 auto;
+        margin-top: 3rem;
+        font-size: medium;
       }
     }
   
@@ -739,7 +803,7 @@
       }
 
       .extra {
-        margin-bottom: 4rem;
+        //padding-bottom: 4rem;
     }
     .homepage-subtitle {
         text-align: center;
@@ -750,15 +814,17 @@
         width:  150px;
         height: 75px;
         object-fit: scale-down;
-        margin-right: 4rem;
+        margin: 0rem 2rem;
       }
     
       .sponsor-icons {
           width: 100%;
           display: flex;
           flex-direction: row;
-          justify-content: flex-start;
+          justify-content: center;
           flex-wrap: wrap;
+          margin-left: auto;
+          margin-right: auto;
       }
       .sponsor-logos {
         margin-bottom: 4rem;
@@ -850,6 +916,42 @@
       justify-content: space-evenly;
     }
 
+    .sponsor-rf {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        min-height: 60vh;
+        border-bottom: 1px solid #DBDBDB;
+        display: flex;
+        flex-direction: column;
+        /* align-items: center; */
+        justify-content: center;
+     
+    }
+
+    .feedback-rf{
+        padding-top: 2rem;
+        padding-bottom: 6rem;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        /* align-items: center; */
+        justify-content: center;
+    }
+
+    .sponsor-subtitle {
+      padding-top: 2rem;
+    }
+    .sponsor-blurb {
+      width: 75%;
+      margin: 0 auto;
+      margin-top: 3rem;
+      font-size: medium;
+    }
   }
 
 
