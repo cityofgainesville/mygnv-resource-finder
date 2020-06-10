@@ -118,7 +118,7 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   if (req.user.role !== 'Owner') return res.status(403).end();
   const provider = req.provider;
-  Provider.deleteOne(provider, (err) => {
+  Provider.deleteOne({ _id: provider._id }, (err) => {
     if (err) {
       console.log(err);
       res.status(400).send(err);

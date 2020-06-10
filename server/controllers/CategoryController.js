@@ -94,7 +94,7 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   if (req.user.role !== 'Owner') return res.status(403).end();
   const category = req.category;
-  Category.deleteOne(category, (err) => {
+  Category.deleteOne({ _id: category._id }, (err) => {
     if (err) {
       console.log(err);
       res.status(400).send(err);

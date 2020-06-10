@@ -174,7 +174,7 @@ exports.read = (req, res) => {
 // Delete a user
 exports.delete = (req, res) => {
   const user = req.userToUpdate;
-  User.deleteOne(user, (err) => {
+  User.deleteOne({ _id: user._id }, (err) => {
     if (err) {
       console.log(err);
       res.status(400).send(err);
