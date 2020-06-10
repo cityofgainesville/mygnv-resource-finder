@@ -1,43 +1,45 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// - name is name of schema
-//   subcategory_of holds objectIDs of parent categories
-// - icon_name holds fontawesome icon name, currently
-//   ui only displays icons for top level categories
-const categorySchema = new Schema({
-  name: {
-    required: true,
-    type: String,
-  },
-  providers: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Provider',
+const categorySchema = new Schema(
+  {
+    name: {
+      required: true,
+      type: String,
     },
-  ],
-  children: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Category',
+    resources: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Resource',
+      },
+    ],
+    children: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Category',
+      },
+    ],
+    parents: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Category',
+      },
+    ],
+    icon_name: {
+      required: true,
+      type: String,
     },
-  ],
-  icon_name: {
-    required: true,
-    type: String,
+    // NOTE: If there will be two-way references, then "is_subcategory" will become redundant
+    is_subcategory: { required: true, type: Boolean },
+    updated_at: {
+      type: Date,
+      default: Date.now(),
+    },
+    created_at: {
+      type: Date,
+    },
   },
-  is_subcategory: { required: true, type: Boolean },
-});
-
-// Add updated_at and created_at
-categorySchema.pre('save', (next) => {
-  const currDate = new Date();
-  // Update the updated_at property
-  /* eslint-disable babel/no-invalid-this */
-  this.updated_at = currDate;
-  // If created_at is not present then create it
-  if (!this.created_at) this.created_at = currDate;
-  next();
-});
+  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
+);
 
 module.exports = mongoose.model('Category', categorySchema);
