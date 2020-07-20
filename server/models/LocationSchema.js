@@ -46,38 +46,19 @@ const locationSchema = new Schema(
       },
     },
     // Location contact information (non-published)
-    contact_info: {
+    maintainer_contact_info: {
       name: String,
       title: String,
       email: String,
       phone_1: String,
+      phone_1_notes: String,
       phone_2: String,
-      notes: String,
+      phone_2_notes: String,
     },
     // Should we store an array of emails, or only allow a single email?
     email: String,
     // Is this an appropriate data type for bus routes?
     bus_routes: String,
-    // Is this the appropriate data type? Should we store dates?
-    services_frequency: {
-      weekly: {
-        type: Boolean,
-        required: true,
-      },
-      monthly: {
-        type: Boolean,
-        required: true,
-      },
-      // Should we be storing those dates?
-      specific_dates: {
-        type: Boolean,
-        required: true,
-      },
-      ad_hoc: {
-        type: Boolean,
-        required: true,
-      },
-    },
     hours: {
       // Store number type, then calculate hh:mm format (number of minutes since 00:00) (24-hour time)
       monday: {
@@ -151,7 +132,28 @@ const locationSchema = new Schema(
         },
       },
     },
+    // Is this the appropriate data type? Should we store dates?
+    services_frequency: {
+      weekly: {
+        type: Boolean,
+        required: true,
+      },
+      monthly: {
+        type: Boolean,
+        required: true,
+      },
+      // Should we be storing those dates?
+      specific_dates: {
+        type: Boolean,
+        required: true,
+      },
+      ad_hoc: {
+        type: Boolean,
+        required: true,
+      },
+    },
     // Is this the right type for a schedule?
+    weekly_schedule: String,
     monthly_schedule: String,
     adhoc_schedule: String,
     specific_dates: [
@@ -267,7 +269,7 @@ const locationSchema = new Schema(
       phone: String,
       email: String,
       url: String,
-      // Do we want a text field for extra appointment details?
+      appointment_details: String,
     },
     united_way_approved: {
       type: Boolean,
@@ -290,9 +292,8 @@ const locationSchema = new Schema(
         type: Boolean,
         required: true,
       },
-      // Should we have a text field for other languages?
       others: {
-        type: Boolean,
+        type: String,
         required: true,
       },
     },

@@ -8,18 +8,25 @@ const resourceSchema = new Schema(
     organization_description: String,
     organization_url: String,
     // Master contact information (non-published)
-    contact_info: {
+    maintainer_contact_info: {
       name: String,
       title: String,
       email: String,
       phone_1: String,
+      phone_1_notes: String,
       phone_2: String,
-      notes: String,
+      phone_2_notes: String,
     },
     locations: [
       {
         type: Schema.Types.ObjectId,
         ref: 'Location',
+      },
+    ],
+    categories: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Category',
       },
     ],
     updated_at: {

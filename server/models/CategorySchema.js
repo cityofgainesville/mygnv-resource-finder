@@ -29,8 +29,6 @@ const categorySchema = new Schema(
       required: true,
       type: String,
     },
-    // NOTE: If there will be two-way references, then "is_subcategory" will become redundant
-    is_subcategory: { required: true, type: Boolean },
     updated_at: {
       type: Date,
       default: Date.now(),
