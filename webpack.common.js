@@ -2,6 +2,9 @@
 
 const path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 module.exports = {
   entry: ['@babel/polyfill', 'react-hot-loader/patch', './client/index.js'],
@@ -15,6 +18,10 @@ module.exports = {
       template: './client/index.html',
       filename: './index.html',
     }),
+    new MiniCssExtractPlugin({
+      filename: isDevelopment ? '[name].css' : '[name].[hash].css',
+      chunkFilename: isDevelopment ? '[id].css' : '[id].[hash].css',
+    }),
   ],
   module: {
     rules: [
@@ -26,7 +33,51 @@ module.exports = {
       },
       {
         test: /\.s?css$/,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
+        oneOf: [
+          {
+            test: /\.module\.s?css$/,
+            use: [
+              {
+                loader: MiniCssExtractPlugin.loader,
+                options: { hmr: isDevelopment },
+              },
+              {
+                loader: 'css-loader',
+                options: {
+                  modules: true,
+                  exportOnlyLocals: false,
+                  sourceMap: isDevelopment,
+                },
+              },
+              {
+                loader: 'sass-loader',
+                options: {
+                  sourceMap: isDevelopment,
+                },
+              },
+            ],
+          },
+          {
+            use: [
+              {
+                loader: MiniCssExtractPlugin.loader,
+                options: { hmr: isDevelopment },
+              },
+              {
+                loader: 'css-loader',
+                options: {
+                  sourceMap: isDevelopment,
+                },
+              },
+              {
+                loader: 'sass-loader',
+                options: {
+                  sourceMap: isDevelopment,
+                },
+              },
+            ],
+          },
+        ],
       },
       {
         test: /\.(png|jp(e*)g|svg)$/,
@@ -52,5 +103,8 @@ module.exports = {
         ],
       },
     ],
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.scss'],
   },
 };
