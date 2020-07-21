@@ -21,41 +21,30 @@ const userSchema = new Schema({
   },
   role: {
     type: String,
-    enum: ['Provider', 'Editor', 'Owner'],
+    enum: ['Editor', 'Owner'],
     required: true,
   },
-  // For Provider
-  assigned_provider: {
-    type: String,
-  },
-  can_edit_assigned_provider: {
-    type: Boolean,
-  },
   // For Editor
-  provider_can_edit: [
+  location_can_edit: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Provider',
+      ref: 'Location',
     },
   ],
   // For Editor
-  cat_can_edit_provider_in: [
+  resource_can_edit: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Resource',
+    },
+  ],
+  // For Editor
+  cat_can_edit_resource_in: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Category',
     },
   ],
-});
-
-// If a user's role is changed to a more restrictive role, ensure that the old user data is also deleted
-// eg. If role changes from Editor to Provider then clear out the provider_can_edit and cat_can_edit_provider
-userSchema.pre('validate', (next, data) => {
-  /* eslint-disable babel/no-invalid-this */
-  if (this.role === 'Provider') {
-    this.provider_can_edit = [];
-    this.cat_can_edit_provider_in = [];
-  }
-  next();
 });
 
 userSchema.plugin(passportLocalMongoose, { usernameField: 'email' });

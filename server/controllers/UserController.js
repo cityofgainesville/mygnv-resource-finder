@@ -70,20 +70,19 @@ const currentUserUpdate = async (req, res) => {
   try {
     const currentUser = req.user;
     const infoToUpdate = req.body;
-    if (currentUser.role === 'Provider' || currentUser.role === 'Editor') {
+    if (currentUser.role === 'Editor') {
       currentUser.first_name = infoToUpdate.first_name;
       currentUser.last_name = infoToUpdate.last_name;
-      if (currentUser.assigned_provider !== infoToUpdate.assigned_provider) {
-        currentUser.assigned_provider = infoToUpdate.assigned_provider;
-        currentUser.can_edit_assigned_provider = false;
-      }
     } else if (currentUser.role === 'Owner') {
       for (const key in infoToUpdate) {
         if (
           Object.prototype.hasOwnProperty.call(infoToUpdate, key) &&
           key !== 'password' &&
           key !== 'old_password' &&
-          currentUser[key] !== infoToUpdate[key]
+          key !== 'updated_at' &&
+          key !== 'created_at' &&
+          key !== '_id' &&
+          key !== '__v'
         ) {
           currentUser[key] = infoToUpdate[key];
         }
@@ -118,7 +117,10 @@ const adminUpdate = async (req, res) => {
         Object.prototype.hasOwnProperty.call(infoToUpdate, key) &&
         key !== 'password' &&
         key !== 'old_password' &&
-        userToUpdate[key] !== infoToUpdate[key]
+        key !== 'updated_at' &&
+        key !== 'created_at' &&
+        key !== '_id' &&
+        key !== '__v'
       ) {
         userToUpdate[key] = infoToUpdate[key];
       }
@@ -145,7 +147,8 @@ exports.update = async (req, res) => {
 /* 
   Accepts query parameters in this format
   categories=true // or false
-  providers=true // or false
+  resources=true // or false
+  locations=true // or false
   True will populate the array, false will leave it as an array of ObjectIDs.
 */
 exports.list = (req, res) => {
@@ -153,8 +156,10 @@ exports.list = (req, res) => {
   let populateOptions = [];
   if (req.query.categories === 'true')
     populateOptions = [...populateOptions, 'cat_can_edit_provider_in'];
-  if (req.query.providers === 'true')
-    populateOptions = [...populateOptions, 'provider_can_edit'];
+  if (req.query.resources === 'true')
+    populateOptions = [...populateOptions, 'resource_can_edit'];
+  if (req.query.locations === 'true')
+    populateOptions = [...populateOptions, 'location_can_edit'];
   User.find({})
     .populate(...populateOptions)
     .exec((err, users) => {
