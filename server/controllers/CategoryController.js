@@ -4,15 +4,18 @@ const Category = require('../models/CategorySchema');
 /* 
   Accepts query parameters in this format
   children=true // or false
-  providers=true // or false
+  parents=true // or false
+  resources=true // or false
   True will populate the array, false will leave it as an array of ObjectIDs.
 */
 exports.list = (req, res) => {
   let populateOptions = [];
   if (req.query.children === 'true')
     populateOptions = [...populateOptions, 'children'];
-  if (req.query.providers === 'true')
-    populateOptions = [...populateOptions, 'providers'];
+  if (req.query.parents === 'true')
+    populateOptions = [...populateOptions, 'parents'];
+  if (req.query.resources === 'true')
+    populateOptions = [...populateOptions, 'resources'];
   Category.find({})
     .populate(...populateOptions)
     .exec((err, categories) => {
@@ -28,16 +31,16 @@ exports.list = (req, res) => {
 /* 
   Accepts query parameters in this format
   children=true // or false
-  providers=true // or false
+  resources=true // or false
   True will populate the array, false will leave it as an array of ObjectIDs.
 */
 exports.listTopLevel = (req, res) => {
   let populateOptions = [];
   if (req.query.children === 'true')
     populateOptions = [...populateOptions, 'children'];
-  if (req.query.providers === 'true')
-    populateOptions = [...populateOptions, 'providers'];
-  Category.find({ is_subcategory: false })
+  if (req.query.resources === 'true')
+    populateOptions = [...populateOptions, 'resources'];
+  Category.find({ parents: { $size: 0 } })
     .populate(...populateOptions)
     .exec((err, categories) => {
       if (err) {
@@ -106,16 +109,20 @@ exports.delete = (req, res) => {
 /* 
   Accepts query parameters in this format
   children=true // or false
-  providers=true // or false
+  parents=true // or false
+  resources=true // or false
   True will populate the array, false will leave it as an array of ObjectIDs.
 */
+// TODO: Strip out private data
 exports.categoryById = (req, res, next, id) => {
   let populateOptions = [];
   console.log(req.query);
   if (req.query.children === 'true')
     populateOptions = [...populateOptions, 'children'];
-  if (req.query.providers === 'true')
-    populateOptions = [...populateOptions, 'providers'];
+  if (req.query.parents === 'true')
+    populateOptions = [...populateOptions, 'parents'];
+  if (req.query.resources === 'true')
+    populateOptions = [...populateOptions, 'resources'];
   console.log(populateOptions);
   Category.findById(id)
     .populate(...populateOptions)

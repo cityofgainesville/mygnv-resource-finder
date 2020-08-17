@@ -95,10 +95,10 @@ exports.update = (req, res) => {
     if (
       Object.prototype.hasOwnProperty.call(infoToUpdate, key) &&
       provider[key] !== infoToUpdate[key] &&
-      key != 'updated_at' &&
-      key != 'created_at' &&
-      key != '_id' &&
-      key != '__v'
+      key !== 'updated_at' &&
+      key !== 'created_at' &&
+      key !== '_id' &&
+      key !== '__v'
     ) {
       provider[key] = infoToUpdate[key];
     }

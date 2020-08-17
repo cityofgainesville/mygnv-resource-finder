@@ -6,8 +6,9 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const passport = require('./passport');
 
-const providerRouter = require('../routes/ProviderRoute');
 const categoryRouter = require('../routes/CategoryRoute');
+const locationRouter = require('../routes/LocationRoute');
+const resourceRouter = require('../routes/ResourceRoute');
 const userRouter = require('../routes/UserRoute');
 
 const developmentMode = 'development';
@@ -56,7 +57,8 @@ module.exports.start = () => {
   app.use(passport.session());
 
   // Routes
-  app.use('/api/providers', providerRouter);
+  app.use('/api/resources', resourceRouter);
+  app.use('/api/locations', locationRouter);
   app.use('/api/categories', categoryRouter);
   app.use('/api/users', userRouter);
 

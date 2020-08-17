@@ -21,7 +21,8 @@ router.route('/isLoggedIn').post(userController.isLoggedIn);
 /* 
   Accepts query parameters in this format
   categories=true // or false
-  providers=true // or false
+  resources=true // or false
+  locations=true // or false
   True will populate the array, false will leave it as an array of ObjectIDs.
 */
 router.route('/list').get(userController.isAuthenticated, userController.list);
