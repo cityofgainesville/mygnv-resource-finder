@@ -2,8 +2,6 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
 const passport = require('./passport');
 
 const categoryRouter = require('../routes/CategoryRoute');
@@ -27,9 +25,6 @@ require('dotenv').config();
 
 const dbUri = process.env.DB_URI ? process.env.DB_URI : '';
 const port = process.env.PORT ? process.env.PORT : 8080;
-const sessionSecret = process.env.SESSION_SECRET
-  ? process.env.SESSION_SECRET
-  : 'lol cats';
 
 module.exports.start = () => {
   // Connect to database
@@ -50,18 +45,7 @@ module.exports.start = () => {
   // A day in milliseconds
   const DAY_IN_MS = 24 * 3600000;
 
-  app.use(
-    session({
-      secret: sessionSecret,
-      // Session should expire after 2 days
-      maxAge: 2 * DAY_IN_MS,
-      resave: false,
-      saveUninitialized: false,
-      store: new MongoStore({ mongooseConnection: mongoose.connection }),
-    })
-  );
   app.use(passport.initialize());
-  app.use(passport.session());
 
   // Routes
   app.use(resourcesURI.path, resourceRouter);

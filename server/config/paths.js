@@ -26,5 +26,12 @@ module.exports.categoriesURI = {
 
 module.exports.usersURI = {
   path: '/api/users',
-  endpoints: {},
+  endpoints: {
+    login: '/login',
+    isLoggedIn: '/isLoggedIn',
+    list: '/list',
+    register: '/register',
+    update: '/update',
+    delete: '/delete',
+  },
 };
