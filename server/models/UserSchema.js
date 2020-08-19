@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const passportLocalMongoose = require('passport-local-mongoose');
 
+const roles = require('../config/roles');
+
 // Integrates with "passport-local-mongoose"
 // which handles hashing and salting passwords
 // passwords are NOT stored
@@ -21,7 +23,7 @@ const userSchema = new Schema({
   },
   role: {
     type: String,
-    enum: ['Editor', 'Owner'],
+    enum: [roles.OWNER, roles.EDITOR],
     required: true,
   },
   // For Editor

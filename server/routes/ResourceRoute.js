@@ -1,6 +1,9 @@
 const resourceController = require('../controllers/ResourceController');
 const userController = require('../controllers/UserController');
 const express = require('express');
+
+const { resourcesURI } = require('../config/paths');
+
 const router = new express.Router();
 
 // Path is /api/resources/list
@@ -12,12 +15,12 @@ const router = new express.Router();
   categories=true // or false
   True will populate the array, false will leave it as an array of ObjectIDs.
 */
-router.route('/list').get(resourceController.list);
+router.route(resourcesURI.endpoints.list).get(resourceController.list);
 
 // Path is /api/resources/create
 // POST will create resource if user authenticated
 router
-  .route('/create')
+  .route(resourcesURI.endpoints.create)
   .post(userController.isAuthenticated, resourceController.create);
 
 // Path is /api/resources/:resourceId
@@ -27,7 +30,7 @@ router.route('/:resourceId').get(resourceController.read);
 // Path is /api/resources/update/:resourceId
 // POST will update resource if authenticated
 router
-  .route('/update/:resourceId')
+  .route(`${resourcesURI.endpoints.create}/:resourceId`)
   .post(
     userController.isAuthenticated,
     resourceController.isResourceUpdateAllowed,
@@ -37,7 +40,7 @@ router
 // Path is /api/resources/delete/:resourceId
 // DELETE will update resource if authenticated
 router
-  .route('/delete/:resourceId')
+  .route(`${resourcesURI.endpoints.delete}/:resourceId`)
   .delete(userController.isAuthenticated, resourceController.delete);
 
 // Middleware to get resource by id from mongoDB

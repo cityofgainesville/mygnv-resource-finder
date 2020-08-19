@@ -135,8 +135,13 @@ exports.list = (req, res) => {
     populateOptions = [...populateOptions, 'locations'];
   if (req.query.categories === 'true')
     populateOptions = [...populateOptions, 'categories'];
+  // Ignore private data when populating
+  let select = '';
+  if (req.user?.role !== roles.OWNER) {
+    select = '-_maintainer_contact_info';
+  }
   Resource.find({})
-    .populate(...populateOptions)
+    .populate(...populateOptions, select)
     .exec((err, resources) => {
       if (err) {
         console.log(err);
@@ -144,17 +149,6 @@ exports.list = (req, res) => {
       } else {
         res.json(
           resources.map((resource) => {
-            if (
-              resource.locations &&
-              resource.locations.length &&
-              resource.locations[0] instanceof mongoose.Types.ObjectId
-            ) {
-              resource.locations = resource.locations.map((location) => {
-                // Do not provide the non-published contact information
-                delete location.maintainer_contact_info;
-                return location;
-              });
-            }
             // Do not provide the non-published contact information
             delete resource.maintainer_contact_info;
             return resource;

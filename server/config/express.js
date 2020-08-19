@@ -11,6 +11,13 @@ const locationRouter = require('../routes/LocationRoute');
 const resourceRouter = require('../routes/ResourceRoute');
 const userRouter = require('../routes/UserRoute');
 
+const {
+  resourcesURI,
+  locationsURI,
+  categoriesURI,
+  usersURI,
+} = require('./paths');
+
 const developmentMode = 'development';
 const devServerEnabled =
   process.argv.length >= 2 && process.argv[2] === developmentMode;
@@ -57,10 +64,10 @@ module.exports.start = () => {
   app.use(passport.session());
 
   // Routes
-  app.use('/api/resources', resourceRouter);
-  app.use('/api/locations', locationRouter);
-  app.use('/api/categories', categoryRouter);
-  app.use('/api/users', userRouter);
+  app.use(resourcesURI.path, resourceRouter);
+  app.use(locationsURI.path, locationRouter);
+  app.use(categoriesURI.path, categoryRouter);
+  app.use(usersURI.path, userRouter);
 
   // Register all routes before registering webpack middleware
 

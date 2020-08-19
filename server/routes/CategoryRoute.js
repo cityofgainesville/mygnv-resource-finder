@@ -2,6 +2,8 @@ const categoryController = require('../controllers/CategoryController');
 const userController = require('../controllers/UserController');
 const express = require('express');
 
+const { categoriesURI } = require('../config/paths');
+
 const router = new express.Router();
 
 // Path is /api/categories/list
@@ -13,12 +15,12 @@ const router = new express.Router();
   resources=true // or false
   True will populate the array, false will leave it as an array of ObjectIDs.
 */
-router.route('/list').get(categoryController.list);
+router.route(categoriesURI.endpoints.list).get(categoryController.list);
 
 // Path is /api/categories/create
 // POST will create category if user authenticated
 router
-  .route('/create')
+  .route(categoriesURI.endpoints.create)
   .post(userController.isAuthenticated, categoryController.create);
 
 // Path is /api/categories/listTopLevel
@@ -29,7 +31,9 @@ router
   resources=true // or false
   True will populate the array, false will leave it as an array of ObjectIDs.
 */
-router.route('/listTopLevel').get(categoryController.listTopLevel);
+router
+  .route(categoriesURI.endpoints.listTopLevel)
+  .get(categoryController.listTopLevel);
 
 // Path is /api/categories/:categoryId
 // GET will return category
@@ -45,13 +49,13 @@ router.route('/:categoryId').get(categoryController.read);
 // Path is /api/categories/update/:categoryId
 // POST will update category if authenticated
 router
-  .route('/update/:categoryId')
+  .route(`${categoriesURI.endpoints.update}/:categoryId`)
   .post(userController.isAuthenticated, categoryController.update);
 
 // Path is /api/categories/delete/:categoryId
 // DELETE will delete category if authenticated
 router
-  .route('/delete/:categoryId')
+  .route(`${categoriesURI.endpoints.delete}/:categoryId`)
   .delete(userController.isAuthenticated, categoryController.delete);
 
 // Middleware that gets category with id == categoryID from mongoDB
