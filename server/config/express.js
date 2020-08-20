@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const passport = require('./passport');
 
 const categoryRouter = require('../routes/CategoryRoute');
@@ -9,12 +10,7 @@ const locationRouter = require('../routes/LocationRoute');
 const resourceRouter = require('../routes/ResourceRoute');
 const userRouter = require('../routes/UserRoute');
 
-const {
-  resourcesURI,
-  locationsURI,
-  categoriesURI,
-  usersURI,
-} = require('./paths');
+const { resourcesURI, locationsURI } = require('./paths');
 
 const developmentMode = 'development';
 const devServerEnabled =
@@ -42,16 +38,16 @@ module.exports.start = () => {
   // Parse application/json
   app.use(bodyParser.json());
 
-  // A day in milliseconds
-  const DAY_IN_MS = 24 * 3600000;
+  // Parse cookies
+  app.use(cookieParser());
 
   app.use(passport.initialize());
 
   // Routes
   app.use(resourcesURI.path, resourceRouter);
   app.use(locationsURI.path, locationRouter);
-  app.use(categoriesURI.path, categoryRouter);
-  app.use(usersURI.path, userRouter);
+  app.use(categoryRouter.path, categoryRouter);
+  app.use(userRouter.path, userRouter);
 
   // Register all routes before registering webpack middleware
 

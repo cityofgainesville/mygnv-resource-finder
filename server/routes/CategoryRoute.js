@@ -2,7 +2,7 @@ const categoryController = require('../controllers/CategoryController');
 const userController = require('../controllers/UserController');
 const express = require('express');
 
-const { categoriesURI } = require('../config/paths');
+const path = '/api/categories';
 
 const router = new express.Router();
 
@@ -15,13 +15,15 @@ const router = new express.Router();
   resources=true // or false
   True will populate the array, false will leave it as an array of ObjectIDs.
 */
-router.route(categoriesURI.endpoints.list).get(categoryController.list);
+router.get('/list', categoryController.list);
 
 // Path is /api/categories/create
 // POST will create category if user authenticated
-router
-  .route(categoriesURI.endpoints.create)
-  .post(userController.isAuthenticated, categoryController.create);
+router.post(
+  '/create',
+  userController.isAuthenticated,
+  categoryController.create
+);
 
 // Path is /api/categories/listTopLevel
 // GET will return JSON of all top level categories
@@ -31,9 +33,7 @@ router
   resources=true // or false
   True will populate the array, false will leave it as an array of ObjectIDs.
 */
-router
-  .route(categoriesURI.endpoints.listTopLevel)
-  .get(categoryController.listTopLevel);
+router.get('/listTopLevel', categoryController.listTopLevel);
 
 // Path is /api/categories/:categoryId
 // GET will return category
@@ -44,21 +44,26 @@ router
   resources=true // or false
   True will populate the array, false will leave it as an array of ObjectIDs.
 */
-router.route('/:categoryId').get(categoryController.read);
+router.get('/:categoryId', categoryController.read);
 
 // Path is /api/categories/update/:categoryId
 // POST will update category if authenticated
-router
-  .route(`${categoriesURI.endpoints.update}/:categoryId`)
-  .post(userController.isAuthenticated, categoryController.update);
+router.post(
+  '/update/:categoryId',
+  userController.isAuthenticated,
+  categoryController.update
+);
 
 // Path is /api/categories/delete/:categoryId
 // DELETE will delete category if authenticated
-router
-  .route(`${categoriesURI.endpoints.delete}/:categoryId`)
-  .delete(userController.isAuthenticated, categoryController.delete);
+router.delete(
+  '/delete/:categoryId',
+  userController.isAuthenticated,
+  categoryController.delete
+);
 
 // Middleware that gets category with id == categoryID from mongoDB
 router.param('categoryId', categoryController.categoryById);
 
 module.exports = router;
+module.exports.path = path;

@@ -2,6 +2,7 @@ const Category = require('../models/CategorySchema');
 const Resource = require('../models/ResourceSchema');
 
 const roles = require('../config/roles');
+const { restart } = require('nodemon');
 
 // Get all the categories
 /* 
@@ -74,13 +75,27 @@ exports.read = (req, res) => {
 exports.create = (req, res) => {
   if (req.user?.role !== roles.OWNER) return res.status(403).end();
   const category = new Category(req.body);
+  const newResources = category.resources;
+  const newChildren = category.children;
+  const newParents = category.parents;
+  category.resources = [];
+  category.children = [];
+  category.parents = [];
 
   category.save((err) => {
     if (err) {
       console.log(err);
       res.status(400).send(err);
     } else {
-      res.json({ success: true, category: category });
+      updateCategoryResourcesBinding(category, newResources);
+      updateCategoryChildrenBinding(category, newChildren);
+      updateCategoryParentsBinding(category, newParents);
+      category.save((err) => {
+        if (err) {
+        } else {
+          res.json({ success: true, category: category });
+        }
+      });
     }
   });
 };
@@ -95,12 +110,6 @@ exports.update = (req, res) => {
     category.name = newCategory.name;
   }
 
-  updateCategoryResourcesBinding(category, newCategory.resources);
-
-  updateCategoryChildrenBinding(children, newCategory.children);
-
-  updateCategoryParentsBinding(children, newCategory.parents);
-
   if (newCategory.icon_name) {
     category.icon_name = newCategory.icon_name;
   }
@@ -110,7 +119,17 @@ exports.update = (req, res) => {
       console.log(err);
       res.status(400).send(err);
     } else {
-      res.json({ success: true, category: category });
+      updateCategoryResourcesBinding(category, newCategory.resources);
+      updateCategoryChildrenBinding(category, newCategory.children);
+      updateCategoryParentsBinding(category, category.parents);
+      category.save((err) => {
+        if (err) {
+          console.log(err);
+          res.status(400).send(err);
+        } else {
+          res.json({ success: true, category: category });
+        }
+      });
     }
   });
 };
@@ -232,7 +251,7 @@ const updateCategoryParentsBinding = (category, newParents) => {
       } else {
         const childrenSet = new Set(parentCategory.parents);
         childrenSet.add(category._id);
-        parentCategory.children = [...childrenSet];
+        parentCategory.parents = [...childrenSet];
       }
       parentCategory.save();
     });
@@ -259,11 +278,18 @@ const updateCategoryParentsBinding = (category, newParents) => {
 exports.delete = (req, res) => {
   if (req.user?.role !== roles.OWNER) return res.status(403).end();
   const category = req.category;
+
+  // Unlink resources, children, parents
   Category.deleteOne(category, (err) => {
     if (err) {
       console.log(err);
       res.status(400).send(err);
-    } else res.json({ success: true });
+    } else {
+      updateCategoryResourcesBinding(category, []);
+      updateCategoryChildrenBinding(category, []);
+      updateCategoryParentsBinding(category, []);
+      res.json({ success: true });
+    }
   });
 };
 

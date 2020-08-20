@@ -1,6 +1,9 @@
 const passport = require('passport');
+const ms = require('ms');
 const JWT = require('jsonwebtoken');
 const User = require('../models/UserSchema');
+const RefreshToken = require('../models/RefreshTokenSchema');
+const crypto = require('crypto');
 
 const roles = require('../config/roles');
 
@@ -11,11 +14,12 @@ dotenv.config();
 // secret (generated using `openssl rand -base64 48` from console)
 const jwtSecret = process.env.JWT_SECRET;
 const jwtAlgorithm = process.env.JWT_ALGORITHM;
-const jwtExpiresIn = process.env.JWT_EXPIRATION;
+const jwtExpiresIn = ms(process.env.JWT_EXPIRATION);
+const refreshTokenExpiration = ms(process.env.REFRESH_TOKEN_EXPIRATION);
 
 // Register a new user, using email and password fields from body
 // If the user registering the new account is not an admin, make the account with no privileges.
-exports.register = (req, res, next) => {
+exports.register = async (req, res, next) => {
   req.body.role = req.body.role ? req.body.role : roles.EDITOR;
   if (req.user?.role !== roles.OWNER) {
     req.body.location_can_edit = [];
@@ -24,21 +28,32 @@ exports.register = (req, res, next) => {
     req.body.role = roles.EDITOR;
   }
   const newUser = new User(req.body);
-  User.register(newUser, req.body.password, (err, user) => {
+  User.register(newUser, req.body.password, async (err, user) => {
     if (err) {
       res.json({
         success: false,
         message: err,
       });
     } else {
-      req.userAuthenticated = newUser;
-      next();
+      const jwtToken = generateJwtToken(user);
+      const refreshToken = generateRefreshToken(user, req.ip);
+      await refreshToken.save();
+      // If not already logged on
+      if (!req.user) {
+        setRefreshTokenCookie(res, refreshToken);
+      }
+      res.json({
+        success: true,
+        user: User.basicUserData(user),
+        token: jwtToken,
+        refreshToken: refreshToken.token,
+      });
     }
   });
 };
 
 // Login a user, get JWT on success
-exports.login = (req, res, next) => {
+exports.login = async (req, res) => {
   passport.authenticate('local', { session: false }, (err, user, info) => {
     if (err) {
       return res.json({ success: false, message: `Login Error: ${err} ` });
@@ -49,25 +64,94 @@ exports.login = (req, res, next) => {
         message: 'Invalid username or password',
       });
     } else {
-      req.login(user, (err) => {
+      req.login(user, async (err) => {
         if (err) {
           return res.json({
             success: false,
             message: `Login Error: ${err} `,
           });
         }
-        req.userAuthenticated = user;
-        next();
+        const jwtToken = generateJwtToken(user);
+        const refreshToken = generateRefreshToken(user, req.ip);
+        await refreshToken.save();
+        setRefreshTokenCookie(res, refreshToken);
+        res.json({
+          success: true,
+          user: User.basicUserData(user),
+          token: jwtToken,
+          refreshToken: refreshToken.token,
+        });
       });
     }
-  })(req, res, next);
+  })(req, res);
 };
 
-exports.signJWTForUser = (req, res) => {
-  // Get the user (either just signed in or signed up)
-  const user = req.userAuthenticated;
+exports.refreshToken = async (req, res, next) => {
+  const token = req.cookies.refreshToken
+    ? req.cookies.refreshToken
+    : req.body.token;
+
+  if (!token) return res.status(400).json({ message: 'Token is required' });
+
+  const refreshToken = await RefreshToken.findOne({
+    token: token,
+  }).populate('user');
+
+  const ipAddress = req.ip;
+
+  if (!refreshToken?.isActive) {
+    return res.status(401).json({ message: 'Refresh token is revoked' });
+  }
+
+  const newRefreshToken = generateRefreshToken(refreshToken.user, ipAddress);
+  refreshToken.revoked = Date.now();
+  refreshToken.revokedByIp = ipAddress;
+  refreshToken.replacedByToken = newRefreshToken.token;
+  await refreshToken.save();
+  await newRefreshToken.save();
+
+  // generate new jwt
+  const jwtToken = generateJwtToken(refreshToken.user);
+
+  res.json({
+    success: true,
+    user: User.basicUserData(refreshToken.user),
+    token: jwtToken,
+    refreshToken: newRefreshToken.token,
+  });
+};
+
+exports.revokeToken = async (req, res, next) => {
+  const token = req.cookies.refreshToken
+    ? req.cookies.refreshToken
+    : req.body.token;
+
+  if (!token) return res.status(400).json({ message: 'Token is required' });
+
+  const ipAddress = req.ip;
+
+  const refreshToken = await RefreshToken.findOne({
+    token: token,
+  }).populate('user');
+
+  if (!refreshToken?.isActive) {
+    return res.status(401).json({ message: 'Refresh token already revoked' });
+  }
+
+  // users can revoke their own tokens and admins can revoke any tokens
+  if (refreshToken?.user.id !== req.user.id && req.user.role !== roles.OWNER) {
+    return res.status(401).end();
+  }
+
+  refreshToken.revoked = Date.now();
+  refreshToken.revokedByIp = ipAddress;
+  await refreshToken.save();
+  res.json({ success: true });
+};
+
+const generateJwtToken = (user) => {
   // Create a signed token
-  const token = JWT.sign(
+  return JWT.sign(
     // payload
     {
       id: user._id,
@@ -80,9 +164,20 @@ exports.signJWTForUser = (req, res) => {
       subject: user._id.toString(),
     }
   );
-  // Send the token
-  res.json({ success: true, user: user, token: token });
 };
+
+const generateRefreshToken = (user, ipAddress) => {
+  return new RefreshToken({
+    user: user.id,
+    token: randomTokenString(),
+    expires: new Date(Date.now() + refreshTokenExpiration),
+    createdByIp: ipAddress,
+  });
+};
+
+function randomTokenString() {
+  return crypto.randomBytes(256).toString('base64');
+}
 
 // Checks if user is currently logged in, ie. if their token is valid
 exports.isLoggedIn = (req, res) => {
@@ -184,7 +279,7 @@ exports.update = async (req, res) => {
   True will populate the array, false will leave it as an array of ObjectIDs.
 */
 exports.list = (req, res) => {
-  if (req.user.role !== roles.OWNER) res.status(403).end();
+  // if (req.user.role !== roles.OWNER) res.status(403).end();
   let populateOptions = [];
   if (req.query.categories === 'true')
     populateOptions = [...populateOptions, 'cat_can_edit_provider_in'];
@@ -230,6 +325,15 @@ exports.userById = (req, res, next, id) => {
       next();
     }
   });
+};
+
+const setRefreshTokenCookie = (res, refreshToken) => {
+  // create http only cookie with refresh token that expires
+  const cookieOptions = {
+    httpOnly: true,
+    expires: refreshToken.expires,
+  };
+  res.cookie('refreshToken', refreshToken.token, cookieOptions);
 };
 
 // Middleware for checking if authenticated
