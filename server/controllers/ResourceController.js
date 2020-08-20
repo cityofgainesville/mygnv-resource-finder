@@ -2,6 +2,7 @@ const Resource = require('../models/ResourceSchema');
 const Category = require('../models/CategorySchema');
 const Location = require('../models/LocationSchema');
 
+const { getAddedRemoved } = require('./util');
 const roles = require('../models/UserSchema').roles;
 
 // Create a resource
@@ -11,6 +12,8 @@ exports.create = (req, res) => {
   const resource = new Resource(req.body);
   const newLocations = resource.locations;
   const newCategories = resource.categories;
+  resource.locations = [];
+  resource.categories = [];
 
   resource.save((err) => {
     if (err) {
@@ -134,7 +137,6 @@ exports.update = (req, res) => {
           res.json({ success: true, resource: resource });
         }
       });
-      res.json({ success: true, resource: resource });
     }
   });
 };
@@ -155,10 +157,8 @@ const updateResourceLocationsBinding = (resource, newLocations) => {
       if (err) {
         res.status(400).send(err);
       } else {
-        const locationsSet = new Set(resource.locations);
-        locationsSet.add(location._id);
-        resource.locations = [...locationsSet];
-        resource.save();
+        location.resource = resource._id;
+        location.save();
       }
     });
   });
@@ -167,17 +167,12 @@ const updateResourceLocationsBinding = (resource, newLocations) => {
     Location.findById(removedLocation).exec((err, location) => {
       if (err) {
         res.status(400).send(err);
-      } else {
-        const locationsSet = new Set(resource.locations);
-        if (locationsSet.has(location._id)) {
-          locationsSet.delete(location._id);
-          resource.locations = [...locationsSet];
-        }
-        resource.save();
+      } else if (location.resource === resource._id) {
+        delete location.resource;
+        location.save();
       }
     });
   });
-
   resource.locations = newLocations;
 };
 
@@ -197,10 +192,10 @@ const updateResourceCategoriesBinding = (resource, newCategories) => {
       if (err) {
         res.status(400).send(err);
       } else {
-        const categoriesSet = new Set(resource.categories);
-        categoriesSet.add(category._id);
-        resource.categories = [...categoriesSet];
-        resource.save();
+        const resourcesSet = new Set(category.resources);
+        resourcesSet.add(resource._id);
+        category.resources = [...resourcesSet];
+        category.save();
       }
     });
   });
@@ -210,12 +205,12 @@ const updateResourceCategoriesBinding = (resource, newCategories) => {
       if (err) {
         res.status(400).send(err);
       } else {
-        const categoriesSet = new Set(resource.categories);
-        if (categoriesSet.has(category._id)) {
-          categoriesSet.delete(category._id);
-          resource.categories = [...categoriesSet];
+        const resourcesSet = new Set(category.resources);
+        if (resourcesSet.has(resource._id)) {
+          resourcesSet.delete(resource._id);
+          category.resources = [...resourcesSet];
+          category.save();
         }
-        resource.save();
       }
     });
   });

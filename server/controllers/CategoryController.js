@@ -1,6 +1,7 @@
 const Category = require('../models/CategorySchema');
 const Resource = require('../models/ResourceSchema');
 
+const { getAddedRemoved } = require('./util');
 const roles = require('../models/UserSchema').roles;
 
 // Get all the categories
@@ -140,24 +141,6 @@ exports.update = (req, res) => {
   });
 };
 
-const getAddedRemoved = (newValues, oldValues) => {
-  const newValuesSet = new Set(newValues);
-  const oldValuesSet = new Set(oldValues);
-  const addedValues = [];
-  const removedValues = [];
-  newValues.forEach((value) => {
-    if (!oldValuesSet.has(value)) {
-      addedValues.push(value);
-    }
-  });
-  oldValues.forEach((value) => {
-    if (!newValuesSet.has(value)) {
-      removedValues.push(value);
-    }
-  });
-  return { addedValues, removedValues };
-};
-
 const updateCategoryResourcesBinding = (category, newResources) => {
   // If it's a added resource, link the resource's binding to this category.
   // If it's a removed resource, unlink the resource's binding to this category.
@@ -177,6 +160,7 @@ const updateCategoryResourcesBinding = (category, newResources) => {
         const categoriesSet = new Set(resource.categories);
         categoriesSet.add(category._id);
         resource.categories = [...categoriesSet];
+        resource.save();
       }
     });
   });
@@ -190,8 +174,8 @@ const updateCategoryResourcesBinding = (category, newResources) => {
         if (categoriesSet.has(category._id)) {
           categoriesSet.delete(category._id);
           resource.categories = [...categoriesSet];
+          resource.save();
         }
-        resource.save();
       }
     });
   });
@@ -217,8 +201,8 @@ const updateCategoryChildrenBinding = (category, newChildren) => {
         const parentsSet = new Set(childCategory.parents);
         parentsSet.add(category._id);
         childCategory.parents = [...parentsSet];
+        childCategory.save();
       }
-      childCategory.save();
     });
   });
 
@@ -227,12 +211,12 @@ const updateCategoryChildrenBinding = (category, newChildren) => {
       if (err) {
         res.status(400).send(err);
       } else {
+        const parentsSet = new Set(childCategory.parents);
         if (parentsSet.has(category._id)) {
-          const parentsSet = new Set(childCategory.parents);
           parentsSet.delete(category._id);
           childCategory.parents = [...parentsSet];
+          childCategory.save();
         }
-        childCategory.save();
       }
     });
   });
@@ -258,8 +242,8 @@ const updateCategoryParentsBinding = (category, newParents) => {
         const childrenSet = new Set(parentCategory.parents);
         childrenSet.add(category._id);
         parentCategory.parents = [...childrenSet];
+        parentCategory.save();
       }
-      parentCategory.save();
     });
   });
 
@@ -268,12 +252,12 @@ const updateCategoryParentsBinding = (category, newParents) => {
       if (err) {
         res.status(400).send(err);
       } else {
+        const childrenSet = new Set(parentCategory.children);
         if (childrenSet.has(category._id)) {
-          const childrenSet = new Set(parentCategory.children);
           childrenSet.delete(category._id);
           parentCategory.children = [...childrenSet];
+          parentCategory.save();
         }
-        parentCategory.save();
       }
     });
   });
