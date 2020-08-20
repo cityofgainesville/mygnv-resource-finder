@@ -1,18 +1,30 @@
 const Resource = require('../models/ResourceSchema');
 const Category = require('../models/CategorySchema');
+const Location = require('../models/LocationSchema');
+
+const roles = require('../models/UserSchema').roles;
 
 // Create a resource
 exports.create = (req, res) => {
   // Only the owner role can create new resources.
-  if (req.user.role !== 'Owner') return res.status(403).end();
+  if (req.user.role !== roles.OWNER) return res.status(403).end();
   const resource = new Resource(req.body);
+  const newLocations = resource.locations;
+  const newCategories = resource.categories;
 
   resource.save((err) => {
     if (err) {
       console.log(err);
       res.status(400).send(err);
     } else {
-      res.json({ success: true, resource: resource });
+      updateResourceLocationsBinding(resource, newLocations);
+      updateResourceCategoriesBinding(resource, newCategories);
+      category.save((err) => {
+        if (err) {
+        } else {
+          res.json({ success: true, resource: resource });
+        }
+      });
     }
   });
 };
@@ -20,14 +32,17 @@ exports.create = (req, res) => {
 // Get the current resource
 exports.read = (req, res) => {
   const resource = req.resource;
-  // Do not provide the non-published contact information
-  delete resource.maintainer_contact_info;
+  if (req.user?.role !== roles.OWNER) {
+    // Do not provide the non-published contact information
+    delete resource.maintainer_contact_info;
+  }
+
   res.json(resource);
 };
 
 exports.isResourceUpdateAllowed = async (req, res, next) => {
   const currentUser = req.user;
-  if (currentUser.role === 'Owner') return next();
+  if (currentUser.role === roles.OWNER) return next();
   const resourceToEdit = req.resource;
   let resources;
   let categories;
@@ -50,7 +65,7 @@ exports.isResourceUpdateAllowed = async (req, res, next) => {
       resource,
     ])
   );
-  if (currentUser.role === 'Editor') {
+  if (currentUser.role === roles.EDITOR) {
     currentUser.resource_can_edit.forEach((id) => {
       if (!resourceMap.has(id.toString())) return;
       allowedResources.push(resourceMap.get(id.toString()));
@@ -84,18 +99,20 @@ exports.isResourceUpdateAllowed = async (req, res, next) => {
 // Update a resource
 exports.update = (req, res) => {
   const resource = req.resource;
-  const infoToUpdate = req.body;
+  const newResource = req.body;
 
-  for (const key in infoToUpdate) {
+  for (const key in newResource) {
     if (
-      Object.prototype.hasOwnProperty.call(infoToUpdate, key) &&
-      resource[key] !== infoToUpdate[key] &&
+      Object.prototype.hasOwnProperty.call(newResource, key) &&
+      resource[key] !== newResource[key] &&
       key !== 'updated_at' &&
       key !== 'created_at' &&
       key !== '_id' &&
-      key !== '__v'
+      key !== '__v' &&
+      key !== 'locations' &&
+      key !== 'categories'
     ) {
-      resource[key] = infoToUpdate[key];
+      resource[key] = newResource[key];
     }
   }
 
@@ -104,21 +121,124 @@ exports.update = (req, res) => {
       console.log(err);
       res.status(400).send(err);
     } else {
+      if (newResource.locations) {
+        updateResourceLocationsBinding(resource, newResource.locations);
+      }
+      if (newResource.categories) {
+        updateResourceCategoriesBinding(resource, newResource.categories);
+      }
+
+      category.save((err) => {
+        if (err) {
+        } else {
+          res.json({ success: true, resource: resource });
+        }
+      });
       res.json({ success: true, resource: resource });
     }
   });
 };
 
+const updateResourceLocationsBinding = (resource, newLocations) => {
+  // If it's a added location, link the location's binding to this resource.
+  // If it's a removed location, unlink the location's binding to this resource.
+
+  if (resource.locations === newLocations) return;
+
+  const { addedLocations, removedLocations } = getAddedRemoved(
+    newLocations,
+    resource.locations
+  );
+
+  addedLocations.map((addedLocation) => {
+    Location.findById(addedLocation).exec((err, location) => {
+      if (err) {
+        res.status(400).send(err);
+      } else {
+        const locationsSet = new Set(resource.locations);
+        locationsSet.add(location._id);
+        resource.locations = [...locationsSet];
+        resource.save();
+      }
+    });
+  });
+
+  removedLocations.map((removedLocation) => {
+    Location.findById(removedLocation).exec((err, location) => {
+      if (err) {
+        res.status(400).send(err);
+      } else {
+        const locationsSet = new Set(resource.locations);
+        if (locationsSet.has(location._id)) {
+          locationsSet.delete(location._id);
+          resource.locations = [...locationsSet];
+        }
+        resource.save();
+      }
+    });
+  });
+
+  resource.locations = newLocations;
+};
+
+const updateResourceCategoriesBinding = (resource, newCategories) => {
+  // If it's a added category, link the category's binding to this resource.
+  // If it's a removed category, unlink the category's binding to this resource.
+
+  if (resource.categories === newCategories) return;
+
+  const { addedCategories, removedCategories } = getAddedRemoved(
+    newCategories,
+    resource.categories
+  );
+
+  addedCategories.map((addedCategory) => {
+    Category.findById(addedCategory).exec((err, category) => {
+      if (err) {
+        res.status(400).send(err);
+      } else {
+        const categoriesSet = new Set(resource.categories);
+        categoriesSet.add(category._id);
+        resource.categories = [...categoriesSet];
+        resource.save();
+      }
+    });
+  });
+
+  removedCategories.map((removedCategory) => {
+    Category.findById(removedCategory).exec((err, category) => {
+      if (err) {
+        res.status(400).send(err);
+      } else {
+        const categoriesSet = new Set(resource.categories);
+        if (categoriesSet.has(category._id)) {
+          categoriesSet.delete(category._id);
+          resource.categories = [...categoriesSet];
+        }
+        resource.save();
+      }
+    });
+  });
+
+  resource.categories = newCategories;
+};
+
 // Delete a resource
 // TODO: Properly unlink
 exports.delete = (req, res) => {
-  if (req.user.role !== 'Owner') return res.status(403).end();
+  if (req.user.role !== roles.OWNER) return res.status(403).end();
   const resource = req.resource;
+
+  // Unlink locations, categories
   Resource.deleteOne(resource, (err) => {
     if (err) {
       console.log(err);
       res.status(400).send(err);
-    } else res.json({ success: true });
+    } else {
+      updateResourceLocationsBinding(resource, []);
+      updateResourceCategoriesBinding(resource, []);
+      res.json({ success: true });
+    }
   });
 };
 
@@ -140,20 +260,23 @@ exports.list = (req, res) => {
   if (req.user?.role !== roles.OWNER) {
     select = '-_maintainer_contact_info';
   }
-  Resource.find({})
+  const conditions = req.query.conditions ? req.query.conditions : {};
+  Resource.find(conditions)
     .populate(...populateOptions, select)
     .exec((err, resources) => {
       if (err) {
         console.log(err);
         res.status(400).send(err);
       } else {
-        res.json(
-          resources.map((resource) => {
-            // Do not provide the non-published contact information
-            delete resource.maintainer_contact_info;
-            return resource;
-          })
-        );
+        if (req.user?.role !== roles.OWNER) {
+          res.json(
+            resources.map((resource) => {
+              // Do not provide the non-published contact information
+              delete resource.maintainer_contact_info;
+              return resource;
+            })
+          );
+        } else res.json(resources);
       }
     });
 };

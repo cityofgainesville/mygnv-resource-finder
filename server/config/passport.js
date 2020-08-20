@@ -1,7 +1,6 @@
 // Passport authentication setup with schema.
 
 const passport = require('passport');
-const JWT = require('jsonwebtoken');
 const PassportJwt = require('passport-jwt');
 const User = require('../models/UserSchema');
 
@@ -33,7 +32,7 @@ passport.use(
     // When we have a verified token
     (payload, done) => {
       // Find the real user from our database using the `id` in the JWT
-      User.findById(payload.sub)
+      User.findById(payload.id)
         .then((user) => {
           // If user was found with this id
           if (user) {

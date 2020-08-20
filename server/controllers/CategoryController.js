@@ -1,8 +1,7 @@
 const Category = require('../models/CategorySchema');
 const Resource = require('../models/ResourceSchema');
 
-const roles = require('../config/roles');
-const { restart } = require('nodemon');
+const roles = require('../models/UserSchema').roles;
 
 // Get all the categories
 /* 
@@ -25,7 +24,8 @@ exports.list = (req, res) => {
   if (req.user?.role !== roles.OWNER) {
     select = '-_maintainer_contact_info';
   }
-  Category.find({})
+  const conditions = req.query.conditions ? req.query.conditions : {};
+  Category.find(conditions)
     .populate(...populateOptions, select)
     .exec((err, categories) => {
       if (err) {
@@ -109,7 +109,6 @@ exports.update = (req, res) => {
   if (newCategory.name) {
     category.name = newCategory.name;
   }
-
   if (newCategory.icon_name) {
     category.icon_name = newCategory.icon_name;
   }
@@ -119,9 +118,16 @@ exports.update = (req, res) => {
       console.log(err);
       res.status(400).send(err);
     } else {
-      updateCategoryResourcesBinding(category, newCategory.resources);
-      updateCategoryChildrenBinding(category, newCategory.children);
-      updateCategoryParentsBinding(category, category.parents);
+      if (newCategory.resources) {
+        updateCategoryResourcesBinding(category, newCategory.resources);
+      }
+      if (newCategory.children) {
+        updateCategoryChildrenBinding(category, newCategory.children);
+      }
+      if (newCategory.parents) {
+        updateCategoryParentsBinding(category, category.parents);
+      }
+
       category.save((err) => {
         if (err) {
           console.log(err);
@@ -311,10 +317,14 @@ exports.categoryById = (req, res, next, id) => {
     populateOptions = [...populateOptions, 'parents'];
   if (req.query.resources?.toLowerCase() === 'true')
     populateOptions = [...populateOptions, 'resources'];
-  console.log(populateOptions);
+  let select = '';
+  // Ignore private data when populating
+  if (req.user?.role !== roles.OWNER) {
+    select = '-_maintainer_contact_info';
+  }
   Category.findById(id)
     // Ignore private data when populating
-    .populate(...populateOptions, '-_maintainer_contact_info')
+    .populate(...populateOptions, select)
     .exec((err, category) => {
       if (err) {
         res.status(400).send(err);

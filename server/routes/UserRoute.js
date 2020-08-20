@@ -26,10 +26,10 @@ router.post(
   userController.isLoggedIn
 );
 
-router.post('/refresh-token', userController.refreshToken);
+router.post('/refresh_token', userController.refreshToken);
 
 router.post(
-  '/revoke-token',
+  '/revoke_token',
   userController.isAuthenticated,
   userController.revokeToken
 );
@@ -66,6 +66,12 @@ router.delete(
   '/delete/:userId',
   userController.isAuthenticated,
   userController.delete
+);
+
+router.post(
+  '/revoke_tokens/:userId',
+  userController.isAuthenticated,
+  userController.revokeTokens
 );
 
 // Middleware to get user by id from mongoDB

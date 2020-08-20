@@ -15,7 +15,11 @@ const router = new express.Router();
   resources=true // or false
   True will populate the array, false will leave it as an array of ObjectIDs.
 */
-router.get('/list', categoryController.list);
+router.get(
+  '/list',
+  userController.optionalAuthentication,
+  categoryController.list
+);
 
 // Path is /api/categories/create
 // POST will create category if user authenticated
@@ -33,7 +37,11 @@ router.post(
   resources=true // or false
   True will populate the array, false will leave it as an array of ObjectIDs.
 */
-router.get('/listTopLevel', categoryController.listTopLevel);
+router.get(
+  '/listTopLevel',
+  userController.optionalAuthentication,
+  categoryController.listTopLevel
+);
 
 // Path is /api/categories/:categoryId
 // GET will return category
@@ -44,7 +52,11 @@ router.get('/listTopLevel', categoryController.listTopLevel);
   resources=true // or false
   True will populate the array, false will leave it as an array of ObjectIDs.
 */
-router.get('/:categoryId', categoryController.read);
+router.get(
+  '/:categoryId',
+  userController.optionalAuthentication,
+  categoryController.read
+);
 
 // Path is /api/categories/update/:categoryId
 // POST will update category if authenticated

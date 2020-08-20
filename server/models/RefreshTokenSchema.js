@@ -7,20 +7,22 @@ dotenv.config();
 
 const refreshTokenExpiration = ms(process.env.REFRESH_TOKEN_EXPIRATION);
 
+const documentExpires = new Date(Date.now() + 2 * refreshTokenExpiration);
+
 const refreshTokenSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: 'User' },
-  token: String,
-  expires: Date,
-  created: { type: Date, default: Date.now },
+  token: { type: String, unique: true, required: true },
+  // expires: { type: Date, required: true },
+  created: {
+    type: Date,
+    default: Date.now,
+    expires: ms(documentExpires.getTime()),
+    index: true,
+  },
   createdByIp: String,
   revoked: Date,
   revokedByIp: String,
   replacedByToken: String,
-  expireAt: {
-    type: Date,
-    default: Date.now,
-    index: { expires: refreshTokenExpiration },
-  },
 });
 
 refreshTokenSchema.virtual('isExpired').get(function() {

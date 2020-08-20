@@ -3,7 +3,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const passportLocalMongoose = require('passport-local-mongoose');
 
-const roles = require('../config/roles');
+const roles = {
+  OWNER: 'Owner',
+  EDITOR: 'Editor',
+};
 
 // Integrates with "passport-local-mongoose"
 // which handles hashing and salting passwords
@@ -90,3 +93,5 @@ module.exports.basicUserData = (user) => {
     cat_can_edit_resource_in,
   };
 };
+
+module.exports.roles = roles;

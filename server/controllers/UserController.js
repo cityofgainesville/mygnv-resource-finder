@@ -1,11 +1,11 @@
 const passport = require('passport');
 const ms = require('ms');
 const JWT = require('jsonwebtoken');
-const User = require('../models/UserSchema');
 const RefreshToken = require('../models/RefreshTokenSchema');
 const crypto = require('crypto');
 
-const roles = require('../config/roles');
+const User = require('../models/UserSchema');
+const roles = User.roles;
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -113,6 +113,7 @@ exports.refreshToken = async (req, res, next) => {
   // generate new jwt
   const jwtToken = generateJwtToken(refreshToken.user);
 
+  setRefreshTokenCookie(res, refreshToken);
   res.json({
     success: true,
     user: User.basicUserData(refreshToken.user),
@@ -121,14 +122,34 @@ exports.refreshToken = async (req, res, next) => {
   });
 };
 
+exports.revokeTokens = (req, res, next) => {
+  if (req.user.id !== req.userToUpdate.id && req.user.role !== roles.OWNER)
+    return res.status(401).end();
+
+  RefreshToken.find({ user: req.userToUpdate.id }).exec(
+    (err, refreshTokens) => {
+      if (err) {
+        res.status(400).send(err);
+      } else {
+        refreshTokens.forEach(async (refreshToken) => {
+          if (refreshToken.isActive) {
+            refreshToken.revoked = Date.now();
+            refreshToken.revokedByIp = req.ip;
+            await refreshToken.save();
+          }
+        });
+        res.json({ success: true });
+      }
+    }
+  );
+};
+
 exports.revokeToken = async (req, res, next) => {
   const token = req.cookies.refreshToken
     ? req.cookies.refreshToken
     : req.body.token;
 
   if (!token) return res.status(400).json({ message: 'Token is required' });
-
-  const ipAddress = req.ip;
 
   const refreshToken = await RefreshToken.findOne({
     token: token,
@@ -144,7 +165,7 @@ exports.revokeToken = async (req, res, next) => {
   }
 
   refreshToken.revoked = Date.now();
-  refreshToken.revokedByIp = ipAddress;
+  refreshToken.revokedByIp = req.ip;
   await refreshToken.save();
   res.json({ success: true });
 };
@@ -167,16 +188,17 @@ const generateJwtToken = (user) => {
 };
 
 const generateRefreshToken = (user, ipAddress) => {
+  const expiryDate = new Date(Date.now() + refreshTokenExpiration);
   return new RefreshToken({
     user: user.id,
     token: randomTokenString(),
-    expires: new Date(Date.now() + refreshTokenExpiration),
+    expires: expiryDate.getTime(),
     createdByIp: ipAddress,
   });
 };
 
 function randomTokenString() {
-  return crypto.randomBytes(256).toString('base64');
+  return crypto.randomBytes(128).toString('base64');
 }
 
 // Checks if user is currently logged in, ie. if their token is valid
@@ -340,7 +362,7 @@ const setRefreshTokenCookie = (res, refreshToken) => {
 // Used to protect routes from unauthorized access
 exports.isAuthenticated = passport.authenticate('jwt', { session: false });
 
-// For register API
+// For optional authorization
 exports.optionalAuthentication = (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (err, user, info) => {
     if (err) next(err);

@@ -10,8 +10,6 @@ const locationRouter = require('../routes/LocationRoute');
 const resourceRouter = require('../routes/ResourceRoute');
 const userRouter = require('../routes/UserRoute');
 
-const { resourcesURI, locationsURI } = require('./paths');
-
 const developmentMode = 'development';
 const devServerEnabled =
   process.argv.length >= 2 && process.argv[2] === developmentMode;
@@ -44,8 +42,8 @@ module.exports.start = () => {
   app.use(passport.initialize());
 
   // Routes
-  app.use(resourcesURI.path, resourceRouter);
-  app.use(locationsURI.path, locationRouter);
+  app.use(resourceRouter.path, resourceRouter);
+  app.use(locationRouter.path, locationRouter);
   app.use(categoryRouter.path, categoryRouter);
   app.use(userRouter.path, userRouter);
 
