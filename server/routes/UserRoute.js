@@ -1,8 +1,9 @@
-const userController = require('../controllers/UserController');
-const express = require('express');
+import userController from '../controllers/UserController';
+import express from 'express';
+
 const router = new express.Router();
 
-const path = '/api/users';
+export const path = '/api/users';
 
 // Path is /api/users/login
 // POST with correct email and password field
@@ -77,5 +78,4 @@ router.post(
 // Middleware to get user by id from mongoDB
 router.param('userId', userController.userById);
 
-module.exports = router;
-module.exports.path = path;
+export default router;

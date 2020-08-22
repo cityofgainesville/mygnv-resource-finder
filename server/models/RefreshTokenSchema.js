@@ -1,8 +1,9 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import mongoose from 'mongoose';
+const { Schema } = mongoose;
 
-const ms = require('ms');
-const dotenv = require('dotenv');
+import ms from 'ms';
+import dotenv from 'dotenv';
+
 dotenv.config();
 
 const refreshTokenExpiration = ms(process.env.REFRESH_TOKEN_EXPIRATION);
@@ -46,4 +47,4 @@ refreshTokenSchema.set('toJSON', {
   },
 });
 
-module.exports = mongoose.model('RefreshToken', refreshTokenSchema);
+export default mongoose.model('RefreshToken', refreshTokenSchema);

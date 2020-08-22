@@ -1,8 +1,8 @@
-const categoryController = require('../controllers/CategoryController');
-const userController = require('../controllers/UserController');
-const express = require('express');
+import categoryController from '../controllers/CategoryController';
+import userController from '../controllers/UserController';
+import express from 'express';
 
-const path = '/api/categories';
+export const path = '/api/categories';
 
 const router = new express.Router();
 
@@ -77,5 +77,4 @@ router.delete(
 // Middleware that gets category with id == categoryID from mongoDB
 router.param('categoryId', categoryController.categoryById);
 
-module.exports = router;
-module.exports.path = path;
+export default router;

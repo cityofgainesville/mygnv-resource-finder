@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import mongoose from 'mongoose';
+const { Schema } = mongoose;
 
 // A schema for holding a resource, each individual location will be a child of this schema
 const resourceSchema = new Schema(
@@ -40,4 +40,4 @@ const resourceSchema = new Schema(
   { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );
 
-module.exports = mongoose.model('Resource', resourceSchema);
+export default mongoose.model('Resource', resourceSchema);

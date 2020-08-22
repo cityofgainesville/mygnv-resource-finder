@@ -1,8 +1,8 @@
-const Category = require('../models/CategorySchema');
-const Resource = require('../models/ResourceSchema');
+import Category from '../models/CategorySchema';
+import Resource from '../models/ResourceSchema';
 
-const { getAddedRemoved } = require('./util');
-const roles = require('../models/UserSchema').roles;
+import { getAddedRemoved } from './util';
+import { roles } from '../models/UserSchema';
 
 // Get all the categories
 /* 
@@ -12,6 +12,9 @@ const roles = require('../models/UserSchema').roles;
   resources=true // or false
   True will populate the array, false will leave it as an array of ObjectIDs.
 */
+
+const exports = {};
+
 exports.list = (req, res) => {
   let populateOptions = [];
   if (req.query.children?.toLowerCase() === 'true')
@@ -319,3 +322,5 @@ exports.categoryById = (req, res, next, id) => {
       }
     });
 };
+
+export default exports;

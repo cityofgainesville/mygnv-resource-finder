@@ -1,26 +1,54 @@
-const express = require('express');
-const path = require('path');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const passport = require('./passport');
+import express from 'express';
+import path from 'path';
+import mongoose from 'mongoose';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 
-const categoryRouter = require('../routes/CategoryRoute');
-const locationRouter = require('../routes/LocationRoute');
-const resourceRouter = require('../routes/ResourceRoute');
-const userRouter = require('../routes/UserRoute');
+import webpack from 'webpack';
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
+import webpackDevConfig from '../../webpack.dev';
+
+import history from 'connect-history-api-fallback';
+import morgan from 'morgan';
+
+import passport from './passport.js';
+import categoryRouter, { path as categoryPath } from '../routes/CategoryRoute';
+import locationRouter, { path as locationPath } from '../routes/LocationRoute';
+import resourceRouter, { path as resourcePath } from '../routes/ResourceRoute';
+import userRouter, { path as userPath } from '../routes/UserRoute';
+
+import apolloPkg from 'apollo-server-express';
+const { ApolloServer, gql } = apolloPkg;
+
+// Populate process.env, for development
+import dotenv from 'dotenv';
+dotenv.config();
+
+// Construct a schema, using GraphQL schema language
+const typeDefs = gql`
+  type Query {
+    hello: String
+  }
+`;
+
+// Provide resolver functions for your schema fields
+const resolvers = {
+  Query: {
+    hello: () => 'Hello world!',
+  },
+};
+
+const apolloServer = new ApolloServer({ typeDefs, resolvers });
 
 const developmentMode = 'development';
 const devServerEnabled =
   process.argv.length >= 2 && process.argv[2] === developmentMode;
 
-// Populate process.env, for development
-require('dotenv').config();
-
 const dbUri = process.env.DB_URI ? process.env.DB_URI : '';
 const port = process.env.PORT ? process.env.PORT : 8080;
 
-module.exports.start = () => {
+export const start = () => {
   // Connect to database
   mongoose.connect(dbUri, {
     useNewUrlParser: true,
@@ -42,22 +70,17 @@ module.exports.start = () => {
   app.use(passport.initialize());
 
   // Routes
-  app.use(resourceRouter.path, resourceRouter);
-  app.use(locationRouter.path, locationRouter);
-  app.use(categoryRouter.path, categoryRouter);
-  app.use(userRouter.path, userRouter);
+  app.use(resourcePath, resourceRouter);
+  app.use(locationPath, locationRouter);
+  app.use(categoryPath, categoryRouter);
+  app.use(userPath, userRouter);
+
+  // GraphQL middleware
+  app.use(apolloServer.getMiddleware({ path: '/graphql' }));
 
   // Register all routes before registering webpack middleware
 
   if (devServerEnabled) {
-    const webpack = require('webpack');
-    const webpackDevMiddleware = require('webpack-dev-middleware');
-    const webpackHotMiddleware = require('webpack-hot-middleware');
-    const webpackDevConfig = require('../../webpack.dev');
-
-    const history = require('connect-history-api-fallback');
-    const morgan = require('morgan');
-
     // Handles any requests that don't match the ones above
     app.use(history());
 

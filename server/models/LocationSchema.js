@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import mongoose from 'mongoose';
+const { Schema } = mongoose;
 
 // A schema for holding resource information for a particular location
 const locationSchema = new Schema(
@@ -328,4 +328,4 @@ const locationSchema = new Schema(
   { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );
 
-module.exports = mongoose.model('Location', locationSchema);
+export default mongoose.model('Location', locationSchema);

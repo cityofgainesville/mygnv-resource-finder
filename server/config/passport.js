@@ -1,10 +1,11 @@
 // Passport authentication setup with schema.
 
-const passport = require('passport');
-const PassportJwt = require('passport-jwt');
-const User = require('../models/UserSchema');
+import passport from 'passport';
+import PassportJwt from 'passport-jwt';
+import dotenv from 'dotenv';
 
-const dotenv = require('dotenv');
+import User from '../models/UserSchema';
+
 dotenv.config();
 
 // These should be in .env
@@ -50,4 +51,4 @@ passport.use(
   )
 );
 
-module.exports = passport;
+export default passport;

@@ -1,9 +1,10 @@
-const locationController = require('../controllers/LocationController');
-const userController = require('../controllers/UserController');
-const express = require('express');
+import locationController from '../controllers/LocationController';
+import userController from '../controllers/UserController';
+import express from 'express';
+
 const router = new express.Router();
 
-const path = '/api/locations';
+export const path = '/api/locations';
 
 // Path is /api/locations/list
 // GET will return JSON of all locations
@@ -50,5 +51,4 @@ router.delete(
 // Middleware to get location by id from mongoDB
 router.param('locationId', locationController.locationById);
 
-module.exports = router;
-module.exports.path = path;
+export default router;

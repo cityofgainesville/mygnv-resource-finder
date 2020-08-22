@@ -1,9 +1,11 @@
-const Resource = require('../models/ResourceSchema');
-const Category = require('../models/CategorySchema');
-const Location = require('../models/LocationSchema');
+import Resource from '../models/ResourceSchema';
+import Category from '../models/CategorySchema';
+import Location from '../models/LocationSchema';
 
-const { getAddedRemoved } = require('./util');
-const roles = require('../models/UserSchema').roles;
+import { getAddedRemoved } from './util';
+import { roles } from '../models/UserSchema';
+
+const exports = {};
 
 // Create a resource
 exports.create = (req, res) => {
@@ -288,3 +290,5 @@ exports.resourceById = (req, res, next, id) => {
     }
   });
 };
+
+export default exports;

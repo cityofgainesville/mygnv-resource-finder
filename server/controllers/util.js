@@ -1,4 +1,4 @@
-const getAddedRemoved = (newValues, oldValues) => {
+export const getAddedRemoved = (newValues, oldValues) => {
   const newValuesSet = new Set(newValues);
   const oldValuesSet = new Set(oldValues);
   const addedValues = [];
@@ -15,5 +15,3 @@ const getAddedRemoved = (newValues, oldValues) => {
   });
   return { addedValues, removedValues };
 };
-
-module.exports = { getAddedRemoved };

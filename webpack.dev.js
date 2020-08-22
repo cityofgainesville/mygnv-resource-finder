@@ -1,11 +1,11 @@
 // Webpack dev config, uses common config as base
 
-const webpack = require('webpack');
-const merge = require('webpack-merge');
-const common = require('./webpack.common');
-const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
+import webpack from 'webpack';
+import merge from 'webpack-merge';
+import common from './webpack.common';
+import ErrorOverlayPlugin from 'error-overlay-webpack-plugin';
 
-module.exports = merge(common, {
+export default merge(common, {
   mode: 'development',
   plugins: [new ErrorOverlayPlugin(), new webpack.HotModuleReplacementPlugin()],
   devtool: 'cheap-module-source-map', // Needed by error-overlay-webpack-plugin

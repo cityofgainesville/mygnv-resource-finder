@@ -1,8 +1,8 @@
 // Webpack production config, uses common config as base
 
-const merge = require('webpack-merge');
-const common = require('./webpack.common.js');
+import merge from 'webpack-merge';
+import common from './webpack.common.js';
 
-module.exports = merge(common, {
+export default merge(common, {
   mode: 'production',
 });

@@ -1,13 +1,12 @@
-const passport = require('passport');
-const ms = require('ms');
-const JWT = require('jsonwebtoken');
-const RefreshToken = require('../models/RefreshTokenSchema');
-const crypto = require('crypto');
+import passport from 'passport';
+import ms from 'ms';
+import JWT from 'jsonwebtoken';
+import RefreshToken from '../models/RefreshTokenSchema';
+import crypto from 'crypto';
 
-const User = require('../models/UserSchema');
-const roles = User.roles;
+import User, { roles } from '../models/UserSchema';
 
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
 dotenv.config();
 
 // These should be in .env
@@ -16,6 +15,8 @@ const jwtSecret = process.env.JWT_SECRET;
 const jwtAlgorithm = process.env.JWT_ALGORITHM;
 const jwtExpiresIn = ms(process.env.JWT_EXPIRATION);
 const refreshTokenExpiration = ms(process.env.REFRESH_TOKEN_EXPIRATION);
+
+const exports = {};
 
 // Register a new user, using email and password fields from body
 // If the user registering the new account is not an admin, make the account with no privileges.
@@ -372,3 +373,5 @@ exports.optionalAuthentication = (req, res, next) => {
     next();
   })(req, res, next);
 };
+
+export default exports;

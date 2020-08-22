@@ -1,9 +1,10 @@
-const resourceController = require('../controllers/ResourceController');
-const userController = require('../controllers/UserController');
-const express = require('express');
+import resourceController from '../controllers/ResourceController';
+import userController from '../controllers/UserController';
+import express from 'express';
+
 const router = new express.Router();
 
-const path = '/api/resources';
+export const path = '/api/resources';
 
 // Path is /api/resources/list
 // GET will return JSON of all resources
@@ -56,5 +57,4 @@ router.delete(
 // Middleware to get resource by id from mongoDB
 router.param('resourceId', resourceController.resourceById);
 
-module.exports = router;
-module.exports.path = path;
+export default router;

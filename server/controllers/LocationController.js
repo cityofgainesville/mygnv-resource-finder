@@ -1,7 +1,9 @@
-const Location = require('../models/LocationSchema');
-const Resource = require('../models/ResourceSchema');
+import Location from '../models/LocationSchema';
+import Resource from '../models/ResourceSchema';
 
-const roles = require('../models/UserSchema').roles;
+import { roles } from '../models/UserSchema';
+
+const exports = {};
 
 // Create a location
 exports.create = (req, res) => {
@@ -228,3 +230,5 @@ exports.locationById = (req, res, next, id) => {
     }
   });
 };
+
+export default exports;

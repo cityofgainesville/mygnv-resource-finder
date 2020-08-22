@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const passportLocalMongoose = require('passport-local-mongoose');
+import mongoose from 'mongoose';
+const { Schema } = mongoose;
+import passportLocalMongoose from 'passport-local-mongoose';
 
-const roles = {
+export const roles = {
   OWNER: 'Owner',
   EDITOR: 'Editor',
 };
@@ -69,9 +69,9 @@ userSchema.plugin(passportLocalMongoose, {
   session: false,
 });
 
-module.exports = mongoose.model('User', userSchema);
+export default mongoose.model('User', userSchema);
 
-module.exports.basicUserData = (user) => {
+export const basicUserData = (user) => {
   const {
     id,
     email,
@@ -93,5 +93,3 @@ module.exports.basicUserData = (user) => {
     cat_can_edit_resource_in,
   };
 };
-
-module.exports.roles = roles;
