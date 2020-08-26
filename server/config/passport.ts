@@ -4,7 +4,7 @@ import passport from 'passport';
 import PassportJwt from 'passport-jwt';
 import dotenv from 'dotenv';
 
-import User from '../models/UserSchema';
+import { UserModel } from '../models/UserModel';
 
 dotenv.config();
 
@@ -13,10 +13,10 @@ dotenv.config();
 const jwtSecret = process.env.JWT_SECRET;
 const jwtAlgorithm = process.env.JWT_ALGORITHM;
 
-passport.use(User.createStrategy());
+passport.use(UserModel.createStrategy());
 
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+passport.serializeUser(UserModel.serializeUser());
+passport.deserializeUser(UserModel.deserializeUser());
 
 passport.use(
   new PassportJwt.Strategy(
@@ -33,7 +33,7 @@ passport.use(
     // When we have a verified token
     (payload, done) => {
       // Find the real user from our database using the `id` in the JWT
-      User.findById(payload.id)
+      UserModel.findById(payload.id)
         .then((user) => {
           // If user was found with this id
           if (user) {

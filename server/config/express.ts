@@ -12,34 +12,60 @@ import webpackDevConfig from '../../webpack.dev';
 import history from 'connect-history-api-fallback';
 import morgan from 'morgan';
 
-import passport from './passport.js';
+import passport from './passport';
+import { buildContext, createOnConnect } from 'graphql-passport';
+
 import categoryRouter, { path as categoryPath } from '../routes/CategoryRoute';
 import locationRouter, { path as locationPath } from '../routes/LocationRoute';
 import resourceRouter, { path as resourcePath } from '../routes/ResourceRoute';
 import userRouter, { path as userPath } from '../routes/UserRoute';
 
-import apolloPkg from 'apollo-server-express';
-const { ApolloServer, gql } = apolloPkg;
+import { ApolloServer, gql } from 'apollo-server-express';
+import { schemaComposer } from 'graphql-compose';
+
+import { UserType, UserModel, Role } from '../models/UserModel';
+
+import { CategoryGraphQL } from '../resolvers/CategoryResolver';
+import { ResourceGraphQL } from '../resolvers/ResourceResolver';
+import { LocationGraphQL } from '../resolvers/LocationResolver';
 
 // Populate process.env, for development
 import dotenv from 'dotenv';
 dotenv.config();
 
-// Construct a schema, using GraphQL schema language
-const typeDefs = gql`
-  type Query {
-    hello: String
+schemaComposer.merge(CategoryGraphQL);
+schemaComposer.merge(ResourceGraphQL);
+schemaComposer.merge(LocationGraphQL);
+
+declare global {
+  namespace Express {
+    export interface User extends UserType {}
+    interface Request {
+      id?: string;
+      user?: User;
+      userToUpdate?: UserType;
+    }
   }
-`;
+}
 
-// Provide resolver functions for your schema fields
-const resolvers = {
-  Query: {
-    hello: () => 'Hello world!',
+export class ResponseError extends Error {
+  constructor(message: string, status?: number) {
+    super(message);
+    this.status = status;
+  }
+  status?: number;
+}
+
+const passportMiddleware = passport.initialize();
+
+const apolloServer = new ApolloServer({
+  schema: schemaComposer.buildSchema(),
+  playground: {
+    settings: {
+      'request.credentials': 'include',
+    },
   },
-};
-
-const apolloServer = new ApolloServer({ typeDefs, resolvers });
+});
 
 const developmentMode = 'development';
 const devServerEnabled =
@@ -67,7 +93,7 @@ export const start = () => {
   // Parse cookies
   app.use(cookieParser());
 
-  app.use(passport.initialize());
+  app.use(passportMiddleware);
 
   // Routes
   app.use(resourcePath, resourceRouter);
