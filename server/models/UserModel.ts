@@ -18,7 +18,7 @@ import {
   PassportLocalDocument,
   model,
 } from 'mongoose';
-
+import { Base } from '@typegoose/typegoose/lib/defaultClasses';
 
 export enum Role {
   OWNER = 'Owner',

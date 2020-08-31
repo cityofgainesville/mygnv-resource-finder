@@ -1,9 +1,9 @@
-import userController from '../controllers/UserController';
+import * as userController from '../controllers/UserController';
 import express from 'express';
 
-const router = new express.Router();
-
 export const path = '/api/users';
+
+const router: express.Router = express.Router();
 
 // Path is /api/users/login
 // POST with correct email and password field
@@ -66,7 +66,7 @@ router.post(
 router.delete(
   '/delete/:userId',
   userController.isAuthenticated,
-  userController.delete
+  userController.remove
 );
 
 router.post(

@@ -1,10 +1,10 @@
-import locationController from '../controllers/LocationController';
-import userController from '../controllers/UserController';
+import * as locationController from '../controllers/LocationController';
+import * as userController from '../controllers/UserController';
 import express from 'express';
 
-const router = new express.Router();
-
 export const path = '/api/locations';
+
+const router: express.Router = express.Router();
 
 // Path is /api/locations/list
 // GET will return JSON of all locations
@@ -45,7 +45,7 @@ router.post(
 router.delete(
   '/delete/:locationId',
   userController.isAuthenticated,
-  locationController.delete
+  locationController.remove
 );
 
 // Middleware to get location by id from mongoDB

@@ -1,10 +1,10 @@
-import categoryController from '../controllers/CategoryController';
-import userController from '../controllers/UserController';
+import * as categoryController from '../controllers/CategoryController';
+import * as userController from '../controllers/UserController';
 import express from 'express';
 
 export const path = '/api/categories';
 
-const router = new express.Router();
+const router: express.Router = express.Router();
 
 // Path is /api/categories/list
 // GET will return JSON of all categories
@@ -71,7 +71,7 @@ router.post(
 router.delete(
   '/delete/:categoryId',
   userController.isAuthenticated,
-  categoryController.delete
+  categoryController.remove
 );
 
 // Middleware that gets category with id == categoryID from mongoDB

@@ -1,8 +1,14 @@
-export const getAddedRemoved = (newValues: string[], oldValues: string[]) => {
+import * as mongoose from 'mongoose';
+export type ObjectId = mongoose.Types.ObjectId;
+
+export const getAddedRemoved = (
+  newValues: ObjectId[],
+  oldValues: ObjectId[]
+) => {
   const newValuesSet = new Set(newValues);
   const oldValuesSet = new Set(oldValues);
-  const added: string[] = [];
-  const removed: string[] = [];
+  const added: ObjectId[] = [];
+  const removed: ObjectId[] = [];
   if (newValues) {
     newValues.forEach((value) => {
       if (!oldValuesSet.has(value)) {
@@ -21,3 +27,6 @@ export const getAddedRemoved = (newValues: string[], oldValues: string[]) => {
 
   return { added, removed };
 };
+
+// export const toObjectIdArray = (values: string[]): ObjectId[] =>
+//   values.map((v) => new mongoose.Types.ObjectId(v));

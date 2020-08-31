@@ -1,23 +1,23 @@
 // Setup webpack common config
 
-import path from 'path';
-import HtmlWebPackPlugin from 'html-webpack-plugin';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+const path = require('path');
+const HtmlWebPackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-const __dirname = path.resolve(path.dirname(''));
+const dirname = path.resolve(path.dirname(''));
 
-export default {
-  entry: ['@babel/polyfill', 'react-hot-loader/patch', './client/index.js'],
+module.exports = {
+  entry: ['@babel/polyfill', 'react-hot-loader/patch', './index.js'],
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(dirname, '../dist/client'),
     publicPath: '/',
     filename: '[hash]-[name].js',
   },
   plugins: [
     new HtmlWebPackPlugin({
-      template: './client/index.html',
+      template: './index.html',
       filename: './index.html',
     }),
     new MiniCssExtractPlugin({

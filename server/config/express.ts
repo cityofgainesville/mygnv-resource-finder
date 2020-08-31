@@ -4,11 +4,6 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 
-import webpack from 'webpack';
-import webpackDevMiddleware from 'webpack-dev-middleware';
-import webpackHotMiddleware from 'webpack-hot-middleware';
-import webpackDevConfig from '../../webpack.dev';
-
 import history from 'connect-history-api-fallback';
 import morgan from 'morgan';
 
@@ -24,6 +19,8 @@ import { ApolloServer, gql } from 'apollo-server-express';
 import { schemaComposer } from 'graphql-compose';
 
 import { UserType, UserModel, Role } from '../models/UserModel';
+import { Category, CategoryType } from '../models/CategoryModel';
+import { LocationType } from '../models/LocationModel';
 
 import { CategoryGraphQL } from '../resolvers/CategoryResolver';
 import { ResourceGraphQL } from '../resolvers/ResourceResolver';
@@ -31,11 +28,15 @@ import { LocationGraphQL } from '../resolvers/LocationResolver';
 
 // Populate process.env, for development
 import dotenv from 'dotenv';
+import { ResourceType } from '../models/ResourceModel';
+
 dotenv.config();
 
 schemaComposer.merge(CategoryGraphQL);
 schemaComposer.merge(ResourceGraphQL);
 schemaComposer.merge(LocationGraphQL);
+
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 declare global {
   namespace Express {
@@ -44,6 +45,9 @@ declare global {
       id?: string;
       user?: User;
       userToUpdate?: UserType;
+      category?: CategoryType;
+      location?: LocationType;
+      resource?: ResourceType;
     }
   }
 }
@@ -67,12 +71,12 @@ const apolloServer = new ApolloServer({
   },
 });
 
-const developmentMode = 'development';
-const devServerEnabled =
-  process.argv.length >= 2 && process.argv[2] === developmentMode;
-
 const dbUri = process.env.DB_URI ? process.env.DB_URI : '';
-const port = process.env.PORT ? process.env.PORT : 8080;
+const port = process.env.PORT
+  ? isDevelopment
+    ? Number(process.env.PORT) + 1
+    : process.env.PORT
+  : 8080;
 
 export const start = () => {
   // Connect to database
@@ -106,22 +110,16 @@ export const start = () => {
 
   // Register all routes before registering webpack middleware
 
-  if (devServerEnabled) {
+  if (isDevelopment) {
     // Handles any requests that don't match the ones above
     app.use(history());
 
     // Enable request logging for development debugging
     app.use(morgan('dev'));
-
-    const compiler = webpack(webpackDevConfig);
-    // Enable "webpack-dev-middleware"
-    app.use(webpackDevMiddleware(compiler));
-    // Enable "webpack-hot-middleware"
-    app.use(webpackHotMiddleware(compiler));
   }
 
   // For hosting build files, for production
-  if (!devServerEnabled) {
+  if (!isDevelopment) {
     const webpackBuildDir = path.join(__dirname, '../../dist');
     app.use(express.static(webpackBuildDir));
 

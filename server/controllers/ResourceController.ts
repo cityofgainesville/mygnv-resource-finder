@@ -1,17 +1,16 @@
-import Resource from '../models/ResourceSchema';
-import Category from '../models/CategorySchema';
-import Location from '../models/LocationSchema';
+import { ResourceModel, ResourceType } from '../models/ResourceModel';
+import { CategoryModel, CategoryType } from '../models/CategoryModel';
+import { LocationModel } from '../models/LocationModel';
+import { Request, Response, NextFunction } from 'express';
 
-import { getAddedRemoved } from './util';
-import { roles } from '../models/UserSchema';
-
-const exports = {};
+import { getAddedRemoved, ObjectId } from './util';
+import { Role } from '../models/UserModel';
 
 // Create a resource
-exports.create = (req, res) => {
+export const create = (req: Request, res: Response) => {
   // Only the owner role can create new resources.
-  if (req.user.role !== roles.OWNER) return res.status(403).end();
-  const resource = new Resource(req.body);
+  if (req.user.role !== Role.OWNER) return res.status(403).end();
+  const resource = new ResourceModel(req.body);
   const newLocations = resource.locations;
   const newCategories = resource.categories;
   resource.locations = [];
@@ -22,9 +21,13 @@ exports.create = (req, res) => {
       console.log(err);
       res.status(400).send(err);
     } else {
-      updateResourceLocationsBinding(resource, newLocations);
-      updateResourceCategoriesBinding(resource, newCategories);
-      category.save((err) => {
+      updateResourceLocationsBinding(res, resource, newLocations as ObjectId[]);
+      updateResourceCategoriesBinding(
+        res,
+        resource,
+        newCategories as ObjectId[]
+      );
+      resource.save((err: any) => {
         if (err) {
         } else {
           res.json({ success: true, resource: resource });
@@ -35,9 +38,9 @@ exports.create = (req, res) => {
 };
 
 // Get the current resource
-exports.read = (req, res) => {
+export const read = (req: Request, res: Response) => {
   const resource = req.resource;
-  if (req.user?.role !== roles.OWNER) {
+  if (req.user?.role !== Role.OWNER) {
     // Do not provide the non-published contact information
     delete resource.maintainer_contact_info;
   }
@@ -45,55 +48,58 @@ exports.read = (req, res) => {
   res.json(resource);
 };
 
-exports.isResourceUpdateAllowed = async (req, res, next) => {
+export const isResourceUpdateAllowed = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const currentUser = req.user;
-  if (currentUser.role === roles.OWNER) return next();
+  if (currentUser.role === Role.OWNER) return next();
   const resourceToEdit = req.resource;
-  let resources;
-  let categories;
+  let resources: ResourceType[];
+  let categories: CategoryType[];
   try {
-    resources = await Resource.find({});
-    categories = await Category.find({});
+    resources = await ResourceModel.find({});
+    categories = await CategoryModel.find({});
   } catch (err) {
     console.log(err);
   }
-  const allowedResources = [];
+  const allowedResources: ResourceType[] = [];
   const categoryMap = new Map(
     Object.values(categories).map((category) => [
-      category._id.toString(),
+      category._id as ObjectId,
       category,
     ])
   );
   const resourceMap = new Map(
     Object.values(resources).map((resource) => [
-      resource._id.toString(),
+      resource._id as ObjectId,
       resource,
     ])
   );
-  if (currentUser.role === roles.EDITOR) {
-    currentUser.resource_can_edit.forEach((id) => {
-      if (!resourceMap.has(id.toString())) return;
-      allowedResources.push(resourceMap.get(id.toString()));
+  if (currentUser.role === Role.EDITOR) {
+    currentUser.resource_can_edit.forEach((id: ObjectId) => {
+      if (!resourceMap.has(id)) return;
+      allowedResources.push(resourceMap.get(id));
     });
 
     // for each category in cat_can_edit_resource_in, get all resources and stick in array
-    currentUser.cat_can_edit_resource_in.forEach((id) => {
-      if (!categoryMap.has(id.toString())) return;
+    currentUser.cat_can_edit_members.forEach((id: ObjectId) => {
+      if (!categoryMap.has(id)) return;
       allowedResources.push(
         ...categoryMap
-          .get(id.toString())
-          .resources.filter((id) => resourceMap.has(id.toString()))
-          .map((id) => {
-            return resourceMap.get(id.toString());
+          .get(id)
+          .resources.filter((id: ObjectId) => resourceMap.has(id))
+          .map((id: ObjectId) => {
+            return resourceMap.get(id);
           })
       );
     });
   }
 
   if (
-    allowedResources.filter(
-      (resource) => resource._id.toString() === resourceToEdit._id.toString()
-    ).length > 0
+    allowedResources.filter((resource) => resource._id === resourceToEdit._id)
+      .length > 0
   ) {
     return next();
   } else {
@@ -102,9 +108,9 @@ exports.isResourceUpdateAllowed = async (req, res, next) => {
 };
 
 // Update a resource
-exports.update = (req, res) => {
+export const update = (req: Request, res: Response) => {
   const resource = req.resource;
-  const newResource = req.body;
+  const newResource = new ResourceModel(req.body);
 
   for (const key in newResource) {
     if (
@@ -127,13 +133,21 @@ exports.update = (req, res) => {
       res.status(400).send(err);
     } else {
       if (newResource.locations) {
-        updateResourceLocationsBinding(resource, newResource.locations);
+        updateResourceLocationsBinding(
+          res,
+          resource,
+          newResource.locations as ObjectId[]
+        );
       }
       if (newResource.categories) {
-        updateResourceCategoriesBinding(resource, newResource.categories);
+        updateResourceCategoriesBinding(
+          res,
+          resource,
+          newResource.categories as ObjectId[]
+        );
       }
 
-      category.save((err) => {
+      resource.save((err) => {
         if (err) {
         } else {
           res.json({ success: true, resource: resource });
@@ -143,19 +157,23 @@ exports.update = (req, res) => {
   });
 };
 
-const updateResourceLocationsBinding = (resource, newLocations) => {
+const updateResourceLocationsBinding = (
+  res: Response,
+  resource: ResourceType,
+  newLocations: ObjectId[]
+) => {
   // If it's a added location, link the location's binding to this resource.
   // If it's a removed location, unlink the location's binding to this resource.
 
   if (resource.locations === newLocations) return;
 
-  const { addedLocations, removedLocations } = getAddedRemoved(
+  const { added: addedLocations, removed: removedLocations } = getAddedRemoved(
     newLocations,
-    resource.locations
+    resource.locations as ObjectId[]
   );
 
   addedLocations.map((addedLocation) => {
-    Location.findById(addedLocation).exec((err, location) => {
+    LocationModel.findById(addedLocation).exec((err, location) => {
       if (err) {
         res.status(400).send(err);
       } else {
@@ -166,7 +184,7 @@ const updateResourceLocationsBinding = (resource, newLocations) => {
   });
 
   removedLocations.map((removedLocation) => {
-    Location.findById(removedLocation).exec((err, location) => {
+    LocationModel.findById(removedLocation).exec((err, location) => {
       if (err) {
         res.status(400).send(err);
       } else if (location.resource === resource._id) {
@@ -178,19 +196,23 @@ const updateResourceLocationsBinding = (resource, newLocations) => {
   resource.locations = newLocations;
 };
 
-const updateResourceCategoriesBinding = (resource, newCategories) => {
+const updateResourceCategoriesBinding = (
+  res: Response,
+  resource: ResourceType,
+  newCategories: ObjectId[]
+) => {
   // If it's a added category, link the category's binding to this resource.
   // If it's a removed category, unlink the category's binding to this resource.
 
   if (resource.categories === newCategories) return;
 
-  const { addedCategories, removedCategories } = getAddedRemoved(
-    newCategories,
-    resource.categories
-  );
+  const {
+    added: addedCategories,
+    removed: removedCategories,
+  } = getAddedRemoved(newCategories, resource.categories as ObjectId[]);
 
   addedCategories.map((addedCategory) => {
-    Category.findById(addedCategory).exec((err, category) => {
+    CategoryModel.findById(addedCategory).exec((err, category) => {
       if (err) {
         res.status(400).send(err);
       } else {
@@ -203,7 +225,7 @@ const updateResourceCategoriesBinding = (resource, newCategories) => {
   });
 
   removedCategories.map((removedCategory) => {
-    Category.findById(removedCategory).exec((err, category) => {
+    CategoryModel.findById(removedCategory).exec((err, category) => {
       if (err) {
         res.status(400).send(err);
       } else {
@@ -221,19 +243,18 @@ const updateResourceCategoriesBinding = (resource, newCategories) => {
 };
 
 // Delete a resource
-// TODO: Properly unlink
-exports.delete = (req, res) => {
-  if (req.user.role !== roles.OWNER) return res.status(403).end();
+export const remove = (req: Request, res: Response) => {
+  if (req.user.role !== Role.OWNER) return res.status(403).end();
   const resource = req.resource;
 
   // Unlink locations, categories
-  Resource.deleteOne(resource, (err) => {
+  ResourceModel.deleteOne(resource, (err) => {
     if (err) {
       console.log(err);
       res.status(400).send(err);
     } else {
-      updateResourceLocationsBinding(resource, []);
-      updateResourceCategoriesBinding(resource, []);
+      updateResourceLocationsBinding(res, resource, []);
+      updateResourceCategoriesBinding(res, resource, []);
       res.json({ success: true });
     }
   });
@@ -246,7 +267,7 @@ exports.delete = (req, res) => {
   categories=true // or false
   True will populate the array, false will leave it as an array of ObjectIDs.
 */
-exports.list = (req, res) => {
+export const list = (req: Request, res: Response) => {
   let populateOptions = [];
   if (req.query.locations === 'true')
     populateOptions = [...populateOptions, 'locations'];
@@ -254,18 +275,18 @@ exports.list = (req, res) => {
     populateOptions = [...populateOptions, 'categories'];
   // Ignore private data when populating
   let select = '';
-  if (req.user?.role !== roles.OWNER) {
+  if (req.user?.role !== Role.OWNER) {
     select = '-_maintainer_contact_info';
   }
-  const conditions = req.query.conditions ? req.query.conditions : {};
-  Resource.find(conditions)
-    .populate(...populateOptions, select)
+  const filter: any = req.query.filter ? req.query.filter : {};
+  ResourceModel.find(filter)
+    .populate(populateOptions, select)
     .exec((err, resources) => {
       if (err) {
         console.log(err);
         res.status(400).send(err);
       } else {
-        if (req.user?.role !== roles.OWNER) {
+        if (req.user?.role !== Role.OWNER) {
           res.json(
             resources.map((resource) => {
               // Do not provide the non-published contact information
@@ -279,8 +300,13 @@ exports.list = (req, res) => {
 };
 
 // Middleware to get a resource from database by ID, save in req.resource
-exports.resourceById = (req, res, next, id) => {
-  Resource.findById(id).exec((err, resource) => {
+export const resourceById = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+  id: string
+) => {
+  ResourceModel.findById(id).exec((err, resource) => {
     if (err) {
       res.status(400).send(err);
     } else {
@@ -290,5 +316,3 @@ exports.resourceById = (req, res, next, id) => {
     }
   });
 };
-
-export default exports;

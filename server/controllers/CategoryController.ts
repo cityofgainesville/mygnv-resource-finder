@@ -2,8 +2,8 @@ import { ResourceType, Resource, ResourceModel } from '../models/ResourceModel';
 
 import { CategoryType, Category, CategoryModel } from '../models/CategoryModel';
 
-import { getAddedRemoved } from './util';
-import { Role as roles } from '../models/UserModel';
+import { ObjectId, getAddedRemoved } from './util';
+import { Role } from '../models/UserModel';
 import { QueryPopulateOptions, MongooseFilterQuery } from 'mongoose';
 import { Request, Response, NextFunction } from 'express';
 
@@ -26,7 +26,7 @@ export const list = (req: Request, res: Response) => {
     populateOptions = [...populateOptions, 'resources'];
   let select = '';
   // Ignore private data when populating
-  if (req.user?.role !== roles.OWNER) {
+  if (req.user?.role !== Role.OWNER) {
     select = '-_maintainer_contact_info';
   }
   const queryPopulateOptions = populateOptions.map((path) => {
@@ -63,7 +63,7 @@ export const listTopLevel = (req: Request, res: Response) => {
     populateOptions = [...populateOptions, 'resources'];
   let select = '';
   // Ignore private data when populating
-  if (req.user?.role !== roles.OWNER) {
+  if (req.user?.role !== Role.OWNER) {
     select = '-_maintainer_contact_info';
   }
   const queryPopulateOptions = populateOptions.map((path) => {
@@ -90,7 +90,7 @@ export const read = (req: Request, res: Response) => {
 
 // Create a category
 export const create = (req: Request, res: Response) => {
-  if (req.user?.role !== roles.OWNER) return res.status(403).end();
+  if (req.user?.role !== Role.OWNER) return res.status(403).end();
   const category: CategoryType = new CategoryModel(req.body);
   const newResources = category.resources;
   const newChildren = category.children;
@@ -104,9 +104,9 @@ export const create = (req: Request, res: Response) => {
       console.log(err);
       res.status(400).send(err);
     } else {
-      updateCategoryResourcesBinding(res, category, newResources as string[]);
-      updateCategoryChildrenBinding(res, category, newChildren as string[]);
-      updateCategoryParentsBinding(res, category, newParents as string[]);
+      updateCategoryResourcesBinding(res, category, newResources as ObjectId[]);
+      updateCategoryChildrenBinding(res, category, newChildren as ObjectId[]);
+      updateCategoryParentsBinding(res, category, newParents as ObjectId[]);
       category.save((err) => {
         if (err) {
         } else {
@@ -119,9 +119,9 @@ export const create = (req: Request, res: Response) => {
 
 // Update a category
 export const update = (req: Request, res: Response) => {
-  if (req.user?.role !== roles.OWNER) return res.status(403).end();
+  if (req.user?.role !== Role.OWNER) return res.status(403).end();
   const category = req.category;
-  const newCategory = req.body;
+  const newCategory = new CategoryModel(req.body);
 
   if (newCategory.name) {
     category.name = newCategory.name;
@@ -136,13 +136,25 @@ export const update = (req: Request, res: Response) => {
       res.status(400).send(err);
     } else {
       if (newCategory.resources) {
-        updateCategoryResourcesBinding(res, category, newCategory.resources);
+        updateCategoryResourcesBinding(
+          res,
+          category,
+          newCategory.resources as ObjectId[]
+        );
       }
       if (newCategory.children) {
-        updateCategoryChildrenBinding(res, category, newCategory.children);
+        updateCategoryChildrenBinding(
+          res,
+          category,
+          newCategory.children as ObjectId[]
+        );
       }
       if (newCategory.parents) {
-        updateCategoryParentsBinding(res, category, newCategory.parents);
+        updateCategoryParentsBinding(
+          res,
+          category,
+          newCategory.parents as ObjectId[]
+        );
       }
 
       category.save((err) => {
@@ -160,7 +172,7 @@ export const update = (req: Request, res: Response) => {
 const updateCategoryResourcesBinding = (
   res: Response,
   category: CategoryType,
-  newResources: string[]
+  newResources: ObjectId[]
 ) => {
   // If it's a added resource, link the resource's binding to this category.
   // If it's a removed resource, unlink the resource's binding to this category.
@@ -169,7 +181,7 @@ const updateCategoryResourcesBinding = (
 
   const { added: addedResources, removed: removedResources } = getAddedRemoved(
     newResources,
-    category.resources as string[]
+    category.resources as ObjectId[]
   );
 
   addedResources.map((addedResource) => {
@@ -179,7 +191,7 @@ const updateCategoryResourcesBinding = (
       } else {
         const categoriesSet = new Set(resource.categories);
         categoriesSet.add(category.id);
-        (resource as any).categories = [...categoriesSet];
+        resource.categories = [...categoriesSet];
         await resource.save();
       }
     });
@@ -206,7 +218,7 @@ const updateCategoryResourcesBinding = (
 const updateCategoryChildrenBinding = (
   res: Response,
   category: CategoryType,
-  newChildren: string[]
+  newChildren: ObjectId[]
 ) => {
   if (category.children === newChildren) return;
 
@@ -214,7 +226,7 @@ const updateCategoryChildrenBinding = (
   // If it's a removed child, unlink the child's binding to this category.
   const { added: addedChildren, removed: removedChildren } = getAddedRemoved(
     newChildren,
-    category.children as string[]
+    category.children as ObjectId[]
   );
 
   addedChildren.map((addedChild) => {
@@ -251,7 +263,7 @@ const updateCategoryChildrenBinding = (
 const updateCategoryParentsBinding = (
   res: Response,
   category: CategoryType,
-  newParents: string[]
+  newParents: ObjectId[]
 ) => {
   if (category.parents === newParents) return;
 
@@ -259,7 +271,7 @@ const updateCategoryParentsBinding = (
   // If it's a removed child, unlink the child's binding to this category.
   const { added: addedParents, removed: removedParents } = getAddedRemoved(
     newParents,
-    category.parents as string[]
+    category.parents as ObjectId[]
   );
 
   addedParents.map((addedParent) => {
@@ -294,7 +306,7 @@ const updateCategoryParentsBinding = (
 };
 
 export const remove = (req: Request, res: Response) => {
-  if (req.user?.role !== roles.OWNER) return res.status(403).end();
+  if (req.user?.role !== Role.OWNER) return res.status(403).end();
   const category = req.category;
 
   // Unlink resources, children, parents
@@ -320,7 +332,12 @@ export const remove = (req: Request, res: Response) => {
   True will populate the array, false will leave it as an array of ObjectIDs.
 */
 
-export const categoryById = (req, res, next, id) => {
+export const categoryById = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+  id: string
+) => {
   let populateOptions = [];
   if ((req.query.children as string)?.toLowerCase() === 'true')
     populateOptions = [...populateOptions, 'children'];
@@ -330,7 +347,7 @@ export const categoryById = (req, res, next, id) => {
     populateOptions = [...populateOptions, 'resources'];
   let select = '';
   // Ignore private data when populating
-  if (req.user?.role !== roles.OWNER) {
+  if (req.user?.role !== Role.OWNER) {
     select = '-_maintainer_contact_info';
   }
   const queryPopulateOptions = populateOptions.map((path) => {

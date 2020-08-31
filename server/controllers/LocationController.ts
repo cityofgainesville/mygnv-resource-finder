@@ -1,23 +1,23 @@
-import Location from '../models/LocationSchema';
-import Resource from '../models/ResourceSchema';
-
-import { roles } from '../models/UserSchema';
-
-const exports = {};
+import { LocationModel, LocationType } from '../models/LocationModel';
+import { ResourceModel, ResourceType } from '../models/ResourceModel';
+import { Request, Response, NextFunction } from 'express';
+import { Role } from '../models/UserModel';
+import { QueryPopulateOptions } from 'mongoose';
+import { ObjectId } from './util';
 
 // Create a location
-exports.create = (req, res) => {
-  if (req.user.role !== roles.OWNER) return res.status(403).end();
-  const location = new Location(req.body);
+export const create = (req: Request, res: Response) => {
+  if (req.user.role !== Role.OWNER) return res.status(403).end();
+  const location = new LocationModel(req.body);
   const newResource = location.resource;
-  location.resource = [];
+  location.resource = null;
 
   location.save((err) => {
     if (err) {
       console.log(err);
       res.status(400).send(err);
     } else {
-      updateLocationResourceBinding(location, newResource);
+      updateLocationResourceBinding(res, location, newResource as ObjectId);
       location.save((err) => {
         if (err) {
           res.status(400).send(err);
@@ -29,13 +29,17 @@ exports.create = (req, res) => {
   });
 };
 
-const updateLocationResourceBinding = (location, newResource) => {
+const updateLocationResourceBinding = (
+  res: Response,
+  location: LocationType,
+  newResource: ObjectId
+) => {
   if (location.resource === newResource) return;
 
   const oldResource = location.resource;
 
   if (newResource) {
-    Resource.findById(newResource).exec((err, parentResource) => {
+    ResourceModel.findById(newResource).exec((err, parentResource) => {
       if (err) {
         res.status(400).send(err);
       } else {
@@ -48,7 +52,7 @@ const updateLocationResourceBinding = (location, newResource) => {
   }
 
   if (oldResource) {
-    Resource.findById(oldResource).exec((err, parentResource) => {
+    ResourceModel.findById(oldResource).exec((err, parentResource) => {
       if (err) {
         res.status(400).send(err);
       } else {
@@ -66,9 +70,9 @@ const updateLocationResourceBinding = (location, newResource) => {
 };
 
 // Get the current location
-exports.read = (req, res) => {
+export const read = (req: Request, res: Response) => {
   const location = req.location;
-  if (req.user?.role !== roles.OWNER) {
+  if (req.user?.role !== Role.OWNER) {
     // Do not provide the non-published contact information
     delete location.maintainer_contact_info;
   }
@@ -76,55 +80,58 @@ exports.read = (req, res) => {
   res.json(location);
 };
 
-exports.isLocationUpdateAllowed = async (req, res, next) => {
+export const isLocationUpdateAllowed = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const currentUser = req.user;
-  if (currentUser.role === 'Owner') return next();
+  if (currentUser.role === Role.OWNER) return next();
   const locationToEdit = req.location;
-  let locations;
-  let resources;
+  let locations: LocationType[];
+  let resources: ResourceType[];
   try {
-    locations = await Location.find({});
-    resources = await resources.find({});
+    locations = await LocationModel.find({});
+    resources = await ResourceModel.find({});
   } catch (err) {
     console.log(err);
   }
-  const allowedLocations = [];
+  const allowedLocations: LocationType[] = [];
   const locationMap = new Map(
     Object.values(locations).map((location) => [
-      location._id.toString(),
+      location._id as ObjectId,
       location,
     ])
   );
   const resourceMap = new Map(
     Object.values(resources).map((resource) => [
-      resource._id.toString(),
+      resource._id as ObjectId,
       resource,
     ])
   );
-  if (currentUser.role === role.EDITOR) {
-    currentUser.location_can_edit.forEach((id) => {
-      if (!locationMap.has(id.toString())) return;
-      allowedLocations.push(locationMap.get(id.toString()));
+  if (currentUser.role === Role.EDITOR) {
+    currentUser.location_can_edit.forEach((id: ObjectId) => {
+      if (!locationMap.has(id)) return;
+      allowedLocations.push(locationMap.get(id));
     });
   }
 
   // for each resource in resource_can_edit, get all locations and stick in array
-  currentUser.resource_can_edit.forEach((id) => {
-    if (!resourceMap.has(id.toString())) return;
+  currentUser.resource_can_edit.forEach((id: ObjectId) => {
+    if (!resourceMap.has(id)) return;
     allowedLocations.push(
       ...resourceMap
-        .get(id.toString())
-        .locations.filter((id) => resourceMap.has(id.toString()))
-        .map((id) => {
-          return resourceMap.get(id.toString());
+        .get(id)
+        .locations.filter((id: ObjectId) => locationMap.has(id))
+        .map((id: ObjectId) => {
+          return locationMap.get(id);
         })
     );
   });
 
   if (
-    allowedLocations.filter(
-      (location) => location._id.toString() === locationToEdit._id.toString()
-    ).length > 0
+    allowedLocations.filter((location) => location._id === locationToEdit._id)
+      .length > 0
   ) {
     return next();
   } else {
@@ -133,9 +140,9 @@ exports.isLocationUpdateAllowed = async (req, res, next) => {
 };
 
 // Update a location
-exports.update = (req, res) => {
+export const update = (req: Request, res: Response) => {
   const location = req.location;
-  const newLocation = req.body;
+  const newLocation = new LocationModel(req.body);
 
   for (const key in newLocation) {
     if (
@@ -157,10 +164,13 @@ exports.update = (req, res) => {
       res.status(400).send(err);
     } else {
       if (newLocation.resource) {
-        updateLocationResourceBinding(location, newLocation.resource);
+        updateLocationResourceBinding(
+          res,
+          location,
+          newLocation.resource as ObjectId
+        );
       }
-
-      category.save((err) => {
+      location.save((err) => {
         if (err) {
         } else {
           res.json({ success: true, location: location });
@@ -171,41 +181,47 @@ exports.update = (req, res) => {
 };
 
 // Delete a location
-exports.delete = (req, res) => {
-  if (req.user.role !== 'Owner') return res.status(403).end();
+export const remove = (req: Request, res: Response) => {
+  if (req.user.role !== Role.OWNER) return res.status(403).end();
   const location = req.location;
 
   // Unlink resource
-  Location.deleteOne(location, (err) => {
+  LocationModel.deleteOne(location, (err) => {
     if (err) {
       console.log(err);
       res.status(400).send(err);
     } else {
-      updateLocationResourceBinding(location, null);
+      updateLocationResourceBinding(res, location, null);
       res.json({ success: true });
     }
   });
 };
 
 // Get all the locations
-exports.list = (req, res) => {
+export const list = (req: Request, res: Response) => {
   let populateOptions = [];
-  if (req.query.resource === 'true')
+  if ((req.query.resource as string)?.toLowerCase() === 'true')
     populateOptions = [...populateOptions, 'resource'];
-  // Ignore private data when populating
   let select = '';
-  if (req.user?.role !== roles.OWNER) {
+  // Ignore private data when populating
+  if (req.user?.role !== Role.OWNER) {
     select = '-_maintainer_contact_info';
   }
-  const conditions = req.query.conditions ? req.query.conditions : {};
-  Location.find(conditions)
-    .populate(...populateOptions, select)
+  const queryPopulateOptions = populateOptions.map((path) => {
+    const option: QueryPopulateOptions = { path, select };
+    return option;
+  });
+
+  const filter: any = req.query.filter ? req.query.filter : {};
+
+  LocationModel.find(filter)
+    .populate(populateOptions, select)
     .exec((err, locations) => {
       if (err) {
         console.log(err);
         res.status(400).send(err);
       } else {
-        if (req.user?.role !== roles.OWNER) {
+        if (req.user?.role !== Role.OWNER) {
           res.json(
             locations.map((locations) => {
               // Do not provide the non-published contact information
@@ -219,8 +235,26 @@ exports.list = (req, res) => {
 };
 
 // Middleware to get a location from database by ID, save in req.location
-exports.locationById = (req, res, next, id) => {
-  Location.findById(id).exec((err, location) => {
+export const locationById = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+  id: string
+) => {
+  let populateOptions = [];
+  if ((req.query.resource as string)?.toLowerCase() === 'true')
+    populateOptions = [...populateOptions, 'resource'];
+  let select = '';
+  // Ignore private data when populating
+  if (req.user?.role !== Role.OWNER) {
+    select = '-_maintainer_contact_info';
+  }
+  const queryPopulateOptions = populateOptions.map((path) => {
+    const option: QueryPopulateOptions = { path, select };
+    return option;
+  });
+
+  LocationModel.findById(id).exec((err, location) => {
     if (err) {
       res.status(400).send(err);
     } else {
@@ -230,5 +264,3 @@ exports.locationById = (req, res, next, id) => {
     }
   });
 };
-
-export default exports;

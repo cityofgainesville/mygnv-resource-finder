@@ -1,10 +1,10 @@
-import resourceController from '../controllers/ResourceController';
-import userController from '../controllers/UserController';
+import * as resourceController from '../controllers/ResourceController';
+import * as userController from '../controllers/UserController';
 import express from 'express';
 
-const router = new express.Router();
-
 export const path = '/api/resources';
+
+const router: express.Router = express.Router();
 
 // Path is /api/resources/list
 // GET will return JSON of all resources
@@ -51,7 +51,7 @@ router.post(
 router.delete(
   '/delete/:resourceId',
   userController.isAuthenticated,
-  resourceController.delete
+  resourceController.remove
 );
 
 // Middleware to get resource by id from mongoDB

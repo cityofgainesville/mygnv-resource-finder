@@ -7,6 +7,7 @@ import {
   DocumentType,
   getName,
 } from '@typegoose/typegoose';
+import { Base } from '@typegoose/typegoose/lib/defaultClasses';
 
 @modelOptions({ schemaOptions: { _id: false } })
 class TranslationServices {

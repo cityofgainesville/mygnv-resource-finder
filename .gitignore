@@ -1,5 +1,5 @@
 # dependencies
-/node_modules
+**/node_modules
 
 # production
 /dist
@@ -10,7 +10,7 @@
 .env.development.local
 .env.test.local
 .env.production.local
-.env
+**/.env**
 
 # logs
 npm-debug.log*
