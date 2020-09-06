@@ -11,7 +11,7 @@ const dirname = path.resolve(path.dirname(''));
 module.exports = {
   entry: ['@babel/polyfill', 'react-hot-loader/patch', './index.js'],
   output: {
-    path: path.join(dirname, '../dist/client'),
+    path: path.join(dirname, './dist/'),
     publicPath: '/',
     filename: '[hash]-[name].js',
   },
@@ -82,19 +82,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.(png|jp(e*)g|svg)$/,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 20000, // Convert images < 20kb to base64 strings
-              name: '[hash]-[name].[ext]',
-            },
-          },
-        ],
-      },
-      {
-        test: /\.(woff|woff2|eot|ttf)(\?.*$|$)/,
+        test: /\.(woff|woff2|eot|ttf|png|jp(e*)g|svg)(\?.*$|$)/,
         use: [
           {
             loader: 'file-loader',

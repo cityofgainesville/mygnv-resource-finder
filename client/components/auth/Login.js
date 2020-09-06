@@ -29,6 +29,7 @@ const Login = (props) => {
   const [modalIsDisplayed, setModalIsDisplayed] = useState(false);
 
   const [currentUser, setCurrentUser] = useGlobal('currentUser');
+  const [token, setToken] = useGlobal('token');
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -46,28 +47,28 @@ const Login = (props) => {
     setModalIsDisplayed(false);
   };
 
-  const doLogin = (event) => {
+  const doLogin = async (event) => {
     event.preventDefault();
-    axios
-      .post('/api/users/login', {
+    try {
+      const response = await axios.put('/api/auth/login', {
         email: email,
         password: password,
-      })
-      .then((res) => {
-        if (res.data.success) {
-          setCurrentUser(res.data.user);
-          closeModal();
-        } else setInvalidAttempt(true);
-      })
-      .catch((err) => {
-        console.log(err);
       });
+      setCurrentUser(response.data.user);
+      setToken(response.data.access_token);
+      closeModal();
+    } catch (error) {
+      setInvalidAttempt(true);
+    }
   };
-   const alreadyLoggedIn = () => {
+  const alreadyLoggedIn = () => {
     if (!currentUser) return null;
     else
       return (
-        <Row className='justify-content-md-center' style={{ margin: 'auto', marginTop: '155px' }}>
+        <Row
+          className='justify-content-md-center'
+          style={{ margin: 'auto', marginTop: '155px' }}
+        >
           <Col md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }}>
             <span>{`Logged in as: ${currentUser.email}`}</span>
           </Col>
@@ -85,10 +86,10 @@ const Login = (props) => {
         </Row>
       );
   };
-  
-//NEW - IN DEVELOPMENT
 
-  /*const alreadyLoggedIn = () => {
+  // NEW - IN DEVELOPMENT
+
+  /* const alreadyLoggedIn = () => {
     
     if (!currentUser) return null;
     else
@@ -162,61 +163,66 @@ const Login = (props) => {
   const needsLogin = (
     <Container className='justify-content-md-center login-container'>
       <Row className='justify-content-md-center'>
-          <img
-        src={homeIcon}
-        height='100'
-        className='d-inline-block align-top login-img'
-      ></img>
-    </Row>
+        <img
+          src={homeIcon}
+          height='100'
+          className='d-inline-block align-top login-img'
+        ></img>
+      </Row>
       <Row md='auto' className='justify-content-md-center login-title'>
-        <span><strong>myGNV Resource Directory</strong></span>
+        <span>
+          <strong>myGNV Resource Directory</strong>
+        </span>
       </Row>
       <Row md='auto' className='justify-content-md-center login-description'>
         <span>ADMIN PORTAL</span>
       </Row>
       {invalidAttempt ? (
-            <Alert
-              variant='danger'
-              style={{
-                marginTop: '1em',
-                marginLeft: 'auto',
-                marginRight: 'auto',
-              }}
-            >
-              Invalid email or password. Please try again.
-            </Alert>
-          ) : null}
+        <Alert
+          variant='danger'
+          style={{
+            marginTop: '1em',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
+        >
+          Invalid email or password. Please try again.
+        </Alert>
+      ) : null}
       <Form className='justify-content-md-center'>
-            <Form.Group controlId='formBasicEmail' className='search-form-group'>
-              <Form.Control
-                value={email}
-                onChange={handleEmailChange}
-                type='Email'
-                placeholder='Email'
-                className = 'login'
-              />
-            </Form.Group>
-            <Form.Group controlId='formBasicPassword' className='search-form-group'>
-              <Form.Control
-                value={password}
-                onChange={handlePasswordChange}
-                type='password'
-                placeholder='Password'
-                className = 'login'
-              />
-            </Form.Group>
+        <Form.Group controlId='formBasicEmail' className='search-form-group'>
+          <Form.Control
+            value={email}
+            onChange={handleEmailChange}
+            type='Email'
+            placeholder='Email'
+            className='login'
+          />
+        </Form.Group>
+        <Form.Group controlId='formBasicPassword' className='search-form-group'>
+          <Form.Control
+            value={password}
+            onChange={handlePasswordChange}
+            type='password'
+            placeholder='Password'
+            className='login'
+          />
+        </Form.Group>
       </Form>
-      <Row md='auto' style={{ textAlign: 'center', paddingBottom: '1em' }} className='justify-content-md-center'>
+      <Row
+        md='auto'
+        style={{ textAlign: 'center', paddingBottom: '1em' }}
+        className='justify-content-md-center'
+      >
         <Button onClick={doLogin} variant='outline-primary' type='submit'>
-            LOGIN
-          </Button>
+          LOGIN
+        </Button>
       </Row>
     </Container>
   );
 
   return (
-    <React.Fragment
-    >
+    <React.Fragment>
       {currentUser ? alreadyLoggedIn() : needsLogin}
     </React.Fragment>
   );

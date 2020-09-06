@@ -22,7 +22,7 @@ module.exports = merge(common, {
     },
   },
   devServer: {
-    contentBase: path.join(dirname, '../dist/client'),
+    contentBase: path.join(dirname, './dist'),
     historyApiFallback: true,
     compress: true,
     hot: true,
