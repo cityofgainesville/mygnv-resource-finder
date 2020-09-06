@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prebuild": "rimraf dist",
+    "prebuild": "rimraf ./dist",
     "dev": "NODE_ENV=development webpack-dev-server --config webpack/webpack.dev.js",
-    "build": "NODE_ENV=production webpack --config webpack/webpack.prod.js",
+    "build": "NODE_ENV=production ./node_modules/.bin/webpack --config webpack/webpack.prod.js",
     "lint": "eslint ./components/** --ext .js,.jsx; exit 0",
     "lint:fix": "eslint ./components/** --ext .js,.jsx --fix; exit 0"
   },
