@@ -6,8 +6,8 @@ export class JwtAuthGuard extends AuthGuard('jwt') {}
 
 @Injectable()
 export class OptionalJwtAuthGuard extends AuthGuard('jwt') {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    handleRequest(err, user, info) {
+    /* eslint-disable  @typescript-eslint/no-unused-vars */
+    handleRequest(_err: any, user: any, _info: any) {
         return user;
     }
 }

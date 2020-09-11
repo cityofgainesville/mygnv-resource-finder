@@ -8,6 +8,7 @@ import {
 import { TypegooseModule } from 'nestjs-typegoose';
 import { DynamicModule } from '@nestjs/common';
 
+@modelOptions({ schemaOptions: { _id: false } })
 class TranslationServices {
     @Property({ required: true })
     public always_available!: boolean;
@@ -17,6 +18,7 @@ class TranslationServices {
     public over_phone!: boolean;
 }
 
+@modelOptions({ schemaOptions: { _id: false } })
 class LanguagesAvailable {
     @Property({ required: true })
     public english!: boolean;
@@ -29,6 +31,7 @@ class LanguagesAvailable {
     @Property({ required: true })
     public others!: boolean;
 }
+@modelOptions({ schemaOptions: { _id: false } })
 class AppointmentScheduling {
     @Property({ required: true })
     public apply_phone!: boolean;
@@ -38,6 +41,7 @@ class AppointmentScheduling {
     public apply_in_person!: boolean;
 }
 
+@modelOptions({ schemaOptions: { _id: false } })
 class Appointment {
     @Property({ required: true })
     public is_required!: boolean;
@@ -57,6 +61,7 @@ class Appointment {
     public appointment_details?: string;
 }
 
+@modelOptions({ schemaOptions: { _id: false } })
 class Application {
     @Property({ required: true })
     public is_required!: boolean;
@@ -64,6 +69,7 @@ class Application {
     public application_details?: string;
 }
 
+@modelOptions({ schemaOptions: { _id: false } })
 class Ethnicity {
     @Property({ required: true })
     public native_american!: boolean;
@@ -83,6 +89,7 @@ class Ethnicity {
     public pacific_islander!: boolean;
 }
 
+@modelOptions({ schemaOptions: { _id: false } })
 class Gender {
     @Property({ required: true })
     public female!: boolean;
@@ -92,6 +99,7 @@ class Gender {
     public non_binary!: boolean;
 }
 
+@modelOptions({ schemaOptions: { _id: false } })
 class HousingStatus {
     @Property({ required: true })
     public homeless!: boolean;
@@ -105,6 +113,7 @@ class HousingStatus {
     public other!: boolean;
 }
 
+@modelOptions({ schemaOptions: { _id: false } })
 class EducationLevel {
     @Property({ required: true })
     public no_schooling!: boolean;
@@ -132,6 +141,7 @@ class EducationLevel {
     public doctorate_degree!: boolean;
 }
 
+@modelOptions({ schemaOptions: { _id: false } })
 class EmploymentStatus {
     @Property({ required: true })
     public full_time!: boolean;
@@ -153,6 +163,7 @@ class EmploymentStatus {
     public unable_to_work!: boolean;
 }
 
+@modelOptions({ schemaOptions: { _id: false } })
 class EligibilityCriteria {
     @Property()
     public min_age?: number;
@@ -161,7 +172,7 @@ class EligibilityCriteria {
     @Property()
     public min_household_income?: number;
     @Property()
-    public max_household_number?: number;
+    public max_household_income?: number;
     @Property()
     public employment_status?: EmploymentStatus;
     @Property()
@@ -184,6 +195,7 @@ class EligibilityCriteria {
     public eligibility_details?: string;
 }
 
+@modelOptions({ schemaOptions: { _id: false } })
 class ServicesType {
     @Property({ required: true })
     public information!: boolean;
@@ -195,6 +207,7 @@ class ServicesType {
     public professional_services!: boolean;
 }
 
+@modelOptions({ schemaOptions: { _id: false } })
 class ServicesCost {
     @Property({ required: true })
     public free!: boolean;
@@ -202,6 +215,7 @@ class ServicesCost {
     public discounted!: boolean;
 }
 
+@modelOptions({ schemaOptions: { _id: false } })
 class ServicesOffered {
     @Property()
     public types?: ServicesType;
@@ -211,6 +225,7 @@ class ServicesOffered {
     public description?: string;
 }
 
+@modelOptions({ schemaOptions: { _id: false } })
 class SpecificDate {
     @Property({ required: true })
     public name!: boolean;
@@ -218,6 +233,7 @@ class SpecificDate {
     public date!: Date;
 }
 
+@modelOptions({ schemaOptions: { _id: false } })
 class ServicesFrequency {
     @Property({ required: true })
     public weekly!: boolean;
@@ -229,6 +245,7 @@ class ServicesFrequency {
     public ad_hoc!: boolean;
 }
 
+@modelOptions({ schemaOptions: { _id: false } })
 class OperatingHours {
     @Property({ required: true })
     public open!: number;
@@ -236,6 +253,7 @@ class OperatingHours {
     public close!: number;
 }
 
+@modelOptions({ schemaOptions: { _id: false } })
 class WeekHours {
     @Property()
     public monday?: OperatingHours;
@@ -253,6 +271,7 @@ class WeekHours {
     public sunday?: OperatingHours;
 }
 
+@modelOptions({ schemaOptions: { _id: false } })
 class PhoneNumber {
     @Property()
     public name?: string;
@@ -260,6 +279,7 @@ class PhoneNumber {
     public number!: string;
 }
 
+@modelOptions({ schemaOptions: { _id: false } })
 class Address {
     @Property({ required: true })
     public street_1!: string;
@@ -273,6 +293,7 @@ class Address {
     public zipcode!: string;
 }
 
+@modelOptions({ schemaOptions: { _id: false } })
 class MaintainerContactInfo {
     @Property()
     public name?: string;
@@ -281,7 +302,7 @@ class MaintainerContactInfo {
     @Property()
     public email?: string;
     @Property()
-    public phone_?: string;
+    public phone_1?: string;
     @Property()
     public phone_1_notes?: string;
     @Property()
@@ -334,20 +355,32 @@ export class UpdateLocationDto {
     public eligibility_criteria?: EligibilityCriteria;
     public application?: Application;
     public appointment?: Appointment;
-    @Property({ required: true })
     public united_way_approved?: boolean;
     public languages_available?: LanguagesAvailable;
     public translation_services?: TranslationServices;
     public resource?: string;
 }
 
+@modelOptions({
+    schemaOptions: {
+        timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+        toJSON: {
+            virtuals: true,
+            versionKey: false,
+            transform: function (_doc, ret) {
+                // remove these props when object is serialized
+                delete ret._id;
+            },
+        },
+    },
+})
 export class Location {
     public readonly id!: string;
     @Property()
     public readonly updated_at!: Date;
     @Property()
     public readonly created_at!: Date;
-    @Property({ required: true })
+    @Property({ required: true, index: true, unique: true })
     public name!: string;
     @Property()
     public maintainer_contact_info?: MaintainerContactInfo;
@@ -396,18 +429,5 @@ export class Location {
 export type LocationType = DocumentType<Location>;
 
 export const LocationModelModule: DynamicModule = TypegooseModule.forFeature([
-    {
-        typegooseClass: Location,
-        schemaOptions: {
-            timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
-            toJSON: {
-                virtuals: true,
-                versionKey: false,
-                transform: function (doc, ret) {
-                    // remove these props when object is serialized
-                    delete ret._id;
-                },
-            },
-        },
-    },
+    Location,
 ]);

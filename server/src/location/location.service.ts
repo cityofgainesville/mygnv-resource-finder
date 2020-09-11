@@ -12,9 +12,10 @@ import {
     UpdateLocationDto,
 } from './location.entity';
 import { ReturnModelType } from '@typegoose/typegoose';
+import mongoose from 'mongoose';
 import { Role, User } from '../user/user.entity';
 import { QueryPopulateOptions } from 'mongoose';
-import { ObjectId } from '../util';
+import { ObjectId, toObjectIdArray, toStringArray } from '../util';
 import { Category } from '../category/category.entity';
 
 @Injectable()
@@ -57,7 +58,7 @@ export class LocationService {
         );
         if (user.role !== Role.OWNER) {
             return locationList.map((location) => {
-                delete location.maintainer_contact_info;
+                location.maintainer_contact_info = undefined;
                 return location;
             });
         } else return locationList;
@@ -68,7 +69,7 @@ export class LocationService {
             this.queryPopulateOptions(resource, user)
         );
         if (user.role !== Role.OWNER) {
-            delete location.maintainer_contact_info;
+            location.maintainer_contact_info = undefined;
         }
         return location;
     }
@@ -80,15 +81,15 @@ export class LocationService {
         if (user?.role !== Role.OWNER)
             throw new UnauthorizedException('Unauthorized');
         try {
+            const newResource = createLocationDto.resource;
+            createLocationDto.resource = undefined;
             const location = new this.LocationModel(createLocationDto);
-            const newResource = location.resource;
-            location.resource = null;
 
             await location.save();
-            this.updateLocationResourceBinding(
-                location,
-                newResource as ObjectId
-            );
+
+            this.updateLocationResourceBinding(location, newResource);
+            location.resource = new mongoose.Types.ObjectId(newResource);
+
             await location.save();
             return location;
         } catch (error) {
@@ -125,8 +126,9 @@ export class LocationService {
             if (newLocation.resource) {
                 this.updateLocationResourceBinding(
                     location,
-                    newLocation.resource as ObjectId
+                    (newLocation.resource as ObjectId).toHexString()
                 );
+                location.resource = newLocation.resource;
             }
 
             await location.save();
@@ -151,19 +153,21 @@ export class LocationService {
 
     async updateLocationResourceBinding(
         location: LocationType,
-        newResource: ObjectId
+        newResource: string
     ): Promise<void> {
-        if (location.resource === newResource) return;
+        const oldResource = (location.resource as ObjectId)?.toHexString();
 
-        const oldResource = location.resource;
+        if (oldResource !== newResource) return;
 
         if (newResource) {
             const parentResource = await this.ResourceModel.findById(
                 newResource
             );
-            const locationsSet = new Set(parentResource.locations);
-            locationsSet.add(location._id);
-            parentResource.locations = [...locationsSet];
+            const locationsSet = new Set(
+                toStringArray(parentResource.locations as ObjectId[])
+            );
+            locationsSet.add(location.id);
+            parentResource.locations = toObjectIdArray([...locationsSet]);
             await parentResource.save();
         }
 
@@ -171,15 +175,15 @@ export class LocationService {
             const parentResource = await this.ResourceModel.findById(
                 oldResource
             );
-            const locationsSet = new Set(parentResource.locations);
-            if (locationsSet.has(location._id)) {
-                locationsSet.delete(location._id);
-                parentResource.locations = [...locationsSet];
+            const locationsSet = new Set(
+                toStringArray(parentResource.locations as ObjectId[])
+            );
+            if (locationsSet.has(location.id)) {
+                locationsSet.delete(location.id);
+                parentResource.locations = toObjectIdArray([...locationsSet]);
                 await parentResource.save();
             }
         }
-
-        location.resource = newResource;
     }
 
     async isLocationUpdateAllowed(

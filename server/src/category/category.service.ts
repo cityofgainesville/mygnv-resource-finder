@@ -10,7 +10,12 @@ import { InjectModel } from 'nestjs-typegoose';
 import { User, Role } from '../user/user.entity';
 import { QueryPopulateOptions } from 'mongoose';
 import { Resource } from '../resource/resource.entity';
-import { getAddedRemoved, ObjectId } from '../util';
+import {
+    getAddedRemoved,
+    ObjectId,
+    toStringArray,
+    toObjectIdArray,
+} from '../util';
 
 @Injectable()
 export class CategoryService {
@@ -105,15 +110,15 @@ export class CategoryService {
             await category.save();
             this.updateCategoryResourcesBinding(
                 category,
-                newResources as ObjectId[]
+                toStringArray(newResources as ObjectId[])
             );
             this.updateCategoryChildrenBinding(
                 category,
-                newChildren as ObjectId[]
+                toStringArray(newChildren as ObjectId[])
             );
             this.updateCategoryParentsBinding(
                 category,
-                newParents as ObjectId[]
+                toStringArray(newParents as ObjectId[])
             );
             await category.save();
             return category;
@@ -145,19 +150,19 @@ export class CategoryService {
             if (newCategory.resources) {
                 this.updateCategoryResourcesBinding(
                     category,
-                    newCategory.resources as ObjectId[]
+                    toStringArray(newCategory.resources as ObjectId[])
                 );
             }
             if (newCategory.children) {
                 this.updateCategoryChildrenBinding(
                     category,
-                    newCategory.children as ObjectId[]
+                    toStringArray(newCategory.children as ObjectId[])
                 );
             }
             if (newCategory.parents) {
                 this.updateCategoryParentsBinding(
                     category,
-                    newCategory.parents as ObjectId[]
+                    toStringArray(newCategory.parents as ObjectId[])
                 );
             }
 
@@ -186,57 +191,64 @@ export class CategoryService {
 
     private async updateCategoryResourcesBinding(
         category: CategoryType,
-        newResources: ObjectId[]
+        newResources: string[]
     ): Promise<void> {
         // If it's a added resource, link the resource's binding to this category.
         // If it's a removed resource, unlink the resource's binding to this category.
 
-        if (category.resources === newResources) return;
+        const oldResources = toStringArray(category.resources as ObjectId[]);
 
         const {
             added: addedResources,
             removed: removedResources,
-        } = getAddedRemoved(newResources, category.resources as ObjectId[]);
+        } = getAddedRemoved(newResources, oldResources);
 
         addedResources.map(async (addedResource) => {
             const resource = await this.ResourceModel.findById(addedResource);
-            const categoriesSet = new Set(resource.categories);
+            const categoriesSet = new Set(
+                toStringArray(resource.categories as ObjectId[])
+            );
             categoriesSet.add(category.id);
-            resource.categories = [...categoriesSet];
+            resource.categories = toObjectIdArray([...categoriesSet]);
             await resource.save();
         });
 
         removedResources.map(async (removedResource) => {
             const resource = await this.ResourceModel.findById(removedResource);
-            const categoriesSet = new Set(resource.categories);
+            const categoriesSet = new Set(
+                toStringArray(resource.categories as ObjectId[])
+            );
             if (categoriesSet.has(category.id)) {
                 categoriesSet.delete(category.id);
-                resource.categories = [...categoriesSet];
+                resource.categories = toObjectIdArray([...categoriesSet]);
                 await resource.save();
             }
         });
 
-        category.resources = newResources;
+        category.resources = toObjectIdArray(newResources);
     }
 
     private async updateCategoryChildrenBinding(
         category: CategoryType,
-        newChildren: ObjectId[]
+        newChildren: string[]
     ): Promise<void> {
-        if (category.children === newChildren) return;
-
         // If it's a added child, link the child's binding to this category.
         // If it's a removed child, unlink the child's binding to this category.
+
+        const oldChildren = toStringArray(category.children as ObjectId[]);
+
         const {
             added: addedChildren,
             removed: removedChildren,
-        } = getAddedRemoved(newChildren, category.children as ObjectId[]);
+        } = getAddedRemoved(newChildren, oldChildren);
 
         addedChildren.map(async (addedChild) => {
             const childCategory = await this.CategoryModel.findById(addedChild);
-            const parentsSet = new Set(childCategory.parents);
+            const parentsSet = new Set(
+                toStringArray(childCategory.parents as ObjectId[])
+            );
             parentsSet.add(category.id);
-            childCategory.parents = [...parentsSet];
+            childCategory.parents = toObjectIdArray([...parentsSet]);
             await childCategory.save();
         });
 
@@ -244,37 +256,42 @@ export class CategoryService {
             const childCategory = await this.CategoryModel.findById(
                 removedChild
             );
-            const parentsSet = new Set(childCategory.parents);
+            const parentsSet = new Set(
+                toStringArray(childCategory.parents as ObjectId[])
+            );
             if (parentsSet.has(category.id)) {
                 parentsSet.delete(category.id);
-                childCategory.parents = [...parentsSet];
+                childCategory.parents = toObjectIdArray([...parentsSet]);
                 await childCategory.save();
             }
         });
 
-        category.children = newChildren;
+        category.children = toObjectIdArray(newChildren);
     }
 
     private async updateCategoryParentsBinding(
         category: CategoryType,
-        newParents: ObjectId[]
+        newParents: string[]
     ): Promise<void> {
-        if (category.parents === newParents) return;
-
         // If it's a added child, link the child's binding to this category.
         // If it's a removed child, unlink the child's binding to this category.
+
+        const oldParents = toStringArray(category.children as ObjectId[]);
+
         const {
             added: addedParents,
             removed: removedParents,
-        } = getAddedRemoved(newParents, category.parents as ObjectId[]);
+        } = getAddedRemoved(newParents, oldParents);
 
         addedParents.map(async (addedParent) => {
             const parentCategory = await this.CategoryModel.findById(
                 addedParent
             );
-            const childrenSet = new Set(parentCategory.parents);
+            const childrenSet = new Set(
+                toStringArray(parentCategory.children as ObjectId[])
+            );
             childrenSet.add(category.id);
-            parentCategory.parents = [...childrenSet];
+            parentCategory.children = toObjectIdArray([...childrenSet]);
             await parentCategory.save();
         });
 
@@ -290,6 +307,6 @@ export class CategoryService {
             }
         });
 
-        category.parents = newParents;
+        category.parents = toObjectIdArray(newParents);
     }
 }

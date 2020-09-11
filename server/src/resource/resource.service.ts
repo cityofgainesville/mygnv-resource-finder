@@ -13,7 +13,12 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { InjectModel } from 'nestjs-typegoose';
 import { User, Role } from '../user/user.entity';
 import { QueryPopulateOptions } from 'mongoose';
-import { ObjectId, getAddedRemoved } from '../util';
+import {
+    ObjectId,
+    getAddedRemoved,
+    toObjectIdArray,
+    toStringArray,
+} from '../util';
 import { Location } from '../location/location.entity';
 import { Category } from '../category/category.entity';
 
@@ -59,9 +64,9 @@ export class ResourceService {
         const resourceList = await this.ResourceModel.find(filter).populate(
             this.queryPopulateOptions(locations, categories, user)
         );
-        if (user.role !== Role.OWNER) {
+        if (user?.role !== Role.OWNER) {
             return resourceList.map((resource) => {
-                delete resource.maintainer_contact_info;
+                resource.maintainer_contact_info = undefined;
                 return resource;
             });
         } else return resourceList;
@@ -77,7 +82,7 @@ export class ResourceService {
             this.queryPopulateOptions(locations, categories, user)
         );
         if (user.role !== Role.OWNER) {
-            delete resource.maintainer_contact_info;
+            resource.maintainer_contact_info = undefined;
         }
         return resource;
     }
@@ -101,11 +106,11 @@ export class ResourceService {
 
             this.updateResourceLocationsBinding(
                 resource,
-                newLocations as ObjectId[]
+                toStringArray(newLocations as ObjectId[])
             );
             this.updateResourceCategoriesBinding(
                 resource,
-                newCategories as ObjectId[]
+                toStringArray(newCategories as ObjectId[])
             );
 
             await resource.save();
@@ -145,13 +150,13 @@ export class ResourceService {
             if (newResource.locations) {
                 this.updateResourceLocationsBinding(
                     resource,
-                    newResource.locations as ObjectId[]
+                    toStringArray(newResource.locations as ObjectId[])
                 );
             }
             if (newResource.categories) {
                 this.updateResourceCategoriesBinding(
                     resource,
-                    newResource.categories as ObjectId[]
+                    toStringArray(newResource.categories as ObjectId[])
                 );
             }
 
@@ -179,68 +184,72 @@ export class ResourceService {
 
     private async updateResourceLocationsBinding(
         resource: ResourceType,
-        newLocations: ObjectId[]
+        newLocations: string[]
     ): Promise<void> {
         // If it's a added location, link the location's binding to this resource.
         // If it's a removed location, unlink the location's binding to this resource.
 
-        if (resource.locations === newLocations) return;
+        const oldLocations = toStringArray(resource.locations as ObjectId[]);
 
         const {
             added: addedLocations,
             removed: removedLocations,
-        } = getAddedRemoved(newLocations, resource.locations as ObjectId[]);
+        } = getAddedRemoved(newLocations, oldLocations);
 
         addedLocations.map(async (addedLocation) => {
             const location = await this.LocationModel.findById(addedLocation);
             location.resource = resource._id;
-            location.save();
+            await location.save();
         });
 
         removedLocations.map(async (removedLocation) => {
             const location = await this.LocationModel.findById(removedLocation);
-            if (location.resource === resource._id) {
-                delete location.resource;
-                location.save();
+            if ((location.resource as ObjectId).toHexString() === resource.id) {
+                location.resource = undefined;
+                await location.save();
             }
         });
 
-        resource.locations = newLocations;
+        resource.locations = toObjectIdArray(newLocations);
     }
 
     private async updateResourceCategoriesBinding(
         resource: ResourceType,
-        newCategories: ObjectId[]
+        newCategories: string[]
     ): Promise<void> {
         // If it's a added category, link the category's binding to this resource.
         // If it's a removed category, unlink the category's binding to this resource.
 
-        if (resource.categories === newCategories) return;
+        const oldCategories = toStringArray(resource.categories as ObjectId[]);
 
         const {
             added: addedCategories,
             removed: removedCategories,
-        } = getAddedRemoved(newCategories, resource.categories as ObjectId[]);
+        } = getAddedRemoved(newCategories, oldCategories);
 
         addedCategories.map(async (addedCategory) => {
             const category = await this.CategoryModel.findById(addedCategory);
-            const resourcesSet = new Set(category.resources);
-            resourcesSet.add(resource._id);
-            category.resources = [...resourcesSet];
-            category.save();
+            const resourcesSet = new Set(
+                toStringArray(category.resources as ObjectId[])
+            );
+            resourcesSet.add(resource.id);
+            category.resources = toObjectIdArray([...resourcesSet]);
+            await category.save();
         });
 
         removedCategories.map(async (removedCategory) => {
             const category = await this.CategoryModel.findById(removedCategory);
-            const resourcesSet = new Set(category.resources);
-            if (resourcesSet.has(resource._id)) {
-                resourcesSet.delete(resource._id);
-                category.resources = [...resourcesSet];
-                category.save();
+            const resourcesSet = new Set(
+                toStringArray(category.resources as ObjectId[])
+            );
+            if (resourcesSet.has(resource.id)) {
+                resourcesSet.delete(resource.id);
+                category.resources = toObjectIdArray([...resourcesSet]);
+                await category.save();
             }
         });
 
-        resource.categories = newCategories;
+        resource.categories = toObjectIdArray(newCategories);
     }
 
     private async isResourceUpdateAllowed(

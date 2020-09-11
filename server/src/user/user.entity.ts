@@ -1,4 +1,9 @@
-import { Ref, prop as Property, DocumentType } from '@typegoose/typegoose';
+import {
+    Ref,
+    prop as Property,
+    DocumentType,
+    modelOptions,
+} from '@typegoose/typegoose';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { DynamicModule } from '@nestjs/common';
 import { Category } from '../category/category.entity';
@@ -54,7 +59,7 @@ export class UserResponseDto {
     readonly updated_at!: Date;
     @Property()
     readonly created_at!: Date;
-    @Property({ unique: true, required: true })
+    @Property({ required: true, index: true, unique: true })
     email!: string;
     @Property({ required: true })
     first_name!: string;
@@ -62,14 +67,31 @@ export class UserResponseDto {
     last_name!: string;
     @Property({ enum: Role, required: true, default: Role.EDITOR })
     role!: Role;
-    @Property({ itemsRef: () => Location })
+    @Property({ ref: () => Location })
     location_can_edit?: Ref<Location>[];
-    @Property({ itemsRef: () => Resource })
+    @Property({ ref: () => Resource })
     resource_can_edit?: Ref<Resource>[];
-    @Property({ itemsRef: () => Category })
+    @Property({ ref: () => Category })
     cat_can_edit_members?: Ref<Category>[];
 }
 
+@modelOptions({
+    schemaOptions: {
+        timestamps: {
+            createdAt: 'created_at',
+            updatedAt: 'updated_at',
+        },
+        toJSON: {
+            virtuals: true,
+            versionKey: false,
+            transform: function (_doc, ret) {
+                // remove these props when object is serialized
+                delete ret._id;
+                delete ret.hash;
+            },
+        },
+    },
+})
 export class User extends UserResponseDto {
     @Property({ required: true })
     hash!: string;
@@ -78,22 +100,5 @@ export class User extends UserResponseDto {
 export type UserType = DocumentType<User>;
 
 export const UserModelModule: DynamicModule = TypegooseModule.forFeature([
-    {
-        typegooseClass: User,
-        schemaOptions: {
-            timestamps: {
-                createdAt: 'created_at',
-                updatedAt: 'updated_at',
-            },
-            toJSON: {
-                virtuals: true,
-                versionKey: false,
-                transform: function (doc, ret) {
-                    // remove these props when object is serialized
-                    delete ret._id;
-                    delete ret.hash;
-                },
-            },
-        },
-    },
+    User,
 ]);

@@ -27,6 +27,7 @@ export class UpdateResourceDto {
     public categories?: string[];
 }
 
+@modelOptions({ schemaOptions: { _id: false } })
 class MaintainerContactInfo {
     @Property()
     public name?: string;
@@ -35,7 +36,7 @@ class MaintainerContactInfo {
     @Property()
     public email?: string;
     @Property()
-    public phone_?: string;
+    public phone_1?: string;
     @Property()
     public phone_1_notes?: string;
     @Property()
@@ -44,13 +45,26 @@ class MaintainerContactInfo {
     public phone_2_notes?: string;
 }
 
+@modelOptions({
+    schemaOptions: {
+        timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+        toJSON: {
+            virtuals: true,
+            versionKey: false,
+            transform: function (_doc, ret) {
+                // remove these props when object is serialized
+                delete ret._id;
+            },
+        },
+    },
+})
 export class Resource {
     public readonly id!: string;
     @Property()
     public readonly updated_at!: Date;
     @Property()
     public readonly created_at!: Date;
-    @Property({ required: true })
+    @Property({ required: true, index: true, unique: true })
     public name!: string;
     @Property()
     public organization_description?: string;
@@ -58,27 +72,14 @@ export class Resource {
     public organization_url?: string;
     @Property()
     public maintainer_contact_info?: MaintainerContactInfo;
-    @Property({ itemsRef: () => Location })
+    @Property({ ref: () => Location })
     public locations?: Ref<Location>[];
-    @Property({ itemsRef: () => Category })
+    @Property({ ref: () => Category })
     public categories?: Ref<Category>[];
 }
 
 export type ResourceType = DocumentType<Resource>;
 
 export const ResourceModelModule: DynamicModule = TypegooseModule.forFeature([
-    {
-        typegooseClass: Resource,
-        schemaOptions: {
-            timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
-            toJSON: {
-                virtuals: true,
-                versionKey: false,
-                transform: function (doc, ret) {
-                    // remove these props when object is serialized
-                    delete ret._id;
-                },
-            },
-        },
-    },
+    Resource,
 ]);

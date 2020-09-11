@@ -19,7 +19,7 @@ import {
     LoginUserDto,
     UserResponseDto,
 } from '../user/user.entity';
-import { Request, Response } from 'express';
+import { Request, Response, CookieOptions } from 'express';
 import { LoginUserResponseDto } from '../user/user.entity';
 import { RefreshTokenDto } from './auth.entity';
 
@@ -54,7 +54,11 @@ export class AuthController {
         @Res() res: Response,
         @Ip() ip: string
     ): Promise<LoginUserResponseDto> {
-        const data = await this.authService.register(req.body, req.user, ip);
+        const data = await this.authService.register(
+            createUserDto,
+            req.user,
+            ip
+        );
 
         // If not already logged on
         if (!req.user) {
@@ -94,7 +98,9 @@ export class AuthController {
         refreshToken: { token: string; expires: Date }
     ) {
         // create http only cookie with refresh token that expires
-        const cookieOptions = {
+        const cookieOptions: CookieOptions = {
+            sameSite: 'strict',
+            secure: false,
             httpOnly: true,
             expires: refreshToken.expires,
         };

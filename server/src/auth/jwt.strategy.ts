@@ -27,7 +27,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         email: string;
     }): Promise<UserResponseDto | null> {
         try {
-            return await this.UserModel.findOne({ _id: payload.sub });
+            return await this.UserModel.findById(payload.sub);
         } catch (error) {
             return error;
         }

@@ -1,4 +1,9 @@
-import { Ref, prop as Property, DocumentType } from '@typegoose/typegoose';
+import {
+    Ref,
+    prop as Property,
+    DocumentType,
+    modelOptions,
+} from '@typegoose/typegoose';
 import { User } from '../user/user.entity';
 import { TypegooseModule } from 'nestjs-typegoose';
 import ms from 'ms';
@@ -13,6 +18,28 @@ export class RefreshTokenDto {
     refresh_token?: string;
 }
 
+@modelOptions({
+    schemaOptions: {
+        timestamps: {
+            createdAt: 'created_at',
+            updatedAt: 'updated_at',
+        },
+        toJSON: {
+            virtuals: true,
+            versionKey: false,
+            transform: function (_doc, ret) {
+                // remove these props when object is serialized
+                delete ret._id;
+                delete ret.id;
+                delete ret.user;
+                delete ret.updated_at;
+                delete ret.created_at;
+                delete ret.is_expired;
+                delete ret.is_active;
+            },
+        },
+    },
+})
 export class RefreshToken {
     public readonly id!: string;
     @Property()
@@ -21,7 +48,7 @@ export class RefreshToken {
     public readonly created_at!: Date;
     @Property({ required: true, ref: () => User })
     public user!: Ref<User>;
-    @Property({ unique: true, required: true })
+    @Property({ required: true, index: true, unique: true })
     public token!: string;
     @Property({ required: true })
     public expires: Date;
@@ -45,29 +72,5 @@ export class RefreshToken {
 export type RefreshTokenType = DocumentType<RefreshToken>;
 
 export const RefreshTokenModelModule: DynamicModule = TypegooseModule.forFeature(
-    [
-        {
-            typegooseClass: RefreshToken,
-            schemaOptions: {
-                timestamps: {
-                    createdAt: 'created_at',
-                    updatedAt: 'updated_at',
-                },
-                toJSON: {
-                    virtuals: true,
-                    versionKey: false,
-                    transform: function (doc, ret) {
-                        // remove these props when object is serialized
-                        delete ret._id;
-                        delete ret.id;
-                        delete ret.user;
-                        delete ret.updated_at;
-                        delete ret.created_at;
-                        delete ret.is_expired;
-                        delete ret.is_active;
-                    },
-                },
-            },
-        },
-    ]
+    [RefreshToken]
 );

@@ -87,7 +87,7 @@ export class AuthService {
             newUser.role = Role.EDITOR;
         }
 
-        newUser.save();
+        await newUser.save();
 
         const payload = { sub: user.id, email: user.email };
         const jwtToken = this.jwtService.sign(payload);

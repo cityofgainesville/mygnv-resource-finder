@@ -15,7 +15,10 @@ dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
 
 @Module({
     imports: [
-        TypegooseModule.forRoot(process.env.DB_URI),
+        TypegooseModule.forRoot(process.env.DB_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        }),
         ServeStaticModule.forRoot({
             rootPath: path.join(__dirname, '../../client/dist'),
         }),
