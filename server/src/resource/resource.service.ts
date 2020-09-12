@@ -103,11 +103,11 @@ export class ResourceService {
 
             await resource.save();
 
-            this.updateResourceLocationsBinding(
+            await this.updateResourceLocationsBinding(
                 resource,
                 toStringArray(newLocations as ObjectId[])
             );
-            this.updateResourceCategoriesBinding(
+            await this.updateResourceCategoriesBinding(
                 resource,
                 toStringArray(newCategories as ObjectId[])
             );
@@ -147,13 +147,13 @@ export class ResourceService {
             await resource.save();
 
             if (newResource.locations) {
-                this.updateResourceLocationsBinding(
+                await this.updateResourceLocationsBinding(
                     resource,
                     toStringArray(newResource.locations as ObjectId[])
                 );
             }
             if (newResource.categories) {
-                this.updateResourceCategoriesBinding(
+                await this.updateResourceCategoriesBinding(
                     resource,
                     toStringArray(newResource.categories as ObjectId[])
                 );
@@ -171,8 +171,8 @@ export class ResourceService {
         if (user?.role !== Role.OWNER) throw new UnauthorizedException();
         try {
             const resource = await this.ResourceModel.findById(id);
-            this.updateResourceLocationsBinding(resource, []);
-            this.updateResourceCategoriesBinding(resource, []);
+            await this.updateResourceLocationsBinding(resource, []);
+            await this.updateResourceCategoriesBinding(resource, []);
 
             await resource.deleteOne();
         } catch (error) {

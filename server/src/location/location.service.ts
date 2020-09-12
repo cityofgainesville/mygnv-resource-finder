@@ -87,8 +87,7 @@ export class LocationService {
 
             await location.save();
 
-            this.updateLocationResourceBinding(location, newResource);
-            location.resource = new mongoose.Types.ObjectId(newResource);
+            await this.updateLocationResourceBinding(location, newResource);
 
             await location.save();
             return location;
@@ -124,11 +123,10 @@ export class LocationService {
             await location.save();
 
             if (newLocation.resource) {
-                this.updateLocationResourceBinding(
+                await this.updateLocationResourceBinding(
                     location,
                     (newLocation.resource as ObjectId).toHexString()
                 );
-                location.resource = newLocation.resource;
             }
 
             await location.save();
@@ -142,7 +140,7 @@ export class LocationService {
         if (user?.role !== Role.OWNER) throw new UnauthorizedException();
         try {
             const location = await this.LocationModel.findById(id);
-            this.updateLocationResourceBinding(location, null);
+            await this.updateLocationResourceBinding(location, null);
 
             await location.deleteOne();
         } catch (error) {
@@ -150,13 +148,13 @@ export class LocationService {
         }
     }
 
-    async updateLocationResourceBinding(
+    private async updateLocationResourceBinding(
         location: LocationType,
         newResource: string
     ): Promise<void> {
         const oldResource = (location.resource as ObjectId)?.toHexString();
 
-        if (oldResource !== newResource) return;
+        if (oldResource === newResource) return;
 
         if (newResource) {
             const parentResource = await this.ResourceModel.findById(
@@ -183,6 +181,8 @@ export class LocationService {
                 await parentResource.save();
             }
         }
+
+        location.resource = new mongoose.Types.ObjectId(newResource);
     }
 
     async isLocationUpdateAllowed(

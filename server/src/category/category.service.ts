@@ -111,18 +111,20 @@ export class CategoryService {
             category.parents = [];
 
             await category.save();
-            this.updateCategoryResourcesBinding(
+
+            await this.updateCategoryResourcesBinding(
                 category,
                 toStringArray(newResources as ObjectId[])
             );
-            this.updateCategoryChildrenBinding(
+            await this.updateCategoryChildrenBinding(
                 category,
                 toStringArray(newChildren as ObjectId[])
             );
-            this.updateCategoryParentsBinding(
+            await this.updateCategoryParentsBinding(
                 category,
                 toStringArray(newParents as ObjectId[])
             );
+
             await category.save();
             return category;
         } catch (error) {
@@ -150,19 +152,19 @@ export class CategoryService {
             await category.save();
 
             if (newCategory.resources) {
-                this.updateCategoryResourcesBinding(
+                await this.updateCategoryResourcesBinding(
                     category,
                     toStringArray(newCategory.resources as ObjectId[])
                 );
             }
             if (newCategory.children) {
-                this.updateCategoryChildrenBinding(
+                await this.updateCategoryChildrenBinding(
                     category,
                     toStringArray(newCategory.children as ObjectId[])
                 );
             }
             if (newCategory.parents) {
-                this.updateCategoryParentsBinding(
+                await this.updateCategoryParentsBinding(
                     category,
                     toStringArray(newCategory.parents as ObjectId[])
                 );
@@ -180,9 +182,9 @@ export class CategoryService {
         if (user?.role !== Role.OWNER) throw new UnauthorizedException();
         try {
             const category = await this.CategoryModel.findById(id);
-            this.updateCategoryResourcesBinding(category, []);
-            this.updateCategoryChildrenBinding(category, []);
-            this.updateCategoryParentsBinding(category, []);
+            await this.updateCategoryResourcesBinding(category, []);
+            await this.updateCategoryChildrenBinding(category, []);
+            await this.updateCategoryParentsBinding(category, []);
 
             await category.deleteOne();
         } catch (error) {
