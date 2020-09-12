@@ -42,12 +42,12 @@ export class AuthService {
     async validateUser(
         email: string,
         password: string
-    ): Promise<UserResponseDto | null> {
+    ): Promise<UserResponseDto> {
         const user = await this.userService.findOneByEmail(email);
-        if (await bcrypt.compare(password, user.hash)) {
+        if (user && (await bcrypt.compare(password, user.hash))) {
             return user;
         }
-        return null;
+        throw new UnauthorizedException();
     }
 
     async hashPassword(password: string): Promise<string> {
@@ -59,27 +59,22 @@ export class AuthService {
         loginUserDto: LoginUserDto,
         ip: string
     ): Promise<LoginUserResponseDto> {
-        try {
-            const user = await this.validateUser(
-                loginUserDto.email,
-                loginUserDto.password
-            );
-            if (!user) return null;
-            const payload = { sub: user.id, email: user.email };
-            const jwtToken = this.jwtService.sign(payload);
-            const refreshToken = await this.generateRefreshToken(user, ip);
-            await refreshToken.save();
-            return {
-                user,
-                access_token: jwtToken,
-                refresh_token: {
-                    token: refreshToken.token,
-                    expires: refreshToken.expires,
-                },
-            };
-        } catch (error) {
-            throw new InternalServerErrorException(error.message);
-        }
+        const user = await this.validateUser(
+            loginUserDto.email,
+            loginUserDto.password
+        );
+        const payload = { sub: user.id, email: user.email };
+        const jwtToken = this.jwtService.sign(payload);
+        const refreshToken = await this.generateRefreshToken(user, ip);
+        await refreshToken.save();
+        return {
+            user,
+            access_token: jwtToken,
+            refresh_token: {
+                token: refreshToken.token,
+                expires: refreshToken.expires,
+            },
+        };
     }
 
     async register(

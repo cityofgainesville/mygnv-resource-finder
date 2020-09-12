@@ -9,7 +9,6 @@ import {
     Ip,
     Put,
     Query,
-    UnauthorizedException,
 } from '@nestjs/common';
 import {
     ApiCookieAuth,
@@ -43,15 +42,12 @@ export class AuthController {
         @Res() res: Response,
         @Ip() ip: string
     ): Promise<LoginUserResponseDto> {
-        try {
-            const data = await this.authService.login(loginUserDto, ip);
+        const data = await this.authService.login(loginUserDto, ip);
 
-            this.setRefreshTokenCookie(res, data.refresh_token);
+        this.setRefreshTokenCookie(res, data.refresh_token);
 
-            return (res.json(data) as unknown) as LoginUserResponseDto;
-        } catch (error) {
-            throw new UnauthorizedException(error.message);
-        }
+        res.json(data);
+        return data;
     }
 
     @ApiBearerAuth()
@@ -74,14 +70,16 @@ export class AuthController {
             this.setRefreshTokenCookie(res, data.refresh_token);
         }
 
-        return (res.json(data) as unknown) as LoginUserResponseDto;
+        res.json(data);
+        return data;
     }
 
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     @Get('me')
     getProfile(@Req() req: Request, @Res() res: Response): UserResponseDto {
-        return (res.json(req.user) as unknown) as UserResponseDto;
+        res.json(req.user);
+        return req.user;
     }
 
     @ApiOperation({
@@ -103,7 +101,8 @@ export class AuthController {
         const data = await this.authService.refreshToken(refreshToken, ip);
         this.setRefreshTokenCookie(res, data.refresh_token);
 
-        return (res.json(data) as unknown) as LoginUserResponseDto;
+        res.json(data);
+        return data;
     }
 
     async setRefreshTokenCookie(

@@ -258,8 +258,11 @@ export class ResourceService {
             const resourceToEdit = await this.ResourceModel.findById(id);
             if (user.role === Role.OWNER) return resourceToEdit;
 
-            const resources = await this.ResourceModel.find({});
-            const categories = await this.CategoryModel.find({});
+            const [resources, categories] = await Promise.all([
+                this.ResourceModel.find({}),
+                this.CategoryModel.find({}),
+            ]);
+
             const allowedResources: ResourceType[] = [];
             const categoryMap = new Map(
                 Object.values(categories).map((category) => [

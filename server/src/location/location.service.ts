@@ -193,9 +193,12 @@ export class LocationService {
             const locationToEdit = await this.LocationModel.findById(id);
             if (user.role === Role.OWNER) return locationToEdit;
 
-            const categories = await this.CategoryModel.find({});
-            const locations = await this.LocationModel.find({});
-            const resources = await this.ResourceModel.find({});
+            const [categories, locations, resources] = await Promise.all([
+                this.CategoryModel.find({}),
+                this.LocationModel.find({}),
+                this.ResourceModel.find({}),
+            ]);
+
             const allowedLocations: LocationType[] = [];
             const categoryMap = new Map(
                 Object.values(categories).map((category) => [

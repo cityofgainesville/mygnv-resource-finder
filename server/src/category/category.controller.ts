@@ -82,7 +82,8 @@ export class CategoryController {
     })
     @ApiBody({
         required: false,
-        type: Object,
+        type: UpdateCategoryDto,
+        description: 'Specify selection filter',
     })
     @ApiBearerAuth()
     @UseGuards(OptionalJwtAuthGuard)
@@ -91,7 +92,7 @@ export class CategoryController {
         @Query('children') children: string,
         @Query('parents') parents: string,
         @Query('resources') resources: string,
-        @Body() filter: object,
+        @Body() filter: UpdateCategoryDto,
         @Req() req: Request
     ): Promise<Category[]> {
         return await this.categoryService.list(

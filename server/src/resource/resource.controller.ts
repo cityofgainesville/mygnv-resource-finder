@@ -67,7 +67,8 @@ export class ResourceController {
     })
     @ApiBody({
         required: false,
-        type: Object,
+        type: UpdateResourceDto,
+        description: 'Specify selection filter',
     })
     @ApiBearerAuth()
     @UseGuards(OptionalJwtAuthGuard)
@@ -75,7 +76,7 @@ export class ResourceController {
     async list(
         @Query('locations') locations: string,
         @Query('categories') categories: string,
-        @Body() filter: object,
+        @Body() filter: UpdateResourceDto,
         @Req() req: Request
     ): Promise<Resource[]> {
         return await this.resourceService.list(

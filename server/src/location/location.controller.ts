@@ -49,14 +49,15 @@ export class LocationController {
     })
     @ApiBody({
         required: false,
-        type: Object,
+        type: UpdateLocationDto,
+        description: 'Specify selection filter',
     })
     @ApiBearerAuth()
     @UseGuards(OptionalJwtAuthGuard)
     @Put('list')
     async list(
         @Query('resource') resource: string,
-        @Body() filter: object,
+        @Body() filter: UpdateLocationDto,
         @Req() req: Request
     ): Promise<Location[]> {
         return await this.locationService.list(resource, filter, req.user);

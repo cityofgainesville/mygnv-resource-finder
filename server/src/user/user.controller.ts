@@ -76,7 +76,8 @@ export class UserController {
     })
     @ApiBody({
         required: false,
-        type: Object,
+        type: UpdateUserDto,
+        description: 'Specify selection filter',
     })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
@@ -85,7 +86,7 @@ export class UserController {
         @Query('categories') categories: string,
         @Query('resources') resources: string,
         @Query('locations') locations: string,
-        @Body() filter: object,
+        @Body() filter: UpdateUserDto,
         @Req() req: Request
     ): Promise<UserResponseDto[]> {
         return await this.userService.list(
