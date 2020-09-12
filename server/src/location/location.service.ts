@@ -1,7 +1,7 @@
 import {
     Injectable,
     UnauthorizedException,
-    HttpException,
+    InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { Resource } from '../resource/resource.entity';
@@ -93,7 +93,7 @@ export class LocationService {
             await location.save();
             return location;
         } catch (error) {
-            throw new HttpException(error.message, 200);
+            throw new InternalServerErrorException(error.message);
         }
     }
 
@@ -134,20 +134,19 @@ export class LocationService {
             await location.save();
             return location;
         } catch (error) {
-            throw new HttpException(error.message, 200);
+            throw new InternalServerErrorException(error.message);
         }
     }
 
     async delete(id: string, user: User): Promise<void> {
-        if (user?.role !== Role.OWNER)
-            throw new HttpException('Unauthorized', 401);
+        if (user?.role !== Role.OWNER) throw new UnauthorizedException();
         try {
             const location = await this.LocationModel.findById(id);
             this.updateLocationResourceBinding(location, null);
 
             await location.deleteOne();
         } catch (error) {
-            throw new HttpException(error.message, 200);
+            throw new InternalServerErrorException(error.message);
         }
     }
 

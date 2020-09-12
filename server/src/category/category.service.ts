@@ -1,4 +1,8 @@
-import { Injectable, HttpException } from '@nestjs/common';
+import {
+    Injectable,
+    InternalServerErrorException,
+    UnauthorizedException,
+} from '@nestjs/common';
 import {
     Category,
     CreateCategoryDto,
@@ -94,8 +98,7 @@ export class CategoryService {
         createCategoryDto: CreateCategoryDto,
         user: User
     ): Promise<Category> {
-        if (user?.role !== Role.OWNER)
-            throw new HttpException('Unauthorized', 401);
+        if (user?.role !== Role.OWNER) throw new UnauthorizedException();
         try {
             const category: CategoryType = new this.CategoryModel(
                 createCategoryDto
@@ -123,7 +126,7 @@ export class CategoryService {
             await category.save();
             return category;
         } catch (error) {
-            throw new HttpException(error.message, 200);
+            throw new InternalServerErrorException(error.message);
         }
     }
 
@@ -132,8 +135,7 @@ export class CategoryService {
         updateCategoryDto: UpdateCategoryDto,
         user: User
     ): Promise<Category> {
-        if (user?.role !== Role.OWNER)
-            throw new HttpException('Unauthorized', 401);
+        if (user?.role !== Role.OWNER) throw new UnauthorizedException();
         try {
             const category = await this.CategoryModel.findById(id);
             const newCategory = new this.CategoryModel(updateCategoryDto);
@@ -170,13 +172,12 @@ export class CategoryService {
 
             return category;
         } catch (error) {
-            throw new HttpException(error.message, 200);
+            throw new InternalServerErrorException(error.message);
         }
     }
 
     async delete(id: string, user: User): Promise<void> {
-        if (user?.role !== Role.OWNER)
-            throw new HttpException('Unauthorized', 401);
+        if (user?.role !== Role.OWNER) throw new UnauthorizedException();
         try {
             const category = await this.CategoryModel.findById(id);
             this.updateCategoryResourcesBinding(category, []);
@@ -185,7 +186,7 @@ export class CategoryService {
 
             await category.deleteOne();
         } catch (error) {
-            throw new HttpException(error.message, 200);
+            throw new InternalServerErrorException(error.message);
         }
     }
 

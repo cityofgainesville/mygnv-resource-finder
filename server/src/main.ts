@@ -37,6 +37,10 @@ async function bootstrap() {
         .setTitle('MyGNV Resource Finder Api')
         .setDescription('REST API used by the MyGNV Resource Finder')
         .setVersion('1.0')
+        .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' })
+        .addCookieAuth('refresh_token', {
+            type: 'apiKey',
+        })
         .build();
     const document = SwaggerModule.createDocument(app, options);
     SwaggerModule.setup('docs', app, document);

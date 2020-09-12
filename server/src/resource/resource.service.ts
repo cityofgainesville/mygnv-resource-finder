@@ -1,7 +1,7 @@
 import {
     Injectable,
-    HttpException,
     UnauthorizedException,
+    InternalServerErrorException,
 } from '@nestjs/common';
 import {
     Resource,
@@ -91,8 +91,7 @@ export class ResourceService {
         createResourceDto: CreateResourceDto,
         user: User
     ): Promise<Resource> {
-        if (user?.role !== Role.OWNER)
-            throw new HttpException('Unauthorized', 401);
+        if (user?.role !== Role.OWNER) throw new UnauthorizedException();
         try {
             const resource: ResourceType = new this.ResourceModel(
                 createResourceDto
@@ -116,7 +115,7 @@ export class ResourceService {
             await resource.save();
             return resource;
         } catch (error) {
-            throw new HttpException(error.message, 200);
+            throw new InternalServerErrorException(error.message);
         }
     }
 
@@ -164,13 +163,12 @@ export class ResourceService {
 
             return resource;
         } catch (error) {
-            throw new HttpException(error.message, 200);
+            throw new InternalServerErrorException(error.message);
         }
     }
 
     async delete(id: string, user: User): Promise<void> {
-        if (user?.role !== Role.OWNER)
-            throw new HttpException('Unauthorized', 401);
+        if (user?.role !== Role.OWNER) throw new UnauthorizedException();
         try {
             const resource = await this.ResourceModel.findById(id);
             this.updateResourceLocationsBinding(resource, []);
@@ -178,7 +176,7 @@ export class ResourceService {
 
             await resource.deleteOne();
         } catch (error) {
-            throw new HttpException(error.message, 200);
+            throw new InternalServerErrorException(error.message);
         }
     }
 

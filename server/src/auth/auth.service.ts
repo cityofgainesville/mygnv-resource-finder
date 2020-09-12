@@ -1,5 +1,13 @@
 import { UserService } from '../user/user.service';
-import { Injectable, HttpException, forwardRef, Inject } from '@nestjs/common';
+import {
+    Injectable,
+    HttpException,
+    forwardRef,
+    Inject,
+    InternalServerErrorException,
+    BadRequestException,
+    UnauthorizedException,
+} from '@nestjs/common';
 import {
     User,
     CreateUserDto,
@@ -51,23 +59,27 @@ export class AuthService {
         loginUserDto: LoginUserDto,
         ip: string
     ): Promise<LoginUserResponseDto> {
-        const user = await this.validateUser(
-            loginUserDto.email,
-            loginUserDto.password
-        );
-        if (!user) return null;
-        const payload = { sub: user.id, email: user.email };
-        const jwtToken = this.jwtService.sign(payload);
-        const refreshToken = await this.generateRefreshToken(user, ip);
-        await refreshToken.save();
-        return {
-            user,
-            access_token: jwtToken,
-            refresh_token: {
-                token: refreshToken.token,
-                expires: refreshToken.expires,
-            },
-        };
+        try {
+            const user = await this.validateUser(
+                loginUserDto.email,
+                loginUserDto.password
+            );
+            if (!user) return null;
+            const payload = { sub: user.id, email: user.email };
+            const jwtToken = this.jwtService.sign(payload);
+            const refreshToken = await this.generateRefreshToken(user, ip);
+            await refreshToken.save();
+            return {
+                user,
+                access_token: jwtToken,
+                refresh_token: {
+                    token: refreshToken.token,
+                    expires: refreshToken.expires,
+                },
+            };
+        } catch (error) {
+            throw new InternalServerErrorException(error.message);
+        }
     }
 
     async register(
@@ -75,33 +87,37 @@ export class AuthService {
         user: User,
         ip: string
     ): Promise<LoginUserResponseDto> {
-        const hash = await this.hashPassword(createUserDto.password);
-        delete createUserDto.password;
-        const newUser = new this.UserModel(createUserDto);
-        newUser.hash = hash;
+        try {
+            const hash = await this.hashPassword(createUserDto.password);
+            delete createUserDto.password;
+            const newUser = new this.UserModel(createUserDto);
+            newUser.hash = hash;
 
-        if (user?.role !== Role.OWNER) {
-            newUser.location_can_edit = [];
-            newUser.resource_can_edit = [];
-            newUser.cat_can_edit_members = [];
-            newUser.role = Role.EDITOR;
+            if (user?.role !== Role.OWNER) {
+                newUser.location_can_edit = [];
+                newUser.resource_can_edit = [];
+                newUser.cat_can_edit_members = [];
+                newUser.role = Role.EDITOR;
+            }
+
+            await newUser.save();
+
+            const payload = { sub: user.id, email: user.email };
+            const jwtToken = this.jwtService.sign(payload);
+            const refreshToken = await this.generateRefreshToken(newUser, ip);
+            await refreshToken.save();
+
+            return {
+                user: newUser as UserResponseDto,
+                access_token: jwtToken,
+                refresh_token: {
+                    token: refreshToken.token,
+                    expires: refreshToken.expires,
+                },
+            };
+        } catch (error) {
+            throw new InternalServerErrorException(error.message);
         }
-
-        await newUser.save();
-
-        const payload = { sub: user.id, email: user.email };
-        const jwtToken = this.jwtService.sign(payload);
-        const refreshToken = await this.generateRefreshToken(newUser, ip);
-        await refreshToken.save();
-
-        return {
-            user: newUser as UserResponseDto,
-            access_token: jwtToken,
-            refresh_token: {
-                token: refreshToken.token,
-                expires: refreshToken.expires,
-            },
-        };
     }
 
     async generateRefreshToken(
@@ -122,14 +138,14 @@ export class AuthService {
     }
 
     async refreshToken(refreshToken: string, ip: string) {
-        if (!refreshToken) throw new HttpException({}, 400);
+        if (!refreshToken) throw new BadRequestException();
 
         const oldRefreshToken = await this.RefreshTokenModel.findOne({
             token: refreshToken,
         }).populate('user');
 
         if (!oldRefreshToken?.is_active) {
-            throw new HttpException('Refresh token is revoked', 401);
+            throw new UnauthorizedException('Refresh token is revoked');
         }
 
         const newRefreshToken = await this.generateRefreshToken(
@@ -165,7 +181,7 @@ export class AuthService {
         ip: string
     ): Promise<void> {
         if (userLoggedIn?.id !== user_id && userLoggedIn?.role !== Role.OWNER)
-            throw new HttpException('Unauthorized', 401);
+            throw new UnauthorizedException();
 
         const refreshTokens = await this.RefreshTokenModel.find({
             user: user_id,
@@ -181,7 +197,7 @@ export class AuthService {
     }
 
     async revokeToken(refreshToken: string, user: User, ip: string) {
-        if (!refreshToken) throw new HttpException('Token is required', 200);
+        if (!refreshToken) throw new BadRequestException('Token is required');
 
         const refreshTokenDoc = await this.RefreshTokenModel.findOne({
             token: refreshToken,
@@ -196,7 +212,7 @@ export class AuthService {
             (refreshTokenDoc.user as User)?.id !== user?.id &&
             user?.role !== Role.OWNER
         ) {
-            throw new HttpException('Unauthorized', 401);
+            throw new UnauthorizedException();
         }
 
         refreshTokenDoc.revoked = new Date(Date.now());

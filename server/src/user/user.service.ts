@@ -1,4 +1,10 @@
-import { Injectable, HttpException, Inject, forwardRef } from '@nestjs/common';
+import {
+    Injectable,
+    Inject,
+    forwardRef,
+    UnauthorizedException,
+    InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import {
     User,
@@ -57,8 +63,7 @@ export class UserService {
         filter: object,
         user: User
     ): Promise<UserResponseDto[]> {
-        if (user?.role !== Role.OWNER)
-            throw new HttpException('Unauthorized', 401);
+        if (user?.role !== Role.OWNER) throw new UnauthorizedException();
         filter = filter ? filter : {};
         return await this.UserModel.find(filter).populate(
             this.queryPopulateOptions(categories, resources, locations, user)
@@ -73,7 +78,7 @@ export class UserService {
         user: User
     ): Promise<UserResponseDto> {
         if (user?.role !== Role.OWNER && user?.id !== id)
-            throw new HttpException('Unauthorized', 401);
+            throw new UnauthorizedException();
         return (await this.UserModel.findById(id)).populate(
             this.queryPopulateOptions(categories, resources, locations, user)
         );
@@ -86,7 +91,7 @@ export class UserService {
     ): Promise<User> {
         try {
             if (user?.role !== Role.OWNER && user?.id !== id)
-                throw new HttpException('Unauthorized', 401);
+                throw new UnauthorizedException();
             const userToUpdate = await this.UserModel.findById(id);
 
             if (user?.role === Role.OWNER) {
@@ -125,7 +130,7 @@ export class UserService {
             await userToUpdate.save();
             return userToUpdate;
         } catch (error) {
-            throw new HttpException(error.message, 200);
+            throw new InternalServerErrorException(error.message);
         }
     }
 
@@ -137,17 +142,16 @@ export class UserService {
             user.hash = await this.authService.hashPassword(
                 passwordDto.new_password
             );
-        } else throw new HttpException('Old password not correct', 401);
+        } else throw new UnauthorizedException('Old password not correct');
     }
 
     async delete(id: string, user: User): Promise<void> {
-        if (user?.role !== Role.OWNER)
-            throw new HttpException('Unauthorized', 401);
+        if (user?.role !== Role.OWNER) throw new UnauthorizedException();
         try {
             const user = await this.UserModel.findById(id);
             await user.deleteOne();
         } catch (error) {
-            throw new HttpException(error.message, 200);
+            throw new InternalServerErrorException(error.message);
         }
     }
 }
