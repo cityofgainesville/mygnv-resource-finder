@@ -33,7 +33,7 @@ const Search = (props) => {
   // Loads in all providers for filtering through
   useEffect(() => {
     axios
-      .get(`/api/providers/list`)
+      .get(`/api/locations/list`)
       .then((res) => {
         setProviders(res.data);
       })

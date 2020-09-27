@@ -40,11 +40,11 @@ const App = (props) => {
         <Route path={paths.adminPath} component={AdminPortal} />
         <Route exact path={paths.mainPath} component={MainPage}><div  ><MainPage/></div></Route>
         <Route exact path={paths.providerPath} component={Search}><Search/></Route>
-        <Route exact path={paths.safeplacesPath} component={Safeplaces}><div className="noDisplay"><Title/></div><Safeplaces/></Route>
+        <Route exact path={paths.safeplacesPath} component={Safeplaces}><Safeplaces/></Route>
         <Route exact path={paths.hotlinesPath} component={Hotlines}><Hotlines/></Route>
         <Route exact path={paths.searchPath} component={SearchIcon}><SearchIcon/></Route>
 
-        {/*<Route exact path={paths.covidPath} component={Covid}><div className="noDisplay"><Title/></div><Covid/></Route>*/}
+        {/*<Route exact path={paths.covidPath} component={Covid}></div><Covid/></Route>*/}
         <Route exact path={paths.defaultPath} ><Redirect to={paths.mainPath} /></Route>
         <Route exact path={paths.menuPath} component={Title}></Route>
         <Route
@@ -55,7 +55,7 @@ const App = (props) => {
         <Route
           exact
           path={paths.categoryPath + '/:id?'}
-          render={(props) => <React.Fragment><div className="noDisplay"><Title/></div><Category id={props.match.params.id} /></React.Fragment>}
+          render={(props) => <React.Fragment><Category id={props.match.params.id} /></React.Fragment>}
         />
       </Switch>
     </React.Fragment>
