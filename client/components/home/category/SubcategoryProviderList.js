@@ -88,7 +88,7 @@ const SubcategoryProviderList = (props) => {
   console.log(props.providers);
   
   const providerList = props.providers
-  .filter((provider) => {
+ /* .filter((provider) => {
     return (translation ? 
       (provider.translation_available != undefined &&
             provider.translation_available != '' &&
@@ -132,7 +132,7 @@ const SubcategoryProviderList = (props) => {
     return (elderly ?
       (provider.demographics_eligible!== undefined ? provider.demographics_eligible.elderly: null ): provider
     );
-  })
+  })*/
   .sort((a, b) => (a.name > b.name) ? 1 : -1)
   .map((provider) => {
     return (
@@ -144,7 +144,7 @@ const SubcategoryProviderList = (props) => {
       >
         <div className='subcat-provider-div'>
           <h5 className='subcat-provider-h5 providerName'>{provider.name}</h5>
-          {provider.addresses !== undefined &&
+          {/*{provider.addresses !== undefined &&
                 provider.addresses.length > 0
                   ? provider.addresses.map((addresses) => (
                     <div>
@@ -153,7 +153,7 @@ const SubcategoryProviderList = (props) => {
                 {addresses.line_1}
                 {/*{'\n'}
                 {addresses.state} {addresses.zipcode}*/}
-              </span>
+              {/*</span>
               </div>
             )): ''}
             <p className="services">
@@ -167,7 +167,7 @@ const SubcategoryProviderList = (props) => {
               {'Updated '}
               {provider.updated_at.substring(5,7) + '/' + provider.updated_at.substring(8,10)+ '/' + provider.updated_at.substring(0,4)}
               {'\n'}
-            </p>
+              </p>*/}
         </div>
       </ListGroup.Item>
       {/*{(provider.cost_info !== undefined &&
