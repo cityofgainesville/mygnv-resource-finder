@@ -95,7 +95,7 @@ const Search = (props) => {
   };
 
   const providerList = providers
-    .filter((provider) => {
+    /*.filter((provider) => {
       return ( provider.name.toLowerCase().includes(filterText.toLowerCase()) ||
                      provider._id.includes(filterText)
       );
