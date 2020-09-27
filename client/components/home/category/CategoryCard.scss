@@ -4,7 +4,7 @@
 @media only screen and (max-width: 767px) {
   .cat-card-border {
     border: 2px solid $blue-cool-70v;
-    border-radius: 8em;
+    border-radius: 8px;
   }
   .cat-card-button {
     width: 3em;
@@ -38,11 +38,9 @@
 @media only screen and (min-width: 401px) and (max-width: 1024px) {
   .cat-card-border {
     border: 2px solid $blue-cool-70v;
-    border-radius: 8em;
+    border-radius: 8px;
   }
   .cat-card-button {
-    width: 3.75em;
-    height: 3.75em;
     margin-bottom: 1em;
     padding: 5px 5px;
     color:  $blue-cool-70v;
@@ -51,14 +49,14 @@
   .cat-card-div {
     align-items: center;
     text-align: center;
-    font-size: .95em;
+
     color: $blue-cool-70v;
   }
 
   .catCard-con {
     display: flex;
     flex-direction: column;
-    width: 5em;
+    width: 8em;
     /* justify-content: center; */
     /* align-content: center; */
     align-items: center;
@@ -69,11 +67,9 @@
 @media only screen and (max-width: 767px) and (min-width: 426px) {
   .cat-card-border {
     border: 2px solid $blue-cool-70v;
-    border-radius: 8em;
+    border-radius: 8px;
   }
   .cat-card-button {
-    width: 3.75em;
-    height: 3.75em;
     margin-bottom: 1em;
     padding: 5px 5px;
     color:  $blue-cool-70v;
@@ -82,14 +78,14 @@
   .cat-card-div {
     align-items: center;
     text-align: center;
-    font-size: .95em;
+
     color: $blue-cool-70v;
   }
 
   .catCard-con {
     display: flex;
     flex-direction: column;
-    width: 5em;
+    width: 8em;
     /* justify-content: center; */
     /* align-content: center; */
     align-items: center;
@@ -103,11 +99,11 @@
 @media only screen and (min-width: 1025px) {
   .cat-card-border {
     border: 2px solid $blue-cool-70v;
-    border-radius: 8em;
+    border-radius: 8px;
   }
   .cat-card-button {
-    width: 3.75em;
-    height: 3.75em;
+    width: 10em;
+    height: 8em;
     margin-bottom: 1em;
     padding: 5px 5px;
     color:  $blue-cool-70v;
@@ -116,14 +112,14 @@
   .cat-card-div {
     align-items: center;
     text-align: center;
-    font-size: .95em;
+    font-size: 18px;
     color: $blue-cool-70v;
   }
 
   .catCard-con {
     display: flex;
     flex-direction: column;
-    width: 5em;
+    width: 10em;
     /* justify-content: center; */
     /* align-content: center; */
     align-items: center;
@@ -137,7 +133,7 @@
   //@extend: 2px solid $indigo-50;
   background: $blue-cool-70v;
   border-color: none;
-  border-radius: 8em;
+  border-radius: 8px;
   color: #fdfdfd !important;
 }
 
@@ -148,4 +144,7 @@
   margin: auto;
 }
 
+.cat-card-div-active {
+  color: #fdfdfd !important;
+}
 

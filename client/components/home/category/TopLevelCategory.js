@@ -7,16 +7,16 @@ import './TopLevelCategory.scss';
 import CategoryCard from './CategoryCard';
 
 const TopLevelCategory = (props) => {
-  const iconSize = 2;
+  const iconSize = 4;
   const numIcons = 4;
 
   const categoryRowList = [];
   let categoryCol = <React.Fragment></React.Fragment>;
-  props.categories.forEach((category, i) => {
-    /*if (i % numIcons == 0 && i != 0) {
+  /*props.categories.forEach((category, i) => {
+    if (i % numIcons == 0 && i != 0) {
       categoryRowList.push(categoryCol);
       categoryCol = <React.Fragment></React.Fragment>;
-    }*/
+    }
     if(category.name == "COVID-19"){
     categoryCol = (
       <React.Fragment>
@@ -32,13 +32,13 @@ const TopLevelCategory = (props) => {
       </React.Fragment>
     );
     }
-    /*if (i == props.categories.length - 1) {
+    if (i == props.categories.length - 1) {
       categoryRowList.push(categoryCol);
-    }*/
-  });
+    }
+  });*/
   // Have the grid be max 3col wide
   props.categories.sort((a, b) => (a.name > b.name ) ? 1 : -1).forEach((category, i) => {
-    if (i+1 % numIcons == 0 && i != 0) {
+    if (i % numIcons == 0 && i != 0) {
       categoryRowList.push(categoryCol);
       categoryCol = <React.Fragment></React.Fragment>;
     }
@@ -57,15 +57,15 @@ const TopLevelCategory = (props) => {
       </React.Fragment>
     );
     }
-    /*if (i == props.categories.length - 1) {
+    if (i == props.categories.length - 1) {
       categoryRowList.push(categoryCol);
-    }*/
+    }
   });
-  props.categories.forEach((category, i) => {
-    /*if (i % numIcons == 0 && i != 0) {
+  /*props.categories.forEach((category, i) => {
+    if (i % numIcons == 0 && i != 0) {
       categoryRowList.push(categoryCol);
       categoryCol = <React.Fragment></React.Fragment>;
-    }*/
+    }
     if(category.name == "Other" ){
     categoryCol = (
       <React.Fragment>
@@ -84,7 +84,7 @@ const TopLevelCategory = (props) => {
     if (i == props.categories.length - 1) {
       categoryRowList.push(categoryCol);
     }
-  });
+  });*/
   let categoryGrid = <React.Fragment></React.Fragment>;
   categoryRowList.forEach((row) => {
     categoryGrid = (

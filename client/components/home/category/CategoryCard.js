@@ -9,10 +9,12 @@ import './CategoryCard.scss';
 
 const CategoryCard = (props) => {
   const [className, setClassName] = useState('cat-card-border');
+  const [textName, setTextName] = useState('cat-card-div');
   const [icolor, setColor] = useState('#074b69');
 
   const handleClick = () => {
     setClassName('cat-card-border-active');
+    setTextName('cat-card-div-active');
     props.history.push(props.path);
     window.location.reload(false);
   };
@@ -20,10 +22,12 @@ const CategoryCard = (props) => {
   // Change color on hover
   const startHover = () => {
     setClassName('cat-card-border-active');
+    setTextName('cat-card-div-active');
     setColor('white');
   };
   const endHover = () => {
     setClassName('cat-card-border');
+    setTextName('cat-card-div');
     setColor('#074b69');
   };
 
@@ -40,8 +44,9 @@ const CategoryCard = (props) => {
       <i
         className={`cat-card-i fal fa-${props.iconName} fa-${props.iconSize}x`}
       ></i>
+      <div className={textName}>{props.categoryName}</div>
     </Button>
-    <div className='cat-card-div '>{props.categoryName}</div>
+    
     </div>
   );
 };

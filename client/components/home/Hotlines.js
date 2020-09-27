@@ -76,13 +76,13 @@ const Hotlines = (props) => {
         className='hotline-con scroll'
 
       >
-          <Form className= 'white-0-bg search-form'>
+          <Form className= 'white-0-bg search-form' id='hotline-form-group'>
             <Form.Group className='search-form-group' controlId='formFilterText'>
               
           
               <Container style={{margin:'0 0'}}>
 			  <Form.Label className='form-label-n'>
-				  Call a hotline
+				  Hotlines
               </Form.Label>
               </Container>
             </Form.Group>

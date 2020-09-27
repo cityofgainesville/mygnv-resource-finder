@@ -9,14 +9,15 @@ const providersAdminPath = `${adminPath}/providers`;
 const usersAdminPath = `${adminPath}/users`;
 
 const categoryPath = `${mainPath}/categories`;
-const providerPath = `${mainPath}/provider`;
-const searchPath = `${mainPath}/search`;
+const providerDetailPath = '/providers/provider';
+const providerPath = '/providers';
 
-const hotlinesPath = `${mainPath}/hotlines`;
+const hotlinesPath = '/hotlines';
 const safeplacesPath = `${mainPath}/safeplaces`;
 const covidPath = `${mainPath}/covid19`;
 
-const menuPath = `${mainPath}/title`;
+const menuPath = '/title';
+const searchPath = '/search';
 
 const paths = {
   mainPath,
@@ -28,14 +29,15 @@ const paths = {
   usersAdminPath,
 
   categoryPath,
+  providerDetailPath,
   providerPath,
-  searchPath,
 
   hotlinesPath,
   safeplacesPath,
   covidPath,
 
   menuPath,
+  searchPath,
 
 };
 

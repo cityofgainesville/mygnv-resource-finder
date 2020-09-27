@@ -14,12 +14,12 @@
     position: fixed;
     top: 0;
     width: 100%;
-    background: black;
+    background: #213C4C;
     z-index: 1020;
   }
 
   .title {
-    font-weight: 400; 
+
     margin-left: .75rem;
     font-size: 16px;
     margin: 8px;
@@ -82,7 +82,7 @@
   }
 
   #feedback {
-    background: #159a8d;
+    background: #c74200;
     padding: 6px 16px;
     font-size: 14px;
     color: white;
@@ -104,7 +104,7 @@
     position: fixed;
     top: 0;
     width: 100%;
-    background: black;
+    background: #213C4C;
     z-index: 1020;
   }
 
@@ -116,7 +116,7 @@
   }
 
   .title {
-    font-weight: 400; 
+   
     margin-left: .75rem;
     font-size: 16px;
     margin: 8px;
@@ -179,7 +179,7 @@
   }
 
   #feedback {
-    background: #159a8d;
+    background: #c74200;
     padding: 6px 16px;
     font-size: 14px;
     color: white;
@@ -200,8 +200,7 @@
     top:0;
   }
 
-  .title {
-    font-weight: 400; 
+  .title { 
     margin-left: .75rem;
     font-size: 16px;
     margin: 8px;
@@ -264,7 +263,7 @@
   }
 
   #feedback {
-    background: #159a8d;
+    background: #c74200;
     padding: 6px 16px;
     font-size: 14px;
     color: white;
@@ -287,10 +286,11 @@
     position:fixed; 
     z-index: 100; 
     top:0;
+    background: #213C4C;
   }
 
   .title {
-    font-weight: 400; 
+    font-weight: 600; 
     margin-left: .75rem;
   }
 
@@ -300,7 +300,7 @@
   }
 
   #feedback {
-    background: #159a8d;
+    background: #c74200;
     padding: 6px 16px;
     font-size: 16px;
     color: white;
@@ -309,17 +309,22 @@
   }
 
   .navbar{
-    //padding-bottom: 0;
+    padding-bottom: 0;
+  }
+  
+  .navbar-brand{
+    padding-top: 0;
   }
 }
 
 .navbar-active {
-  color: white !important;
-  border-bottom: 5px solid #1DC2AE;
+  font-weight: 600;
+  color: #83CEEE !important;
+  border-bottom: 5px solid #83CEEE;
 }
 
 .nav-link:hover {
-  color: #dedede !important;
+  color: #83CEEE !important;
 }
 
 
@@ -328,7 +333,7 @@
 }
 
 .navbar-light .navbar-nav .nav-link {
-  color: #ACACAC ;
+  color: white ;
 }
 
 
