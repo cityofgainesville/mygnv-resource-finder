@@ -1,0 +1,60 @@
+@import '../../index.scss';
+
+.searchIcon-con {
+
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    display: flex;
+}
+
+.center-con {
+    width: 70%;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 80vh;
+    padding-bottom: 5em;
+}
+
+.searchTitle {
+    font-size: xx-large;
+    color: #20668F;
+    
+}
+
+.searchIconButton {
+    background-color: #20668F;
+    width: 250px;
+    font-size: x-large;
+}
+
+.searchIconButton:hover {
+    background-color: #1b5577;
+    border-color: #1b5577;
+ 
+}
+
+.searchIconButton:active{
+    background-color: #1b5577;
+    border-color: #1b5577;
+
+}
+
+.searchIcon {
+    border-radius: 80px;
+    border-width: 2px;
+    border-color: #074b69;
+    text-align:left;
+    padding-left: 1em;
+    font-size: x-large;
+    background-color: white;
+    padding-top: 1.25em;
+    padding-bottom: 1.25em;
+   // border-right: none;
+}
+
+.search-input {
+    font-size: 22px !important;
+}

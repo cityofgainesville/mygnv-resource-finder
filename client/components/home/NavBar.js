@@ -21,7 +21,7 @@ const NavBar = (props) => {
 
   return (
     <React.Fragment>
-    <div className='black-100-bg nav-container' >
+    <div className='nav-container' >
         <Navbar collapseOnSelect sticky='top' expand='sm' variant='light'>
           <Navbar.Brand>
 
@@ -43,19 +43,46 @@ const NavBar = (props) => {
           <Button className='mobile-nav-buttons'  onClick = {(e)=>handleEntailmentRequest(e)} style={{color: 'white', display: visible ? '' : 'none'}}> <i class="fal fa-times nav-i"  ></i><i class="fal fa-bars" style={{display: visible ? '' : 'none'}}></i></Button>*/}
           <Navbar.Toggle className='ipad' onClick = {(e)=>handleEntailmentRequest(e)} aria-controls='mobile-menu-nav' > <div style={{color: 'white', display: !visible  ? '' : 'none'}}><i class="fal fa-bars nav-i" ></i></div><div style={{color: 'white', display: visible  ? '' : 'none'}}><i class="fal fa-times nav-i"   ></i></div></Navbar.Toggle>
           {/*<Navbar.Toggle className='ipad' onClick = {(e)=>handleEntailmentRequest(e)} aria-controls='mobile-menu-nav' > </Navbar.Toggle>*/}
-          {/*<Navbar.Collapse id='responsive-navbar-nav'>
+          <Navbar.Collapse id='responsive-navbar-nav'>
               <Nav className='mr-auto'>
               
               <Nav.Link className='link-container'>
                   <NavLink
-                    to={paths.mainPath}
+                    exact to={paths.mainPath}
                     className='nav-link'
                     activeClassName='navbar-active active'
                   >
                     Home
                   </NavLink>
                 </Nav.Link>
-               <Nav.Link className='link-container'>
+                <Nav.Link className='link-container'>
+                  <NavLink
+                    to={`${paths.providerPath}/?name=&zip=&age=`}
+                    className='nav-link'
+                    activeClassName='navbar-active active'
+                  >
+                    Providers
+                  </NavLink>
+                </Nav.Link>
+                <Nav.Link className='link-container'>
+                  <NavLink
+                    to={paths.hotlinesPath}
+                    className='nav-link'
+                    activeClassName='navbar-active active'
+                  >
+                    Hotlines
+                  </NavLink>
+                </Nav.Link>
+                <Nav.Link className='link-container'>
+                  <NavLink
+                    to={paths.searchPath}
+                    className='nav-link'
+                    activeClassName='navbar-active active'
+                  >
+                     <i class="far fa-search"></i>
+                  </NavLink>
+                </Nav.Link>
+               {/*<Nav.Link className='link-container'>
                   <NavLink
                     to={paths.adminPath}
                     className='nav-link'
@@ -63,11 +90,11 @@ const NavBar = (props) => {
                   >
                     Admin
                   </NavLink>
-  </Nav.Link>
+        </Nav.Link>*/}
               </Nav>
-          </Navbar.Collapse>*/}
+          </Navbar.Collapse>
         </Navbar>
-        <div id='feedback'><a target='_blank' href='https://alachuacounty.us/covid-19/Pages/default.aspx?' id='feedback-link'>COVID-19 Community Resource Portal</a></div>
+       
     </div>
         <div id='mobile-menu' style={{display: visible ? '' : 'none'}}><Modal id='modal-menu' show={visible}><Title/></Modal></div>
     </React.Fragment>

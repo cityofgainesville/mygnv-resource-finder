@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'reactn';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { ListGroup, Container, Form, InputGroup, Button, Modal} from 'react-bootstrap';
+import { Breadcrumb, ListGroup, Container, Form, InputGroup, Button, Modal} from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import paths from '../../RouterPaths';
-import Homepage from './Title';
+import Title from './Title';
 import '../../index.scss';
 import './Search.scss';
 import IndivProvider from './IndivProvider';
@@ -17,7 +17,7 @@ import CategoryView from './category/CategoryView.js';
 
 const Search = (props) => {
   const [providers, setProviders] = useState([]);
-  const [filterText, setFilterText] = useState('');
+  const [filterText, setFilterText] = useState(decodeURIComponent(window.location.search.substring(1)));
   const [visible, setVisible] = useState(false);
   const [translation, setTranslation] = useState(false);
   const [cost, setCost] = useState(false);
@@ -91,7 +91,7 @@ const Search = (props) => {
   };
 
   const doRedirect = (providerId) => {
-    props.history.push(`${paths.providerPath}/${providerId}`);
+    props.history.push(`${paths.providerDetailPath}/${providerId}`);
   };
 
   const providerList = providers
@@ -100,7 +100,7 @@ const Search = (props) => {
                      provider._id.includes(filterText)
       );
     })
-    .filter((provider) => {
+    /*.filter((provider) => {
       return (translation ? 
          (provider.name.toLowerCase().includes(filterText.toLowerCase()) ||
               provider._id.includes(filterText)) && (provider.translation_available != undefined &&
@@ -145,7 +145,7 @@ const Search = (props) => {
       return (elderly ?
         (provider.demographics_eligible!== undefined ? provider.demographics_eligible.elderly: null ): provider
       );
-    })
+    })*/
 
     .sort((a, b) => (a.name > b.name) ? 1 : -1)
 
@@ -165,7 +165,7 @@ const Search = (props) => {
              
             </h5>
             
-            {provider.addresses !== undefined &&
+           {/* {provider.addresses !== undefined &&
                 provider.addresses.length > 0
                   ? provider.addresses.map((addresses) => (
                     <div>
@@ -174,7 +174,7 @@ const Search = (props) => {
                 {addresses.line_1}
                 {/*{'\n'}
                 {addresses.state} {addresses.zipcode}*/}
-              </span>
+              {/*</span>
               </div>
             )): ''}
             <p className="services">
@@ -187,8 +187,7 @@ const Search = (props) => {
               {'Updated '}
               {provider.updated_at.substring(5,7) + '/' + provider.updated_at.substring(8,10)+ '/' + provider.updated_at.substring(0,4)}
               {'\n'}
-            </p>
-            
+            </p>*/}            
           </div>
         </ListGroup.Item>
         {/*{(provider.cost_info !== undefined &&
@@ -278,11 +277,15 @@ const handleBlurRequest = (e) => {
     
   return (
     <React.Fragment>
-
+      <Breadcrumb className='breadcrumbs'>
+        <Breadcrumb.Item href="#">Provider</Breadcrumb.Item>
+      </Breadcrumb>
+      <div className="noDisplay"><Title/></div>
       <div >
       <div id="topOfListMobile"  className='search-con scroll' >
-
-          <Form className= 'white-0-bg search-form'>
+        
+        
+          {/*<Form className= 'white-0-bg search-form'>
             <Form.Group className='search-form-group' controlId='formFilterText'>
               <Container className = 'mobile-con' style={{margin:'0 0'}}>
               <InputGroup>
@@ -303,7 +306,7 @@ const handleBlurRequest = (e) => {
               </Container>
             </Form.Group>
             <div className='search-cat-con'><p className='search-cat'><Button onClick={(e)=>handleEntailmentRequest(e)} className='search-cat-button' style={{display: !visible ? '' : 'none'}}>Browse by Category <i class="fal fa-chevron-down" style={{color:'black !important'}}></i></Button><Button onClick={(e)=>handleEntailmentRequest(e)} className='search-cat-button' style={{display: visible ? '' : 'none'}}>Browse by Category <i class="fal fa-chevron-up"></i></Button></p><div className="cat-mobile-container" style={{display: visible ? '' : 'none'}}><CategoryView/></div></div>
-          </Form>
+  </Form>*/}
           <Container id="topOfList" className='body searchb'>
           {/*<div >
           <button className='tags exampleTag' style={{display: !clicked ? '' : 'none'}} onClick={(e)=>handleClickedRequest(e)}>Click a tag to filter <i class="fal fa-times fa-1x"></i></button>

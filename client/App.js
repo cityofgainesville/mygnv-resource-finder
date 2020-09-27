@@ -17,6 +17,8 @@ import IndivProvider from './components/home/IndivProvider';
 import Search from './components/home/Search';
 import Hotlines from './components/home/Hotlines';
 import Safeplaces from './components/home/Safeplaces';
+import SearchIcon from './components/home/SearchIcon';
+import { Redirect } from 'react-router';
 //import Covid from './components/home/Covid19';
 
 import './index.scss';
@@ -37,17 +39,18 @@ const App = (props) => {
       <Switch>
         <Route path={paths.adminPath} component={AdminPortal} />
         <Route exact path={paths.mainPath} component={MainPage}><div  ><MainPage/></div></Route>
-        <Route exact path={paths.searchPath} component={Search}><div className="noDisplay"><Title/></div><Search/></Route>
+        <Route exact path={paths.providerPath} component={Search}><Search/></Route>
         <Route exact path={paths.safeplacesPath} component={Safeplaces}><div className="noDisplay"><Title/></div><Safeplaces/></Route>
-        <Route exact path={paths.hotlinesPath} component={Hotlines}><div className="noDisplay"><Title/></div><Hotlines/></Route>
+        <Route exact path={paths.hotlinesPath} component={Hotlines}><Hotlines/></Route>
+        <Route exact path={paths.searchPath} component={SearchIcon}><SearchIcon/></Route>
 
         {/*<Route exact path={paths.covidPath} component={Covid}><div className="noDisplay"><Title/></div><Covid/></Route>*/}
-        <Route exact path={paths.defaultPath} component={MainPage}><div ><MainPage/></div></Route>
+        <Route exact path={paths.defaultPath} ><Redirect to={paths.mainPath} /></Route>
         <Route exact path={paths.menuPath} component={Title}></Route>
         <Route
           exact
-          path={paths.providerPath + '/:id'}
-          render={(props) => <React.Fragment><div className="noDisplay"><Title/></div><IndivProvider id={props.match.params.id} /></React.Fragment>}
+          path={paths.providerDetailPath + '/:id'}
+          render={(props) => <React.Fragment><IndivProvider id={props.match.params.id} /></React.Fragment>}
         />
         <Route
           exact

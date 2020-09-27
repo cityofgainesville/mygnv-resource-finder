@@ -4,6 +4,7 @@ import { Button } from 'react-bootstrap';
 import NavBar from './NavBar';
 import { withRouter } from 'react-router-dom';
 
+
 // A bootstrap button that redirects on click
 // Using the html5 history API and react router
 // this allows back, forward buttons to work in the browser

@@ -43,11 +43,11 @@
     background-color: #B2D6FF !important; // Blue 
   }*/
   .toplevel-row{
-    width: 100%;
+    width: 85%;
   }
   .toplevel-row {
     margin: auto;
-    justify-content: center;
+    justify-content: left;
     margin-bottom: 1em;
     margin-top: auto;
   }
@@ -67,5 +67,8 @@
 
 .toplevel-col {
   padding: 0 0;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
+  flex-grow: 0;
+  margin-left: 1em;
+  margin-right: 1em;
 }

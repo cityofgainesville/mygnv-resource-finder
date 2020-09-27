@@ -1,8 +1,12 @@
-import React from 'reactn';
+//import React from 'reactn';
+import React, { useState, useEffect } from 'reactn';
 import { Redirect } from 'react-router';
+import PropTypes from 'prop-types';
+import axios from 'axios';
 import { Form, FormControl, Container, Row, Col,  ListGroup, InputGroup, Button } from 'react-bootstrap';
 import mygnvIcon from '../../images/mygnv.png';
 import accrgIcon from '../../images/accrg.png';
+import './NavBar.scss';
 import ciseIcon from '../../images/cise.png';
 import cogIcon from '../../images/cog.png' ;
 import designgnvIcon from '../../images/designgnv.png';
@@ -10,6 +14,7 @@ import mocIcon from '../../images/moc.png';
 import RedirectButton from './RedirectButton';
 import CategoryView from './category/CategoryView.js';
 import paths from '../../RouterPaths';
+import { withRouter } from 'react-router-dom';
 import homeIcon from '../../images/myGNVrf.png';
 import Search from './Search.js';
 import Homepage from './Title';
@@ -17,56 +22,150 @@ import Homepage from './Title';
 // Main page component with two buttons for search by category and by name
 
 const MainPage = (props) => {
+  const [myStyle, setStyle] = useState ({borderColor: 'default'});
+  const [myZipStyle, setZipStyle] = useState ({borderColor: 'default'});
+  const [filterText, setFilterText] = useState('');
+  const [filterZipText, setFilterZipText] = useState('');
+  const handleFocusRequest = (e) => {
+    e.preventDefault();
+    setStyle({border: '3px solid #007bff40'});
+    console.log(myStyle);
+}
+
+const doRedirect = (providerId) => {
+  if(event.key === 'Enter'){
+    console.log(`${paths.providerPath}/${providerId}`);
+    props.history.push(`${paths.providerPath}/?name=${filterText}&zip=${filterZipText}&age=`);
+  }
+};
+const handleFilterChange = (event) => {
+  setFilterText(event.target.value);
+};
+const handleFilterZipChange = (event) => {
+  setFilterZipText(event.target.value);
+};
+const handleBlurRequest = (e) => {
+  e.preventDefault();
+  setStyle({border: '2px solid #074b69'});
+  console.log(myStyle);
+}
+const handleFocusZipRequest = (e) => {
+  e.preventDefault();
+  setZipStyle({border: '3px solid #007bff40'});
+  console.log(myStyle);
+}
+
+const handleBlurZipRequest = (e) => {
+e.preventDefault();
+setZipStyle({border: '2px solid #074b69'});
+console.log(myStyle);
+}
   return (
     /*<Redirect to="/home/search"></Redirect>*/
 
     <React.Fragment>
-
+       
     <div >
     <div  className='home-con scroll'>
       <div className= 'white-0-bg homepage-form  '>
       <Container className = 'mobile-con  home-mobile-con' style={{margin:'0 auto', padding: '0'}}>
-      <div className='descriptionRF'>
-        <div className='homepage-title'>my<span id='gnv'>GNV</span> Resource Finder</div>
-        <div  className='onelineDescription'>
-       Find Gainesville programs and services all in one place.
-        </div>
-        <div className="homepage-hero-img">
-        <img  id='hero-img' src={homeIcon}
-          
-          ></img>
-          <div className='dwcont'>
-          <div className='description-words-container'>
-            <div className='description-words'>Your Community</div>
-            <div className='description-words bottom-word'>Your Needs</div>
-          </div>
-          
-           <div  className='description-words-container'>
-            <div className='description-words'>Your Family</div>
-            <div className='description-words bottom-word'>Your Health</div>
-          </div>
-          </div>
-        </div>
-        <div className='angle-down' >
-
-        <Button  variant="link" href='#how-can-we-help'>
-        <i class="fal fa-angle-down" style={{fontSize:"50px", color: "black", filter: "drop-shadow(1px 3px 5px #aaa)"}}></i>
-        </Button>
-        </div>
-      </div>
-
+      <div id='feedback'>Find the latest COVID-19 information at the <a target='_blank' href='https://alachuacounty.us/covid-19/Pages/default.aspx?' id='feedback-link'>Alachua County COVID-19 Community Resource Portal</a></div>
       <div className='descriptionRF extra' id='how-can-we-help'>
-        <div className='homepage-subtitle-2'>How can we help?</div>
+        <div className='homepage-subtitle-2'>Find Gainesville programs and services all in one place.</div>
         <div  className='description-box left-box mobile-box-search'>
-              <div className='menu-title-home menu-title'>Already know the resource name?</div>
-              <div className='menu-title-mobile'>Already know the resource name?</div>
+              <div className='menu-title-home menu-title'>Search for providers by name or zip code.</div>
+              <div className='menu-title-mobile'>Search for providers by name or zip code.</div>
+              <Container className = 'mobile-con input-con' style={{margin:'0 0'}}>
+              <div className='inputTitle'>NAME</div>
+              <InputGroup>
+              <Form.Control
+               value={filterText}
+               onChange={handleFilterChange}
+                onFocus={(e)=>handleFocusRequest(e)}
+                onBlur={(e)=>handleBlurRequest(e)}
+                onKeyPress={() => doRedirect(filterText)}
+                placeholder='Search by Name'
+                className='search'
+              />
+              <InputGroup.Prepend>
+                    <InputGroup.Text style={myStyle}>
+                      <i class="far fa-search" style={{color:'#074b69'}}></i>
+                    </InputGroup.Text>
+                </InputGroup.Prepend>
+              </InputGroup>
+              </Container>
+              <Container className = 'mobile-con input-con' style={{margin:'0 0'}}>
+              <div className='inputTitle'>ZIP CODE</div>
+              <InputGroup>
+              <Form.Control
+               value={filterZipText}
+               onChange={handleFilterZipChange}
+                onFocus={(e)=>handleFocusZipRequest(e)}
+                onBlur={(e)=>handleBlurZipRequest(e)}
+                onKeyPress={() => doRedirect(filterZipText)}
+                placeholder='Search by Zip Code'
+                className='search'
+              />
+              <InputGroup.Prepend>
+                    <InputGroup.Text style={myZipStyle}>
+                      <i class="far fa-search" style={{color:'#074b69'}}></i>
+                    </InputGroup.Text>
+                </InputGroup.Prepend>
+              </InputGroup>
+              </Container>
               <RedirectButton className='menuButton homeMenuButton' path={paths.searchPath} >
-              <i class="far fa-search"  ></i>
-              <span className="menu-name">Search for a resource</span>
+              See all resources
           </RedirectButton>
           </div>
-        <div className='description-box-container'>
-          <div className='description-box top-box'>
+          <div className='description-box-container'>
+          <div  className='description-box top-box hotline-box'>
+              <div className='menu-title-home menu-title'>Search for providers by name or zip code.</div>
+              <div className='menu-title-mobile'>Search for providers by name or zip code.</div>
+              <Container className = 'mobile-con input-con' style={{margin:'0 0'}}>
+              <div className='inputTitle'>NAME</div>
+              <InputGroup>
+              <Form.Control
+                value={filterText}
+                onChange={handleFilterChange}
+                onFocus={(e)=>handleFocusRequest(e)}
+                onBlur={(e)=>handleBlurRequest(e)}
+                onKeyPress={() => doRedirect(filterText)}
+                placeholder='Search by Name'
+                className='search'
+              />
+              <InputGroup.Prepend>
+                    <InputGroup.Text style={myStyle}>
+                      <i class="far fa-search" style={{color:'#074b69'}}></i>
+                    </InputGroup.Text>
+                </InputGroup.Prepend>
+              </InputGroup>
+              </Container>
+              <Container className = 'mobile-con input-con' style={{margin:'0 0'}}>
+                <div className='inputTitle'>ZIP CODE</div>
+              <InputGroup>
+              <Form.Control
+              value={filterZipText}
+              onChange={handleFilterZipChange}
+                onFocus={(e)=>handleFocusZipRequest(e)}
+                onBlur={(e)=>handleBlurZipRequest(e)}
+                onKeyPress={() => doRedirect(filterZipText)}
+                placeholder='Search by Zip Code'
+                className='search'
+              />
+              <InputGroup.Prepend>
+                    <InputGroup.Text style={myZipStyle}>
+                      <i class="far fa-search" style={{color:'#074b69'}}></i>
+                    </InputGroup.Text>
+                </InputGroup.Prepend>
+              </InputGroup>
+              </Container>
+              <RedirectButton className='resourceButton homeMenuButton' path={paths.searchPath} >
+         
+              See all resources
+          </RedirectButton>
+          </div>
+        
+          <div className='description-box top-box hotline-box'>
               <div className='menu-title-home menu-title'>Not sure what you're looking for? Browse by categories.</div>
               <div className='menu-title-mobile'>Not sure what you're looking for? </div>
               <div className='cat-container'>
@@ -74,23 +173,13 @@ const MainPage = (props) => {
               <CategoryView></CategoryView>
               </div>
           </div>
-          <div className='bottom-container'>
-          <div  className='description-box left-box desktop-box-search'>
-              <div className='menu-title-home menu-title'>Already know the resource name?</div>
-              <div className='menu-title-mobile'>Already know the resource name?</div>
-              <RedirectButton className='menuButton homeMenuButton' path={paths.searchPath} >
-              <i class="far fa-search"  ></i>
-              <span className="menu-name">Search for a resource</span>
-          </RedirectButton>
-          </div>
+          
           <div  className='description-box hotline-box'>
-              <div className='menu-title-home menu-title'>Looking for a hotline?</div>
-              <div className='menu-title-mobile'>Looking for a hotline?</div>
+              <div className='menu-title-home menu-title'>Need a quick access to hotlines?</div>
+              <div className='menu-title-mobile'>Need a quick access to hotlines?</div>
               <RedirectButton className='menuButton homeMenuButton' path={paths.hotlinesPath}  >
-              <i class="far fa-phone" ></i>
-              <span className="menu-name">Call a hotline</span>
+              <span className="menu-name">View list of hotlines</span>
               </RedirectButton>
-          </div>
           </div>
         </div>
       </div>
@@ -162,4 +251,8 @@ const MainPage = (props) => {
   );
 };
 
-export default MainPage;
+MainPage.propTypes = {
+  history: PropTypes.instanceOf(Object).isRequired,
+};
+
+export default withRouter(MainPage);

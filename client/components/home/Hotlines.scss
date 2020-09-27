@@ -165,11 +165,15 @@
         display: none;
     }
     .body-hotline {
-        margin-top: 145px; 
+        margin-top: 125px; 
         position:relative;
         //background-color: white;
         width: 90%;
         padding: 0 15px;
+    }
+
+    #hotline-form-group {
+        width: 100%;
     }
     
     .hotline-con {
@@ -180,7 +184,7 @@
         z-index: 0;
         padding: 0;
         margin: 0;
-        width: 75%;
+        width: 100%;
         float: right;
 
         height:100vh;
