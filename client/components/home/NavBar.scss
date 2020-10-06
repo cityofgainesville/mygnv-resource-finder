@@ -42,7 +42,12 @@
   .navbar-active {
     font-weight: 600;
     color: #83CEEE !important;
+    
     border-bottom: 0px solid #83CEEE !important;
+  }
+
+  .navbar-active .search-nav-con{
+    border-color: #83CEEE !important;
   }
 
   .sticky-top {
@@ -166,7 +171,11 @@
   .navbar-active {
     font-weight: 600;
     color: #83CEEE !important;
+    border-color: #83CEEE !important;
     border-bottom: 0px solid #83CEEE !important;
+  }
+  .navbar-active .search-nav-con{
+    border-color: #83CEEE !important;
   }
   .title-links {
     color: #83CEEE ;
@@ -427,6 +436,7 @@
 .navbar-active {
   font-weight: 600;
   color: #83CEEE !important;
+  border-color: #83CEEE !important;
   border-bottom: 5px solid #83CEEE;
 }
 

@@ -260,10 +260,22 @@
     .website {
         margin-right: 1rem;
     }
+    .map {
+        height: 30vh;
+    background: white;
+    border-bottom: 1px solid #dbdbdb;
+    text-align: center;
+    }
 }
 
 /* Tablet Styles */
 @media only screen and (min-width: 401px) and (max-width: 1024px) {
+    .map {
+        height: 30vh;
+    background: white;
+    border-bottom: 1px solid #dbdbdb;
+    text-align: center;
+    }
     .elig-col {
         padding-right: 1rem !important;
     }

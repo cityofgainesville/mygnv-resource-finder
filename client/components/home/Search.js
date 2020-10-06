@@ -24,6 +24,8 @@ const Search = (props) => {
   const [myStyle, setStyle] = useState ({borderColor: 'default'});
   const [clicked, setClicked] = useState(false);
   const [pid, setPid] = useState('');
+  const [marginTop, setMarginTop] = useState('300px');
+
  
 
 
@@ -363,6 +365,16 @@ if(loadingComplete && loadingCompleteSub && subcatId != ''){
   );
 }
 
+/*if(window.innerWidth <= 767){
+  setMarginTop('300px');
+}
+else if(window.innerWidth >= 401 && window.innerWidth <= 1024){
+  //setMarginTop('430px');
+}
+else if(window.innerWidth >= 426 && window.innerWidth <= 767){
+
+}*/
+
   return (
     <React.Fragment>
       <div className='mobile-filter-bread-con'>
@@ -371,6 +383,8 @@ if(loadingComplete && loadingCompleteSub && subcatId != ''){
       </Breadcrumb>
       {!showMobileFilter ? <div className='filter-con mobile-filter'><Button className='filter-btn' onClick={handleMapClickedRequest}>{!showMap ? <div><i class="fas fa-map"></i><strong> MAP VIEW</strong></div> : <div><i class="fas fa-list-ul"></i><strong> LIST VIEW</strong></div>} </Button><Button className='filter-btn' onClick={handleMobileFilterClickedRequest}><strong> FILTER PROVIDERS</strong> {showMobileFilter ? <i class="fas fa-chevron-circle-left"></i> : <i class="fas fa-chevron-circle-right"></i>}</Button></div>: null}
       {showMobileFilter ? <div className='filter-con mobile-filter'><Button className='filter-btn' onClick={handleMobileFilterClickedRequest}>{showMobileFilter ? <i class="fas fa-chevron-circle-left"></i> : <i class="fas fa-chevron-circle-right"></i>} <strong> FILTER PROVIDERS</strong></Button></div> : null}
+      {showMap && !showMobileFilter ? <div class='map'>MAP</div>
+          : null}
       </div>
       {showFilter? <div className="noDisplay"><Title/></div>: null}
       {showMobileFilter? <div className='mobile-title'><Title/></div>: null}
@@ -409,11 +423,13 @@ if(loadingComplete && loadingCompleteSub && subcatId != ''){
   </Container>
 
          </div>
-         <div class='map'></div>
+         <div class='map-desk' style={showFilter ? {width: '40%'}: {width: '50%'}}>MAP</div>
           </div>
+          
          <div className='mapPage-con mobile-mapPage-con' style={{width: '100%'}}>
+         
       <div id="topOfListMobile"  className='search-con ' >
-      
+
         
           {/*<Form className= 'white-0-bg search-form'>
             <Form.Group className='search-form-group' controlId='formFilterText'>
@@ -437,15 +453,14 @@ if(loadingComplete && loadingCompleteSub && subcatId != ''){
             </Form.Group>
             <div className='search-cat-con'><p className='search-cat'><Button onClick={(e)=>handleEntailmentRequest(e)} className='search-cat-button' style={{display: !visible ? '' : 'none'}}>Browse by Category <i class="fal fa-chevron-down" style={{color:'black !important'}}></i></Button><Button onClick={(e)=>handleEntailmentRequest(e)} className='search-cat-button' style={{display: visible ? '' : 'none'}}>Browse by Category <i class="fal fa-chevron-up"></i></Button></p><div className="cat-mobile-container" style={{display: visible ? '' : 'none'}}><CategoryView/></div></div>
   </Form>*/}
-          <Container id="topOfList" className='body searchb'>
+          <Container id="topOfList" className='body searchb' style={showMap ? {marginTop: '50vh'} : null}>
             {!showMobileFilter ? <ListGroup  variant = 'flush' className =' scroll'>{providerList}</ListGroup>: null}
             
 
   </Container>
 
          </div>
-         {showMap ? <div class='map'></div>
-          : null}
+         
           </div>
     </React.Fragment>
   );

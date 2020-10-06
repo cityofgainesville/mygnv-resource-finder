@@ -48,6 +48,8 @@ const Homepage = (props) => {
   const [loadingCompleteSub, setLoadingCompleteSub] = useState(false);
   const [myStyle, setStyle] = useState ({borderColor: 'default'});
   const [myZipStyle, setZipStyle] = useState ({borderColor: 'default'});
+  const [clearCookies, setClearCookies] = useState (false);
+  const [cookies, setCookies] = useState(subcatId == '' && gender=='Not Selected' && filterAgeText=='' && filterText == '' && filterZipText == "" ? false : true);
   
   //SEARCH
   const handleFocusRequest = (e) => {
@@ -293,7 +295,10 @@ if(loadingCompleteSub && subcategories != null){
   });
 }
 
-
+const handleCookiesClick = (e) => {
+  e.preventDefault()
+  setClearCookies(true);
+}
 
 //console.log(props);
 //console.log(TopLevelCategory.propTypes);
@@ -304,7 +309,14 @@ if(loadingCompleteSub && subcategories != null){
         <Alert
           variant='primary'
           className='menu scroll'
+          style={cookies && window.innerWidth >= 1025 ? {paddingTop: '0'}: null}
         >
+          {cookies ? 
+          <Row className="cookies-row">
+            <div className="cookies">myGNV Resource Finder will remember your filters so you can return to the same list later. Click this button if you want to make myGNV Resource Finder to forget all information you have provided.</div>
+            <div className='cookies-btn'><Button className="clear-cookies" onClick={handleCookiesClick}>Clear Cookies</Button></div>
+            <div style={clearCookies? {color: '#20668F'} : {display:'none'}} className='cookies-cleared'>You’re cookies have been cleared.</div>
+          </Row>: null}
           <Row className=' menu-title title-title top-title'>
                 Filters
           </Row>
