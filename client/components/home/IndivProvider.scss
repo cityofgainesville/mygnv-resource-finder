@@ -4,17 +4,96 @@
 
 /* Mobile Styles */
 @media only screen and (max-width: 767px) {
+    .mobile-lang-sub {
+        display: block !important;
+        margin-bottom: .25rem !important;
+    }
+    .mobile-p-btn{
+        display: inline-block !important;
+    }
+    .elig-body {
+        padding-bottom: 0 !important;
+    }
+    .elig-col {
+        padding-right: 0rem !important;
+        margin-bottom: 1rem !important;
+    }
+    .elig-col-con{
+        flex-direction: column !important;
+        padding-bottom: 0 !important;
+        border: none !important;
+    }
+    .main-title{
+        margin-bottom: 0 !important;
+        margin-top: 0 !important;
+        display: block !important;
+    }
+    #main-info .card-text {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .top-right{
+        display: none !important;
+    }
+    .indiv-con{
+        margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    }
+    .top-left{
+        width: 100% !important;
+        padding-left: 0 !important;
+        float: left !important;
+        padding-right: 0 !important;
+    }
+    .mobile-description-title{
+        display: none !important;
+    }
+    .desktop-hours-card {
+        display: none !important;
+    }
+    .hours-left{
+        width: 100% !important;
+        padding-left: 0 !important;
+    }
+    .hours-right{
+        width: 100% !important;
+        padding-left: 0 !important;
+    }
+    .united-way-mobile {
+        color: #1c6da2;
+        float: right;
+        width: 100%;
+        text-align: right;
+        font-size: small;
+        margin-bottom:1rem;
+        display: block !important;
+    }
+    .united-way {
+        color: #1c6da2;
+        float: right;
+        width: 100%;
+        text-align: right;
+        font-size: small;
+        margin-bottom:1.5rem;
+        display: none;
+    }
    
     #right {
         width: fit-content;
-        display: none;
+        display: block;
+        margin-top: 0rem;
+        margin-bottom: 0;
         //min-width: 30%;
         //max-width: 40%;
         
     }
 
+    .mobile-lang {
+        margin-bottom: 0;
+    }
+
     .provider {
-        margin-top: 89px !important;
+        margin-top: 134px !important;
         color: black;
         padding: 0;
         background-color: #FBFBFB;
@@ -128,14 +207,21 @@
 
     .provider-buttons-con {
         display: flex;
+        margin-top: 1rem !important;
+        margin-bottom: 0 !important;
         //justify-content: space-around;
         
     }
 
     .provider-buttons {
         margin-top:.5rem;
-        margin-bottom:1rem;
+        margin-bottom:0rem;
         font-size: 15px;
+        text-align: center !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        padding-top: .2rem !important;
+        //max-width: 50%;
     }
 
     .indivp-name {
@@ -178,6 +264,12 @@
 
 /* Tablet Styles */
 @media only screen and (min-width: 401px) and (max-width: 1024px) {
+    .elig-col {
+        padding-right: 1rem !important;
+    }
+    .united-way-mobile{
+        display: none;
+    }
     .call {
         display: none;
     }
@@ -187,6 +279,9 @@
         //min-width: 30%;
         //max-width: 40%;
         
+    }
+    .mobile-box-search {
+        display: block !important;
     }
 
     .provider {
@@ -216,6 +311,7 @@
     .first-card {
         display: inline-flex;
         justify-content: space-around;
+        padding-bottom: 0 ;
         //margin-left: auto;
         //margin-right: auto;
         //margin-bottom:1rem;
@@ -241,14 +337,17 @@
     .website {
         margin-right: 1rem;
     }
-
     .provider-buttons {
         margin-top:.5rem;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
     }
+
     
     .indivp-name {
         font-weight: 400;
-        margin-bottom: 2rem;
+        text-align: left;
+        margin-bottom: 0rem;
     }
 
     .subtitle {
@@ -262,10 +361,12 @@
     .translation {
         width: 100%;
         font-size: medium;
+        padding-left: 1rem;
     }
 
     .bus {
         font-size: .9rem;
+        padding-left: 0 !important;
     
     }
 
@@ -274,18 +375,42 @@
         //margin-right: .5rem;
         //min-width: 50%;
         max-width: 60%;
-    
+    }
+    .indiv-container {
+        width: 100% !important;
+    }
+    .indiv-con {
+        padding: 1rem;
+        margin-top: 2rem !important;
+        margin-bottom: 2rem !important;
+    }
+    #main-info .card-text {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    #right {
+        width: 50%;
+        //min-width: 30%;
+        //max-width: 40%;
+        border-left: 1px solid #9a9a9a;
+        padding-bottom: 2rem;
+        padding-left: 2rem;
+        
     }
 }
     
 @media only screen and (max-width: 767px) and (min-width: 426px) {
+    .mobile-p-btn{
+        display: inline-block !important;
+        width: 100%;
+    }
     #left {
         width: 100% !important;
         max-width: 100% !important;
     }
 
     .call {
-        display: block;
+        display: inline-block;
         margin-right: 1.5rem;
     }
 
@@ -345,7 +470,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-        padding-bottom: 0;
+        padding-bottom: 0 !important;
         font-size: 15px;
         //margin-left: auto;
         //margin-right: auto;
@@ -420,13 +545,29 @@
         //justify-content: space-between;
         
     }
+    .provider-buttons-con {
+        display: flex;
+        margin-top: 1rem !important;
+        margin-bottom: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0!important;
+        //justify-content: space-around;
+        
+    }
 
     .provider-buttons {
         margin-top:.5rem;
-        margin-bottom:1rem;
+        margin-bottom:0rem;
         font-size: 15px;
+        text-align: center !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        padding-top: .2rem !important;
+        //max-width: 50%;
     }
+    
 
+    
     .indivp-name {
         font-weight: 400;
         margin-bottom: 0rem;
@@ -448,8 +589,17 @@
 
     .bus {
         font-size: 14px;
+        padding-left: 0 !important;
     
     }
+    #main-info {
+        margin-bottom: 0 !important;
+    }
+    .first-card{
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    
 }
 
 
@@ -460,16 +610,21 @@
         display: none;
     }
     #right {
-        width: fit-content;
+        width: 50%;
         //min-width: 30%;
         //max-width: 40%;
+        border-left: 1px solid #9a9a9a;
+        padding-bottom: 2rem;
+        padding-left: 2rem;
         
     }
 
     .provider {
         padding-top: 110px !important;
-        //margin-top: 120px !important;
+        margin-top: 0px !important;
         color: black;
+        border-right: none !important;
+        font-size: medium;
     }
 
     #main-info {
@@ -491,7 +646,8 @@
 
     .first-card {
         display: inline-flex;
-        justify-content: space-around;
+        padding-bottom: 0 !important;
+        //justify-content: space-around;
         //margin-left: auto;
         //margin-right: auto;
         //margin-bottom:1rem;
@@ -505,17 +661,27 @@
     }
 
 
-    .united-way {
+    .united-way-mobile {
         color: #1c6da2;
         float: right;
         width: 100%;
         text-align: right;
         font-size: small;
         margin-bottom:1.5rem;
+        display: none;
+    }
+
+    .united-way{
+        color: #1c6da2;
+        //float: right;
+        width: 100%;
+        //text-align: right;
+        font-size: medium;
+        margin-bottom:1.5rem;
     }
 
     .website {
-        margin-right: 1rem;
+        margin-right: 2rem;
     }
 
     .provider-buttons {
@@ -523,12 +689,13 @@
     }
     
     .indivp-name {
-        font-weight: 400;
-        margin-bottom: 2rem;
+        font-weight: 600;
+        font-size: x-large;
+        margin-bottom: 0rem;
     }
 
     .subtitle {
-        font-size: .9rem;
+        font-size: medium;
         color: black;
         font-weight: 600;
         margin-bottom: 2rem;
@@ -538,18 +705,34 @@
     .translation {
         width: 100%;
         font-size: medium;
+        padding-left: 20px;
     }
 
     .bus {
         font-size: .9rem;
+        padding: 0 !important;
+        margin:0;
     
     }
     #left {
-        width: fit-content;
+        width: 50%;
         //margin-right: .5rem;
         //min-width: 50%;
-        max-width: 60%;
+       // max-width: 60%;
+       padding-bottom: 2rem;
     
+    }
+    .indiv-container {
+        width: 100% !important;
+    }
+    .indiv-con {
+        padding: 1rem;
+        margin-top: 2rem !important;
+        margin-bottom: 2rem !important;
+    }
+    #main-info .card-text {
+        padding-left: 20px;
+        padding-right: 20px;
     }
 
 }
@@ -557,9 +740,7 @@
 
 
 
-.indiv-con {
-    padding: 1rem;
-}
+
 
 .btn-info {
     background-color: #074b69;
@@ -567,13 +748,50 @@
 }
 
 
+.hours-card {
+    width: 100%;
+    padding-top: 1rem;
+    
+    border-top: 1px solid #9a9a9a;
+}
+
+.top-right {
+    min-width: 50%;
+    display: flex;
+    padding-left: 4rem !important;
+
+}
+
+.add-sched-info {
+    padding-bottom: 1rem;
+}
+
+.top-left {
+    margin-bottom: 0;
+}
+
+.hours-right {
+    width: 50%;
+    //padding-bottom: 2rem;
+    padding-left: 2rem;
+
+}
+
+.hours-left {
+    width: 50%;
+    //padding-bottom: 2rem;
+    padding-left: 2rem;
+}
+
+.mobile-lang-sub {
+    display: none;
+}
 
 
 
-
-
-
-
+.top-hours-con {
+    display: flex;
+}
 
 
 
@@ -594,32 +812,76 @@
     margin-bottom: 0;
 }
 
+.main-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
 
 
+.elig-col {
+    //max-width: 33%;
+    padding-right: 6rem;
+}
+
+.elig-col-con {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #dbdbdb;
+}
 
 
 .appt {
     color: black;
 }
 
+.provider-buttons{
+    background-color: transparent;
+    color: #1E83C6;
+    border-color: #1E83C6;
+    padding-left: 3rem;
+    padding-top: .2rem;
+    padding-bottom: .2rem;
+    font-size: 14px;
+    padding-right: 3rem;
+}
+
 
 
 .provider-buttons:hover {
-    background-color: #076086;
-    border-color: #076086;
+    background-color: transparent;
+    color: #17689e;
+    border-color: #17689e;
+    
 }
 
 .provider-buttons:active {
-    background-color: #076086 !important;
-    border-color: #076086 !important;
+    background-color: transparent !important;
+    color: #17689e;
+    border-color: #17689e !important;
 }
 
 .provider-buttons:active:hover {
-    background-color: #076086 !important;
-    border-color: #076086 !important;
+    background-color: transparent !important;
+    color: #17689e;
+    border-color: #17689e !important;
 }
 
 .provider-buttons:focus{
-    background-color: #076086 !important;
-    border-color: #076086 !important;
+    background-color: transparent !important;
+    color: #17689e;
+    border-color: #17689e!important;
+}
+
+.eligibility-card {
+    
+    
+}
+.mobile-p-btn{
+    display: none;
 }

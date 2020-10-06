@@ -8,7 +8,7 @@
     .mobile-phone {
         display: block;
     }
-
+    
     .mobile-phone .btn {
         width: 100%;
         margin-top:.5rem;
@@ -56,6 +56,9 @@
         margin-bottom: 0;
         text-align: center;
     }
+    #hotline-form-group {
+        margin-top: 75px !important;
+    }
     
   }
 
@@ -63,6 +66,9 @@
    @media only screen and (min-width: 401px) and (max-width: 1024px) {
     .mobile-phone {
         display: none;
+    }
+    #hotline-form-group {
+        margin-top: 75px !important;
     }
 
     .phone {
@@ -123,6 +129,7 @@
         padding: 0;
     
     }
+
     
     .hotline-con {
         //height: 100vh;

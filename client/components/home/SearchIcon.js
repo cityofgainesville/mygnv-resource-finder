@@ -35,7 +35,7 @@ const SearchIcon = (props) => {
 
 const doRedirect = () => {
 
-    props.history.push(`${paths.providerPath}/?name=${filterText}&zip=${filterZipText}&age=`);
+    props.history.push(`${paths.providerPath}/?name=${filterText}&zip=${filterZipText}&age=&gender=&main=&sub=`);
 };
 const handleFilterChange = (event) => {
   setFilterText(event.target.value);

@@ -43,15 +43,17 @@ const TopLevelCategory = (props) => {
       categoryCol = <React.Fragment></React.Fragment>;
     }
     if(category.name != "Other" && category.name != "COVID-19"){
+      console.log(category.id);
     categoryCol = (
       <React.Fragment>
         {categoryCol}
         <Col className='toplevel-col'>
           <CategoryCard
+            id={category.id}
             iconName={category.icon_name}
             iconSize={iconSize}
             categoryName={category.name}
-            path={`${paths.categoryPath}/${category._id}`}
+            path={`${paths.categoryPath}/${category.id}`}
           />
         </Col>
       </React.Fragment>

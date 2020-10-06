@@ -1,5 +1,113 @@
 @import '../../index.scss';
 
+
+/* Mobile Styles */
+@media only screen and (max-width: 767px) {
+    /*body {
+      background-color: #F09A9D !important; // Red
+    }*/
+    .center-con{
+        width: 90% !important;
+        height: 92vh !important;
+    }
+    .searchTitle{
+        color: #20668F;
+        font-size: x-large;
+    }
+
+    .searchIcon{
+        font-size: large !important;
+    }
+    .search-input {
+        font-size: medium !important;
+    }
+    .searchIconButton {
+        background-color: #20668F;
+        width: 250px;
+        font-size: large;
+    }
+    
+    
+  }
+  
+  /* Tablet Styles */
+  @media only screen and (min-width: 401px) and (max-width: 1024px) {
+    /*body {
+      background-color: #F5CF8E !important; // Yellow 
+    }*/
+    .searchIcon-con{
+        height: 95vh !important;
+    }
+    .center-con{
+        width: 100% !important;
+    }
+    .search-input {
+        font-size: 22px !important;
+    }
+    .searchTitle {
+        font-size: xx-large;
+        color: #20668F;
+        
+    }
+    .searchIconButton {
+        background-color: #20668F;
+        width: 250px;
+        font-size: x-large;
+    }
+    
+  }
+  
+  @media only screen and (max-width: 767px) and (min-width: 426px) {
+    /*body {
+      background-color: black !important; // Black
+    }*/
+    .searchIcon-con{
+        height: 95vh !important;
+        margin-top: 40px !important;
+    }
+    .center-con{
+        width: 100% !important;
+    }
+    .search-input {
+        font-size: medium !important;
+    }
+    .searchTitle {
+        font-size: x-large;
+        color: #20668F;
+        
+    }
+    .searchIconButton {
+        background-color: #20668F;
+        width: 250px;
+        font-size: large;
+    }
+   
+  }
+  
+  
+  
+  /* Desktop Styles */
+  @media only screen and (min-width: 1025px) {
+    /*body {
+      background-color: #B2D6FF !important; // Blue 
+    }*/
+    .search-input {
+        font-size: 22px !important;
+    }
+    .searchTitle {
+        font-size: xx-large;
+        color: #20668F;
+        
+    }
+    .searchIconButton {
+        background-color: #20668F;
+        width: 250px;
+        font-size: x-large;
+    }
+    
+    
+  }
+
 .searchIcon-con {
 
     align-items: center;
@@ -18,17 +126,8 @@
     padding-bottom: 5em;
 }
 
-.searchTitle {
-    font-size: xx-large;
-    color: #20668F;
-    
-}
 
-.searchIconButton {
-    background-color: #20668F;
-    width: 250px;
-    font-size: x-large;
-}
+
 
 .searchIconButton:hover {
     background-color: #1b5577;
@@ -55,6 +154,3 @@
    // border-right: none;
 }
 
-.search-input {
-    font-size: 22px !important;
-}

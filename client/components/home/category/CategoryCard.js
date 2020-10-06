@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import './CategoryCard.scss';
+import paths from '../../../RouterPaths';
 
 // Renders tile for top level category
 // uses fontawesome light for the icon
@@ -15,7 +16,10 @@ const CategoryCard = (props) => {
   const handleClick = () => {
     setClassName('cat-card-border-active');
     setTextName('cat-card-div-active');
-    props.history.push(props.path);
+    console.log(props.id);
+    props.history.push(`${paths.providerPath}/?name=&zip=&age=&gender=&main=${props.id}&sub=`);
+    //props.history.push(props.path);
+    //props.history.push(`${paths.categoryPath}/${props.id}`);
     window.location.reload(false);
   };
 
@@ -52,6 +56,7 @@ const CategoryCard = (props) => {
 };
 
 CategoryCard.propTypes = {
+  id: PropTypes.string.isRequired,
   iconName: PropTypes.string.isRequired,
   iconSize: PropTypes.number.isRequired,
   categoryName: PropTypes.string.isRequired,

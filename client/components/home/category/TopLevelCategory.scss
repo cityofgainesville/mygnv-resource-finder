@@ -7,9 +7,18 @@
     background-color: #F09A9D !important; // Red
   }*/
   .toplevel-row{
-    width:80%;
-    margin-top: 1em;
+    width:1000%;
+    margin-top: 0;
+
   }
+  .toplevel-col {
+    padding: 0 0;
+    margin-bottom: 0;
+    flex-grow: 0;
+    margin-left: 1em;
+    margin-right: 1em;
+  }
+  
 }
 
 /* Tablet Styles */
@@ -18,8 +27,15 @@
     background-color: #F5CF8E !important; // Yellow 
   }*/
   .toplevel-row{
-    width:80%;
-    margin-top: 1em;
+    width:70%;
+    margin-top:0;
+  }
+  .toplevel-col {
+    padding: 0 0;
+    margin-bottom: 0;
+    flex-grow: 0;
+    margin-left: 1.5em;
+    margin-right: 1.5em;
   }
   
 }
@@ -29,7 +45,7 @@
     background-color: black !important; // Black
   }*/
   .toplevel-row{
-    width:80%;
+    width:75%;
     margin-top: 1em;
   }
  
@@ -51,6 +67,14 @@
     margin-bottom: 1em;
     margin-top: auto;
   }
+  .toplevel-col {
+    padding: 0 0;
+    margin-bottom: 0;
+    flex-grow: 0;
+    margin-left: 1em;
+    margin-right: 1em;
+  }
+  
 }
 
 
@@ -65,10 +89,3 @@
 
 
 
-.toplevel-col {
-  padding: 0 0;
-  margin-bottom: 0;
-  flex-grow: 0;
-  margin-left: 1em;
-  margin-right: 1em;
-}

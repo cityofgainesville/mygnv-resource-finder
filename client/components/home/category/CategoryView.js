@@ -26,17 +26,20 @@ const CategoryView = (props) => {
 
   // Get category from backend based on id passed in (or get top level categories)
   const getData = () => {
+    console.log(props.id);
     if (!props.id) {
       axios
         .get('/api/categories/listTopLevel')
         .then((res) => {
           setCategories(Object.values(res.data));
           setLoadingComplete(true);
+          //console.log(categories);
         })
         .catch((err) => {
           console.log(err);
         });
     } else {
+      
       axios
         .get(`/api/categories/${props.id}`)
         .then((res) => {
@@ -50,6 +53,8 @@ const CategoryView = (props) => {
             })
             .then((res) => {
               setCategory(res.data);
+              console.log(res.data);
+              console.log(res.data.children);
               if(!res.data.is_subcategory){
                 setParent(res.data.name);
               //console.log(res.data.name);
