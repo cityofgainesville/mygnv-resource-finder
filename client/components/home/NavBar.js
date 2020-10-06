@@ -81,7 +81,7 @@ const NavBar = (props) => {
                     className='nav-link'
                     activeClassName='navbar-active active'
                   >
-                    <div class='search-nav-con'>
+                    <div class='search-nav-con '>
                      <i class="far fa-search"></i>
                      <span class='search-nav'>  Search</span>
                      </div>

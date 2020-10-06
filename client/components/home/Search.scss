@@ -8,6 +8,10 @@
     padding-top: .5rem !important;
     font-size: 14px !important;
     padding-bottom: .5rem !important;
+    height: 56px;
+  }
+  .cookies-row{
+    
   }
   .mobile-mapPage-con{
     display: block;
@@ -349,7 +353,11 @@
   }
 
   /* Tablet Styles */
+
   @media only screen and (min-width: 401px) and (max-width: 1024px) {
+    .map{
+      height: 38vh;
+    }
     .mobile-text-input {
       padding-left: 0;
       padding-right: 0;}
@@ -917,6 +925,20 @@
   
   /* Desktop Styles */
   @media only screen and (min-width: 1025px) {
+    .map {
+      display: none;
+    }
+    .map-desk {
+      width: 40%;
+      position: fixed;
+      display: block;
+      height: 100vh;
+      float: right;
+      right: 0;
+      margin-top: 101px;
+      text-align: center;
+      background: white;
+    }
     .mobile-title {
       display: none;
     }
@@ -1247,6 +1269,7 @@
   border-bottom: 1px solid rgb(219, 219, 219);
   border-radius: 0;
   margin-bottom: 0;
+  
 }
 
 .breadcrumb-item a {
