@@ -34,15 +34,15 @@ const App = (props) => {
   return (
     <React.Fragment>
       <AuthState />
-      <NavBar />
+      
       
       <Switch>
         <Route path={paths.adminPath} component={AdminPortal} />
-        <Route exact path={paths.mainPath} component={MainPage}><div  ><MainPage/></div></Route>
-        <Route exact path={paths.providerPath} component={Search}><Search/></Route>
+        <Route exact path={paths.mainPath} component={MainPage}><div  ><NavBar /><MainPage/></div></Route>
+        <Route exact path={paths.providerPath} component={Search}><NavBar /><Search/></Route>
         <Route exact path={paths.safeplacesPath} component={Safeplaces}><Safeplaces/></Route>
-        <Route exact path={paths.hotlinesPath} component={Hotlines}><Hotlines/></Route>
-        <Route exact path={paths.searchPath} component={SearchIcon}><SearchIcon/></Route>
+        <Route exact path={paths.hotlinesPath} component={Hotlines}><NavBar /><Hotlines/></Route>
+        <Route exact path={paths.searchPath} component={SearchIcon}><NavBar /><SearchIcon/></Route>
 
         {/*<Route exact path={paths.covidPath} component={Covid}></div><Covid/></Route>*/}
         <Route exact path={paths.defaultPath} ><Redirect to={paths.mainPath} /></Route>
@@ -50,7 +50,7 @@ const App = (props) => {
         <Route
           exact
           path={paths.providerDetailPath + '/:id'}
-          render={(props) => <React.Fragment><IndivProvider id={props.match.params.id} /></React.Fragment>}
+          render={(props) => <React.Fragment><NavBar /><IndivProvider id={props.match.params.id} /></React.Fragment>}
         />
         <Route
           exact
