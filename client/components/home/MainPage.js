@@ -35,7 +35,7 @@ const MainPage = (props) => {
 const doRedirect = (providerId) => {
   if(event.key === 'Enter'){
     console.log(`${paths.providerPath}/${providerId}`);
-    props.history.push(`${paths.providerPath}/?name=${filterText}&zip=${filterZipText}&age=`);
+    props.history.push(`${paths.providerPath}/?name=${filterText}&zip=${filterZipText}&age=&gender=&main=&sub=`);
   }
 };
 const handleFilterChange = (event) => {
@@ -68,8 +68,9 @@ console.log(myStyle);
     <div >
     <div  className='home-con scroll'>
       <div className= 'white-0-bg homepage-form  '>
-      <Container className = 'mobile-con  home-mobile-con' style={{margin:'0 auto', padding: '0'}}>
       <div id='feedback'>Find the latest COVID-19 information at the <a target='_blank' href='https://alachuacounty.us/covid-19/Pages/default.aspx?' id='feedback-link'>Alachua County COVID-19 Community Resource Portal</a></div>
+      <Container className = 'mobile-con  home-mobile-con' style={{margin:'0 auto', padding: '0'}}>
+     
       <div className='descriptionRF extra' id='how-can-we-help'>
         <div className='homepage-subtitle-2'>Find Gainesville programs and services all in one place.</div>
         <div  className='description-box left-box mobile-box-search'>
@@ -89,7 +90,7 @@ console.log(myStyle);
               />
               <InputGroup.Prepend>
                     <InputGroup.Text style={myStyle}>
-                      <i class="far fa-search" style={{color:'#074b69'}}></i>
+                      <i class="far fa-search" style={{color:'#074b69', fontSize: '1rem'}}></i>
                     </InputGroup.Text>
                 </InputGroup.Prepend>
               </InputGroup>
@@ -108,17 +109,17 @@ console.log(myStyle);
               />
               <InputGroup.Prepend>
                     <InputGroup.Text style={myZipStyle}>
-                      <i class="far fa-search" style={{color:'#074b69'}}></i>
+                      <i class="far fa-search" style={{color:'#074b69', fontSize: '1rem'}}></i>
                     </InputGroup.Text>
                 </InputGroup.Prepend>
               </InputGroup>
               </Container>
-              <RedirectButton className='menuButton homeMenuButton' path={paths.searchPath} >
+              <RedirectButton className='resourceButton homeMenuButton' path={`${paths.providerPath}/?name=&zip=&age=&gender=&main=&sub=`} >
               See all resources
           </RedirectButton>
           </div>
           <div className='description-box-container'>
-          <div  className='description-box top-box hotline-box'>
+          <div  className='description-box top-box hotline-box desktop-top'>
               <div className='menu-title-home menu-title'>Search for providers by name or zip code.</div>
               <div className='menu-title-mobile'>Search for providers by name or zip code.</div>
               <Container className = 'mobile-con input-con' style={{margin:'0 0'}}>
@@ -135,7 +136,7 @@ console.log(myStyle);
               />
               <InputGroup.Prepend>
                     <InputGroup.Text style={myStyle}>
-                      <i class="far fa-search" style={{color:'#074b69'}}></i>
+                      <i class="far fa-search" style={{color:'#074b69', fontSize: '1.5rem'}}></i>
                     </InputGroup.Text>
                 </InputGroup.Prepend>
               </InputGroup>
@@ -154,12 +155,12 @@ console.log(myStyle);
               />
               <InputGroup.Prepend>
                     <InputGroup.Text style={myZipStyle}>
-                      <i class="far fa-search" style={{color:'#074b69'}}></i>
+                      <i class="far fa-search" style={{color:'#074b69', fontSize: '1.5rem'}}></i>
                     </InputGroup.Text>
                 </InputGroup.Prepend>
               </InputGroup>
               </Container>
-              <RedirectButton className='resourceButton homeMenuButton' path={paths.searchPath} >
+              <RedirectButton className='resourceButton homeMenuButton' path={`${paths.providerPath}/?name=&zip=&age=&gender=&main=&sub=`} >
          
               See all resources
           </RedirectButton>
@@ -169,14 +170,14 @@ console.log(myStyle);
               <div className='menu-title-home menu-title'>Not sure what you're looking for? Browse by categories.</div>
               <div className='menu-title-mobile'>Not sure what you're looking for? </div>
               <div className='cat-container'>
-                <div className='menu-title-mobile'>Browse by Categories</div>
+                <div className='menu-title-mobile cat-mobile-title'>Browse by Categories</div>
               <CategoryView></CategoryView>
               </div>
           </div>
           
           <div  className='description-box hotline-box'>
               <div className='menu-title-home menu-title'>Need a quick access to hotlines?</div>
-              <div className='menu-title-mobile'>Need a quick access to hotlines?</div>
+              <div className='menu-title-mobile hotline-mobile-title'>Need a quick access to hotlines?</div>
               <RedirectButton className='menuButton homeMenuButton' path={paths.hotlinesPath}  >
               <span className="menu-name">View list of hotlines</span>
               </RedirectButton>

@@ -7,9 +7,9 @@
     border-radius: 8px;
   }
   .cat-card-button {
-    width: 3em;
-    height: 3em;
-    margin-bottom: .5em;
+    width: 8em;
+    height: 6em;
+    margin-bottom: 1em;
     padding: 5px 5px;
     color:  $blue-cool-70v;
   }
@@ -24,7 +24,7 @@
   .catCard-con {
     display: flex;
     flex-direction: column;
-    width: 4.5em;
+    width: 8em;
     /* justify-content: center; */
     /* align-content: center; */
     align-items: center;
@@ -41,6 +41,8 @@
     border-radius: 8px;
   }
   .cat-card-button {
+    width: 10em;
+    height: 8em;
     margin-bottom: 1em;
     padding: 5px 5px;
     color:  $blue-cool-70v;

@@ -23,6 +23,7 @@ const NavBar = (props) => {
     <React.Fragment>
     <div className='nav-container' >
         <Navbar collapseOnSelect sticky='top' expand='sm' variant='light'>
+          <div className='mobile-top-nav-con'>
           <Navbar.Brand>
 
             <a href='/' class='nav-home-brand'>
@@ -42,6 +43,7 @@ const NavBar = (props) => {
           {/*<Button className='mobile-nav-buttons' onClick = {(e)=>handleEntailmentRequest(e)}  style={{color: 'white', display: !visible ? '' : 'none'}}> <i class="fal fa-bars nav-i" ></i></Button>
           <Button className='mobile-nav-buttons'  onClick = {(e)=>handleEntailmentRequest(e)} style={{color: 'white', display: visible ? '' : 'none'}}> <i class="fal fa-times nav-i"  ></i><i class="fal fa-bars" style={{display: visible ? '' : 'none'}}></i></Button>*/}
           <Navbar.Toggle className='ipad' onClick = {(e)=>handleEntailmentRequest(e)} aria-controls='mobile-menu-nav' > <div style={{color: 'white', display: !visible  ? '' : 'none'}}><i class="fal fa-bars nav-i" ></i></div><div style={{color: 'white', display: visible  ? '' : 'none'}}><i class="fal fa-times nav-i"   ></i></div></Navbar.Toggle>
+          </div>
           {/*<Navbar.Toggle className='ipad' onClick = {(e)=>handleEntailmentRequest(e)} aria-controls='mobile-menu-nav' > </Navbar.Toggle>*/}
           <Navbar.Collapse id='responsive-navbar-nav'>
               <Nav className='mr-auto'>
@@ -57,7 +59,7 @@ const NavBar = (props) => {
                 </Nav.Link>
                 <Nav.Link className='link-container'>
                   <NavLink
-                    to={`${paths.providerPath}/?name=&zip=&age=`}
+                    to={`${paths.providerPath}/?name=&zip=&age=&gender=&main=&sub=`}
                     className='nav-link'
                     activeClassName='navbar-active active'
                   >
@@ -79,9 +81,19 @@ const NavBar = (props) => {
                     className='nav-link'
                     activeClassName='navbar-active active'
                   >
+                    <div class='search-nav-con'>
                      <i class="far fa-search"></i>
+                     <span class='search-nav'>  Search</span>
+                     </div>
                   </NavLink>
                 </Nav.Link>
+              <div className ='mobile-feedback'>
+              <div >
+              Spot something wrong or want to add a new resource? Let us know!
+              </div>
+              <Button className='title-links top-link' variant="link" href='https://cityofgainesville.iad1.qualtrics.com/jfe/form/SV_74157YeIb6ttlYx' target='_blank'>Feedback</Button>
+              <Button className='title-links'  variant="link" href='https://cityofgainesville.iad1.qualtrics.com/jfe/form/SV_bNMcXknvBcVfxoV' target='_blank'>Add a Resource</Button>
+              </div>
                {/*<Nav.Link className='link-container'>
                   <NavLink
                     to={paths.adminPath}
@@ -96,7 +108,7 @@ const NavBar = (props) => {
         </Navbar>
        
     </div>
-        <div id='mobile-menu' style={{display: visible ? '' : 'none'}}><Modal id='modal-menu' show={visible}><Title/></Modal></div>
+       {/* <div id='mobile-menu' style={{display: visible ? '' : 'none'}}><Modal id='modal-menu' show={visible}><Title/></Modal></div>*/}
     </React.Fragment>
   );
 };

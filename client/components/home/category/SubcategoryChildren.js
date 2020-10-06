@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 import { Container, ListGroup, Row, Col, Form, InputGroup } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import './SubcategoryChildren.scss';
+import axios from 'axios';
 
 import paths from '../../../RouterPaths';
 import Homepage from '../Title';
 
 const SubcategoryChildren = (props) => {
   const [visible, setVisible] = useState(false);
+  const [loadingComplete, setLoadingComplete] = useState(false);
+  const [categories, setCategories] = useState(null);
   const [myStyle, setMyStyle] = useState({
 		margins: 'auto auto',
 		//maxWidth: '60em',
@@ -24,19 +27,51 @@ const SubcategoryChildren = (props) => {
 		position:'fixed', 
 		zIndex:'100', 
 		marginTop:'53px'
-	  });
+    });
+
+    useEffect(() => {
+      setCategories(null);
+      //setCategory(null);
+      setLoadingComplete(false);
+      getData();
+    }, [props.id]);
+  
+  const getData = () => {
+    console.log(props.category.children);
+    props.category.children.forEach((child, i) => {
+      console.log(child);
+    axios
+            .get(`/api/categories/${child}`)
+            .then((res) => {
+              setCategories(res.data);
+              console.log(res.data);
+              //console.log(res.data.children);
+              //if(!res.data.is_subcategory){
+                //setParent(res.data.name);
+              //console.log(res.data.name);
+             // }
+              setLoadingComplete(true);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+          });
+        }
 
   const doRedirect = (providerId) => {
     props.history.push(`${paths.categoryPath}/${providerId}`);
   };
 
-  const categoryList = props.category.children.sort((a, b) => (a.name > b.name) ? 1 : -1).map((category) => {
+  const categoryList = () => {
+    /*if (!loadingComplete) return null;
+    console.log("dshj");*/
+    categories.sort((a, b) => (a.name > b.name) ? 1 : -1).map((category) => {
     return (
       <ListGroup.Item
-        key={category._id}
+        key={category.id}
         className=' subcat'
         action
-        onClick={() => doRedirect(category._id)}
+        onClick={() => doRedirect(category.id)}
       >
         <span>{category.name}</span>
         <i class="fal fa-angle-right cat-icon"></i>
@@ -44,6 +79,7 @@ const SubcategoryChildren = (props) => {
       </ListGroup.Item>
     );
   });
+}
 
 
   return (

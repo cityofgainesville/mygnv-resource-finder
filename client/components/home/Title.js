@@ -16,8 +16,13 @@ import './Search.scss';
 const Homepage = (props) => {
   var queryString = decodeURIComponent(window.location.search);
   var queries;
-
+  var sublisting = [];
   queryString = queryString.substring(1); 
+  /*console.log(queryString);
+  if(queryString.includes(' & ')){
+    queryString.replaceAll(/\s/g,'\-');
+    console.log(queryString);
+  }*/
   queries = queryString.split("&");
   
   
@@ -25,16 +30,22 @@ const Homepage = (props) => {
   const [filterText, setFilterText] = useState( queries[0].split("=")[1] ? queries[0].split("=")[1] : '');
   const [filterZipText, setFilterZipText] = useState(queries[1].split("=")[1] ? queries[1].split("=")[1]: '');
   const [filterAgeText, setFilterAgeText] = useState(queries[2].split("=")[1] ? queries[2].split("=")[1]: '');
-  const [gender, setGender] = useState('');
-  const [cat, setCat] = useState('');
-  const [subcat, setSubcat] = useState('');
+  const [gender, setGender] = useState(queries[3].split("=")[1] ? queries[3].split("=")[1]: 'Not Selected');
+  const [cat, setCat] = useState('Not Selected');
+  const [subcat, setSubcat] = useState('Not Selected');
+  //const [cat, setCat] = useState(queries[4].split("=")[1] ? queries[4].split("=")[1]: 'Not Selected');
+  //const [subcat, setSubcat] = useState(queries[5].split("=")[1] ? queries[5].split("=")[1]: 'Not Selected');
+  const [catId, setCatId] = useState(queries[4].split("=")[1] ? queries[4].split("=")[1]:'');
+  const [subcatId, setSubcatId] = useState(queries[5].split("=")[1] ? queries[5].split("=")[1]:'');
   const [visible, setVisible] = useState(false);
   const [hotline, setHotline] = useState("");
   const [search, setSearch] = useState("");
   const [categories, setCategories] = useState(null);
+  const [subcategories, setSubcategories] = useState(null);
   const [parent, setParent] = useState('');
   const [category, setCategory] = useState(null);
   const [loadingComplete, setLoadingComplete] = useState(false);
+  const [loadingCompleteSub, setLoadingCompleteSub] = useState(false);
   const [myStyle, setStyle] = useState ({borderColor: 'default'});
   const [myZipStyle, setZipStyle] = useState ({borderColor: 'default'});
   
@@ -76,34 +87,80 @@ console.log(myStyle);
     return category.is_subcategory || category.children.length === 0;
   };
 
+  // Runs when props.id changes (including on initial mount)
+  useEffect(() => {
+    setCategories(null);
+    setSubcategories(null);
+    setCategory(null);
+    setLoadingComplete(false);
+    setLoadingCompleteSub(false);
+    getData();
+  }, [catId]);
+
+ 
+
   const getData = () => {
+    
       axios
         .get('/api/categories/listTopLevel')
         .then((res) => {
-          setCategories(Object.values(res.data));
+          setCategories(Object.values(res.data).sort((a, b) => (a.name > b.name) ? 1 : -1));
           setLoadingComplete(true);
+          console.log(categories);
+          
         })
         .catch((err) => {
           console.log(err);
         });
+    if(catId != ""){
+     
       axios
-        .get(`/api/categories/${props.id}`)
+        .get(`/api/categories/${catId}`)
         .then((res) => {
           const queryParam = shouldRenderProviders(res.data)
             ? 'providers'
             : 'children';
           console.log(queryParam);
           axios
-            .get(`/api/categories/${props.id}`, {
+            .get(`/api/categories/${catId}`, {
               params: { [queryParam]: true },
             })
             .then((res) => {
               setCategory(res.data);
+              
+              res.data.children.forEach((child, i) => {
+                console.log(child);
+              axios
+                      .get(`/api/categories/${child}`)
+                      .then((res2) => {
+                        //setCategories(res2.data);
+                        sublisting.push(res2.data);
+                        console.log(res2.data);
+                  
+                        setSubcategories(Object.values(sublisting).sort((a, b) => (a.name > b.name) ? 1 : -1));
+                        //console.log(res.data.children);
+                        //if(!res.data.is_subcategory){
+                          //setParent(res.data.name);
+                        //console.log(res.data.name);
+                       // }
+                       //console.log(res.data.children.length);
+                       //console.log(i+1);
+                       if(res.data.children.length == i+1)
+                          setLoadingCompleteSub(true);
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+                    });
+                    console.log(sublisting);
+                    console.log(sublisting.length);
+                //setSubcategories([sublisting[0], sublisting[1], sublisting[2]]);
+                console.log(subcategories);
               if(!res.data.is_subcategory){
                 setParent(res.data.name);
               //console.log(res.data.name);
               }
-              setLoadingComplete(true);
+              //setLoadingComplete(true);
             })
             .catch((err) => {
               console.log(err);
@@ -113,17 +170,68 @@ console.log(myStyle);
           console.log(err);
         });
   };
-  // Runs when props.id changes (including on initial mount)
-  useEffect(() => {
-    setCategories(null);
-    setCategory(null);
-    setLoadingComplete(false);
-    getData();
-  }, [props.id]);
+};
+  
 
   const handleDropChange = (event) => {
-    setGender(event.target.value);
+    setGender(event);
     console.log(gender);
+  };
+
+  const handleDropCatChange = (event) => {
+    setCat(event);
+    if(!(subcatId != "" && subcat == 'Not Selected')){
+      setSubcat("Not Selected");
+    setSubcatId('');
+    console.log("4");
+    }
+    
+    var selected = false;
+    categories.forEach((category) => {
+      console.log(event);
+      if(category.name == event){
+        setCatId(category.id);
+        selected = true;
+      }
+    });
+    
+    if(catId != "" && !selected){
+      categories.forEach((category) => {
+        //console.log(category);
+        if(category.id == catId){
+          setCat(category.name);
+        }
+      });
+    }
+    
+  };
+
+  const handleDropSubcatChange = (event) => {
+    setSubcat(event);
+    var selected = false;
+    console.log("2");
+    subcategories.forEach((category) => {
+      console.log(event);
+      if(category.name == event){
+        setSubcatId(category.id);
+        selected = true;
+        console.log("1");
+      }
+    });
+    
+    if(subcatId != "" && !selected){
+      console.log(subcategories.length);
+      subcategories.forEach((category) => {
+        console.log(category.id);
+        console.log(subcatId);
+        console.log("5");
+        if(category.id == subcatId){
+          setSubcat(category.name);
+          console.log("3");
+        }
+      });
+    }
+    console.log(subcat);
   };
   const handleEntailmentRequest = (e) => {
 		e.preventDefault();
@@ -135,6 +243,57 @@ console.log(myStyle);
   const handleClick = (e) => {
     e.preventDefault()
 }
+
+const clear = (e) => {
+  //e.preventDefault();
+  setCat('Not Selected');
+  setCatId('');
+  setSubcat('Not Selected');
+  setSubcatId('');
+  setGender('Not Selected');
+  setFilterText('');
+  setFilterAgeText('');
+  setFilterZipText('');
+}
+
+const handleKeyPress = (event) => {
+  if(event.key === 'Enter'){
+    //props.history.push(`${paths.providerPath}/?name=${filterText}&zip=${filterZipText}&age=${filterAgeText}&gender=${gender}&main=${catId}&sub=${subcatId}`);
+  }
+} ; 
+
+let dropList = <React.Fragment> <Dropdown.Item eventKey="Not Selected" onSelect={handleDropCatChange}>Not Selected</Dropdown.Item></React.Fragment>;
+if(loadingComplete)
+  categories.forEach((category) => {
+    if(catId != "" && cat == 'Not Selected'){
+      handleDropCatChange();
+    }
+    dropList = (
+      <React.Fragment>
+        {dropList}
+        <Dropdown.Item eventKey={category.name} onSelect={handleDropCatChange}>{category.name}</Dropdown.Item>
+      </React.Fragment>
+    );
+  });
+
+  let dropSubcatList = <React.Fragment><Dropdown.Item eventKey="Not Selected" onSelect={handleDropSubcatChange}>Not Selected</Dropdown.Item></React.Fragment>;
+  //console.log(sublisting.length);
+  
+if(loadingCompleteSub && subcategories != null){
+  subcategories.forEach((subcategory, i) => {
+    if(subcatId != "" && subcat == 'Not Selected'){
+      handleDropSubcatChange();
+    }
+    dropSubcatList = (
+      <React.Fragment>
+        {dropSubcatList}
+        <Dropdown.Item eventKey={subcategory.name} onSelect={handleDropSubcatChange}>{subcategory.name}</Dropdown.Item>
+      </React.Fragment>
+    );
+  });
+}
+
+
 
 //console.log(props);
 //console.log(TopLevelCategory.propTypes);
@@ -160,14 +319,14 @@ console.log(myStyle);
               <span className="menu-name">Locate my nearest safe place</span>
           </RedirectButton>
           </Row>*/}
-            <Form >
+            <Form className='filter-form' id='filter-form-id'>
             <Form.Group>
           <Row className='title-con'>
           {/*<NavLink to={paths.searchPath} className='menuButton' activeClassName='navbar-active active'>
           <i class="fal fa-search"></i>
               Search for a resource
 </NavLink>*/}
-             <Container className = 'mobile-con' style={{margin:'0 0'}}>
+             <Container className = 'mobile-con mobile-text-input' style={{margin:'0 0'}}>
              <div className='widgetTitle'>NAME</div>
               <InputGroup>
               <Form.Control
@@ -175,17 +334,19 @@ console.log(myStyle);
                 onChange={handleFilterChange}
                 onFocus={(e)=>handleFocusRequest(e)}
                 onBlur={(e)=>handleBlurRequest(e)}
+                onKeyPress={handleKeyPress}
                 placeholder='Provider Name'
                 className='widget'
               />
               </InputGroup>
               </Container>
-              <Container className = 'mobile-con ' style={{margin:'0 0'}}>
+              <Container className = 'mobile-con mobile-text-input' style={{margin:'0 0'}}>
               <div className='widgetTitle'>ZIP CODE</div>
               <InputGroup>
               <Form.Control
                 value={filterZipText}
                 onChange={handleFilterZipChange}
+                onKeyPress={handleKeyPress}
                 onFocus={(e)=>handleFocusZipRequest(e)}
                 onBlur={(e)=>handleBlurZipRequest(e)}
                 placeholder='Zip Code'
@@ -205,25 +366,21 @@ console.log(myStyle);
             <Dropdown className='widgetDropdown'>
                 <div className='widgetSubtitle'>Main Category</div>
               <Dropdown.Toggle className='widgetToggle' variant="secondary" id="dropdown-basic">
-                Main Category
+                {cat}
               </Dropdown.Toggle>
 
               <Dropdown.Menu className='widgetDropdown'>
-                <Dropdown.Item href="#/action-1">Female</Dropdown.Item>
-                <Dropdown.Item href="#/action-2">Male</Dropdown.Item>
-                <Dropdown.Item href="#/action-3">Non Binary</Dropdown.Item>
+                {dropList}
               </Dropdown.Menu>
             </Dropdown>
             <Dropdown className='widgetDropdown'>
             <div className='widgetSubtitle'>Sub Category</div>
               <Dropdown.Toggle className='widgetToggle' variant="secondary" id="dropdown-basic">
-                Sub Category
+                {subcat}
               </Dropdown.Toggle>
 
               <Dropdown.Menu className='widgetDropdown'>
-                <Dropdown.Item href="#/action-1">Female</Dropdown.Item>
-                <Dropdown.Item href="#/action-2">Male</Dropdown.Item>
-                <Dropdown.Item href="#/action-3">Non Binary</Dropdown.Item>
+                {dropSubcatList}
               </Dropdown.Menu>
             </Dropdown>
           </Row>
@@ -235,12 +392,13 @@ console.log(myStyle);
               Call a hotline
   </NavLink>*/}
             <div className='widgetTitle'>FILTERS</div>
-            <Container className = 'mobile-con' style={{margin:'0 0'}}>
+            <Container className = 'mobile-con mobile-text-input' style={{margin:'0 0'}}>
             <div className='widgetSubtitle'>Age</div>
               <InputGroup>
               <Form.Control
               value={filterAgeText}
               onChange={handleFilterAgeChange}
+              onKeyPress={handleKeyPress}
                 onFocus={(e)=>handleFocusRequest(e)}
                 onBlur={(e)=>handleBlurRequest(e)}
                 placeholder='Age'
@@ -252,23 +410,24 @@ console.log(myStyle);
               <Dropdown className='widgetDropdown'>
               <div className='widgetSubtitle'>Gender</div>
               <Dropdown.Toggle className='widgetToggle' variant="secondary" id="dropdown-basic">
-                Gender
+                {gender}
               </Dropdown.Toggle>
 
-              <Dropdown.Menu  onChange={handleDropChange} className='widgetDropdown'>
-                <Dropdown.Item value="female">Female</Dropdown.Item>
-                <Dropdown.Item value="male">Male</Dropdown.Item>
-                <Dropdown.Item value="non_binary">Non Binary</Dropdown.Item>
+              <Dropdown.Menu  className='widgetDropdown'>
+              <Dropdown.Item eventKey="Not Selected" onSelect={handleDropChange}>Not Selected</Dropdown.Item>
+                <Dropdown.Item eventKey="Female" onSelect={handleDropChange}>Female</Dropdown.Item>
+                <Dropdown.Item eventKey="Male" onSelect={handleDropChange}>Male</Dropdown.Item>
+                <Dropdown.Item eventKey="Non Binary" onSelect={handleDropChange}>Non Binary</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </Row>
-          <Button className='widgetButton' variant="primary" type="submit">
+          <Button className='widgetButton' id='search-widget' variant="primary" type="submit" href={`${paths.providerPath}/?name=${filterText}&zip=${filterZipText}&age=${filterAgeText}&gender=${gender}&main=${catId}&sub=${subcatId}`}>
               Search
             </Button>
-            <Button className='widgetButton' variant="link">Clear filters</Button>
+            <Button className='widgetButton' id='clear-widget' variant="link" onClick={clear}>Clear filters</Button>
           </Form.Group>
               </Form>
-          <Row className='justify-content-center' style={{ margin: 'auto' }}>
+          <Row className='justify-content-center noDisplay' style={{ margin: 'auto' }}>
             <Col xs={11} className='phrase'>
               <div>
               Spot something wrong or want to add a new resource? Let us know!
