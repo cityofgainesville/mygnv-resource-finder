@@ -13,8 +13,8 @@ const RedirectButton = (props) => {
   const doRedirect = () => {
     
     props.history.push(props.path);
-    if(!props.path.includes("admin"))
-      window.location.reload(false);
+    /*if(!props.path.includes("admin"))
+      window.location.reload(false);*/
   };
 
   return (
