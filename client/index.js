@@ -15,7 +15,7 @@ import App from './App';
 
 ReactDOM.render(
   <BrowserRouter>
-  <Favicon url="https://raw.githubusercontent.com/cityofgainesville/mygnv-resource-finder/master/client/favicon.ico" />
+  <Favicon url="https://raw.githubusercontent.com/cityofgainesville/mygnv-resource-finder/database-v2/client/favicon.ico" />
     <App />
   </BrowserRouter>,
   document.querySelector('#root')
