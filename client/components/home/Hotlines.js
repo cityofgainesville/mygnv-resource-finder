@@ -95,14 +95,14 @@ const Hotlines = (props) => {
 				<h5 className=' hotline-pname providerName'>Alachua County COVID-19 Hotline</h5>
 				<p className ='provider-phoneNumber mobile-phone'>
 				
-				Business Hours:<Button href='tel:+13523348810' variant='outline-info' style={{width: '100%',marginBottom: '16px'}}>352-334-8810 </Button>
+				Business Hours:<Button href='tel:+13523348810' variant='outline-info' style={{width: '100%',marginBottom: '16px'}}>(352) 334-8810 </Button>
 				<br></br>
-				After Hours: <Button href='tel:+13523347900' variant='outline-info'>352-334-7900</Button>
+				After Hours: <Button href='tel:+13523347900' variant='outline-info'>(352) 334-7900</Button>
 				</p>
 				<p className ='provider-phoneNumber phone'>
-				Business Hours: 352-334-8810
+				Business Hours: (352) 334-8810
 				<br></br>
-				After Hours: 352-334-7900
+				After Hours: (352) 334-7900
 				</p>
 				</div>
 			</ListGroup.Item>
@@ -113,10 +113,10 @@ const Hotlines = (props) => {
 
 				<h5 className='hotline-pname providerName '>Compliance Issue Reports</h5>
 				<p className ='provider-phoneNumber mobile-phone'>
-				<Button href='tel:+13529551818' variant='outline-info'>352-955-1818</Button>
+				<Button href='tel:+13529551818' variant='outline-info'>(352) 955-1818</Button>
 				</p>
 				<p className ='provider-phoneNumber phone'>
-					352-955-1818
+					(352) 955-1818
 				</p>
                 
 				</div>
@@ -142,10 +142,10 @@ const Hotlines = (props) => {
 				<div className='subcat-provider-div  provider-hotline'>
 				<h5 className='hotline-pname providerName '>Crisis Center Line</h5>
 				<p className ='provider-phoneNumber mobile-phone'>
-				<Button href='tel:+13522646789' variant='outline-info'>352-264-6789</Button>
+				<Button href='tel:+13522646789' variant='outline-info'>(352) 264-6789</Button>
 				</p>
 				<p className ='provider-phoneNumber phone'>
-				352-264-6789
+				(352) 264-6789
 				</p>
 				</div>
 			</ListGroup.Item>
@@ -155,10 +155,10 @@ const Hotlines = (props) => {
 				<div className='subcat-provider-div  provider-hotline'>
 				<h5 className='hotline-pname providerName '>Department of Children and Families-Abuse Hotline</h5>
 				<p className ='provider-phoneNumber mobile-phone'>
-				<Button href='tel:+18009622873' variant='outline-info'>1-800-96-ABUSE</Button>
+				<Button href='tel:+18009622873' variant='outline-info'>1 (800) 96-ABUSE</Button>
 				</p>
 				<p className ='provider-phoneNumber phone'>
-				1-800-96-ABUSE
+				1 (800) 96-ABUSE
 				</p>
 				</div>
 			</ListGroup.Item>
@@ -168,10 +168,10 @@ const Hotlines = (props) => {
 				<div className='subcat-provider-div  provider-hotline'>
 				<h5 className=' hotline-pname providerName'>Florida AIDS Hotline</h5>
 				<p className ='provider-phoneNumber mobile-phone'>
-				<Button href='tel:+18003522437' variant='outline-info'>1-800-352-2437</Button>
+				<Button href='tel:+18003522437' variant='outline-info'>1 (800) 352-2437</Button>
 				</p>
 				<p className ='provider-phoneNumber phone'>
-				1-800-352-2437
+				1 (800) 352-2437
 				</p>
 				</div>
 			</ListGroup.Item>
@@ -182,10 +182,10 @@ const Hotlines = (props) => {
 				<div className='subcat-provider-div provider-hotline'>
 				<h5 className='hotline-pname providerName '>State of Florida's Coronavirus Information Line</h5>
 				<p className ='provider-phoneNumber mobile-phone'>
-					<Button href='tel:+18667796121' variant='outline-info'>866-779-6121</Button>
+					<Button href='tel:+18667796121' variant='outline-info'>(866) 779-6121</Button>
 				</p>
 				<p className ='provider-phoneNumber phone'>
-					866-779-6121
+					(866) 779-6121
 				</p>
 				</div>
 			</ListGroup.Item>
@@ -209,7 +209,7 @@ const Hotlines = (props) => {
 				<p className ='provider-phoneNumber phone'>
 					Available 24/7
 					<br></br>
-					Call 2-1-1 or 352-332-4636
+					Call 2-1-1 or (352) 332-4636
 				<br></br>
 					Text your zip code to 898-211
 				</p>

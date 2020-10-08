@@ -338,7 +338,7 @@ const handleCookiesClick = (e) => {
           <i class="fal fa-search"></i>
               Search for a resource
 </NavLink>*/}
-             <Container className = 'mobile-con mobile-text-input' style={{margin:'0 0'}}>
+             <Container className = 'mobile-con mobile-text-input filter' style={{margin:'0 0'}}>
              <div className='widgetTitle'>NAME</div>
               <InputGroup>
               <Form.Control
@@ -352,7 +352,7 @@ const handleCookiesClick = (e) => {
               />
               </InputGroup>
               </Container>
-              <Container className = 'mobile-con mobile-text-input' style={{margin:'0 0'}}>
+              <Container className = 'mobile-con mobile-text-input filter' style={{margin:'0 0'}}>
               <div className='widgetTitle'>ZIP CODE</div>
               <InputGroup>
               <Form.Control
@@ -372,11 +372,11 @@ const handleCookiesClick = (e) => {
               <span className="menu-name">Search for a resource</span>
 </RedirectButton>*/}
           </Row>
-          <hr></hr>
+       
           <Row className='title-con'>
-          <div className='widgetTitle'>CATEGORIES</div>
-            <Dropdown className='widgetDropdown'>
-                <div className='widgetSubtitle'>Main Category</div>
+          {/*<div className='widgetTitle'>CATEGORIES</div>*/}
+            <Dropdown className='widgetDropdown filter'>
+                <div className='widgetTitle'>MAIN CATEGORY</div>
               <Dropdown.Toggle className='widgetToggle' variant="secondary" id="dropdown-basic">
                 {cat}
               </Dropdown.Toggle>
@@ -385,8 +385,8 @@ const handleCookiesClick = (e) => {
                 {dropList}
               </Dropdown.Menu>
             </Dropdown>
-            <Dropdown className='widgetDropdown'>
-            <div className='widgetSubtitle'>Sub Category</div>
+            <Dropdown className='widgetDropdown filter'>
+            <div className='widgetTitle'>SUB CATEGORY</div>
               <Dropdown.Toggle className='widgetToggle' variant="secondary" id="dropdown-basic">
                 {subcat}
               </Dropdown.Toggle>
@@ -397,15 +397,15 @@ const handleCookiesClick = (e) => {
             </Dropdown>
           </Row>
             
-          <hr></hr>
+         
           <Row className='title-con'>
             {/*<NavLink to={paths.hotlinesPath} className='menuButton' activeClassName='navbar-active active'>
             <i class="fal fa-phone" ></i>
               Call a hotline
   </NavLink>*/}
-            <div className='widgetTitle'>FILTERS</div>
-            <Container className = 'mobile-con mobile-text-input' style={{margin:'0 0'}}>
-            <div className='widgetSubtitle'>Age</div>
+            {/*<div className='widgetTitle'>FILTERS</div>*/}
+            <Container className = 'mobile-con mobile-text-input filter' style={{margin:'0 0'}}>
+            <div className='widgetTitle'>AGE</div>
               <InputGroup>
               <Form.Control
               value={filterAgeText}
@@ -419,8 +419,8 @@ const handleCookiesClick = (e) => {
     
               </InputGroup>
               </Container>
-              <Dropdown className='widgetDropdown'>
-              <div className='widgetSubtitle'>Gender</div>
+              <Dropdown className='widgetDropdown filter'>
+              <div className='widgetTitle'>GENDER</div>
               <Dropdown.Toggle className='widgetToggle' variant="secondary" id="dropdown-basic">
                 {gender}
               </Dropdown.Toggle>

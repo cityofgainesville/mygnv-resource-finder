@@ -166,7 +166,7 @@ const IndivProvider = (props) => {
 
   const br = <br></br>;
 
-  let breadcrumbs = <React.Fragment><Breadcrumb.Item href={`${paths.providerPath}/?name=&zip=&age=&gender=&main=&sub=`}>Provider</Breadcrumb.Item></React.Fragment>;
+  let breadcrumbs = <React.Fragment><Breadcrumb.Item href={`${paths.providerPath}/?name=&zip=&age=&gender=&main=&sub=`}>Providers</Breadcrumb.Item></React.Fragment>;
 
 if(loadingComplete && loadingCompleteSub && subcatId != '' && loadingCompleteP){
   breadcrumbs = (
@@ -174,6 +174,14 @@ if(loadingComplete && loadingCompleteSub && subcatId != '' && loadingCompleteP){
       {breadcrumbs}
       <Breadcrumb.Item >{cat}</Breadcrumb.Item>
       <Breadcrumb.Item href={`${paths.providerPath}/?name=&zip=&age=&gender=&main=${catId}&sub=${subcatId}`}>{subcat}</Breadcrumb.Item>
+      <Breadcrumb.Item href='#'>{provider.name}</Breadcrumb.Item>
+    </React.Fragment>
+  );
+}
+if(subcatId == '' && loadingCompleteP){
+  breadcrumbs = (
+    <React.Fragment>
+      {breadcrumbs}
       <Breadcrumb.Item href='#'>{provider.name}</Breadcrumb.Item>
     </React.Fragment>
   );
@@ -398,11 +406,12 @@ if(loadingComplete && loadingCompleteSub && subcatId != '' && loadingCompleteP){
               <Card.Body>
               <Card.Text >
               {provider.services_offered.types !== undefined
-                  ?( provider.services_offered.types.information || provider.services_offered.types.money || provider.services_offered.types.goods || provider.services_offered.types.professional_services) ? (<Card.Text><span><strong className="subtitle appt">Type: </strong>{provider.services_offered.types.information ? (<span>Information (i.e. referrals, educational materials)</span>) : ''}{provider.services_offered.types.information && provider.services_offered.types.money ? (<span>, Money (i.e. rent payment assistance, transportation vouchers)</span>) : provider.services_offered.types.money ? (<span>Money (i.e. rent payment assistance, transportation vouchers)</span>) :''}{(provider.services_offered.types.information || provider.services_offered.types.money) && provider.services_offered.types.goods ? (<span>, Goods (i.e. food, medication)</span>) : provider.services_offered.types.goods ? (<span>Goods (i.e. food, medication)</span>) : ''}{(provider.services_offered.types.information || provider.services_offered.types.money || provider.services_offered.types.goods) && provider.services_offered.types.professional_services ? (<span>, Professional Services (i.e. medical appointments, legal counseling)</span>) : provider.services_offered.types.professional_services ? (<span>Professional Services (i.e. medical appointments, legal counseling)</span>) : ''}</span></Card.Text>)
+                  ?( provider.services_offered.types.information || provider.services_offered.types.money || provider.services_offered.types.goods || provider.services_offered.types.professional_services) ? (<Card.Text><span><strong className="subtitle appt">Type: </strong>{provider.services_offered.types.information ? (<div>• Information (i.e. referrals, educational materials)</div>) : ''}{provider.services_offered.types.information && provider.services_offered.types.money ? (<div>• Money (i.e. rent payment assistance, transportation vouchers)</div>) : provider.services_offered.types.money ? (<div>• Money (i.e. rent payment assistance, transportation vouchers)</div>) :''}{(provider.services_offered.types.information || provider.services_offered.types.money) && provider.services_offered.types.goods ? (<div>• Goods (i.e. food, medication)</div>) : provider.services_offered.types.goods ? (<div>• Goods (i.e. food, medication)</div>) : ''}{(provider.services_offered.types.information || provider.services_offered.types.money || provider.services_offered.types.goods) && provider.services_offered.types.professional_services ? (<div>• Professional Services (i.e. medical appointments, legal counseling)</div>) : provider.services_offered.types.professional_services ? (<div>• Professional Services (i.e. medical appointments, legal counseling)</div>) : ''}</span></Card.Text>)
                 : '' : ''}
               {provider.services_offered.service_cost !== undefined && (provider.services_offered.service_cost.free ||  provider.services_offered.service_cost.discounted)
                   ? (<Card.Text><span><strong className="subtitle appt">Cost: </strong>{provider.services_offered.service_cost.free ? (<span>Free</span>) : provider.services_offered.service_cost.discounted ? (<span>Discounted</span>) : ''}</span></Card.Text>)
                 : ''}
+                
                 {provider.services_offered.description !== '' &&
                 provider.services_offered.description !== undefined
                 ? (<Card.Text><span><strong className="subtitle appt">Description: </strong></span><br></br><div>{(provider.services_offered.description.includes('●') || provider.services_offered.description.includes('•') || provider.services_offered.description.includes('*')? provider.services_offered.description.split(/['●'||'•'||'*']/).map((line)=> {return(line !== "" && line !== "\n" ? (<span>{`• ${line.trim()}`}<br></br></span>) : null)}) : provider.services_offered.description)}</div></Card.Text>)
@@ -551,7 +560,7 @@ if(loadingComplete && loadingCompleteSub && subcatId != '' && loadingCompleteP){
               <Card.Body>
               <Card.Text >
               {provider.services_offered.types !== undefined
-                  ?( provider.services_offered.types.information || provider.services_offered.types.money || provider.services_offered.types.goods || provider.services_offered.types.professional_services) ? (<Card.Text><span><strong className="subtitle appt">Type: </strong>{provider.services_offered.types.information ? (<span>Information (i.e. referrals, educational materials)</span>) : ''}{provider.services_offered.types.information && provider.services_offered.types.money ? (<span>, Money (i.e. rent payment assistance, transportation vouchers)</span>) : provider.services_offered.types.money ? (<span>Money (i.e. rent payment assistance, transportation vouchers)</span>) :''}{(provider.services_offered.types.information || provider.services_offered.types.money) && provider.services_offered.types.goods ? (<span>, Goods (i.e. food, medication)</span>) : provider.services_offered.types.goods ? (<span>Goods (i.e. food, medication)</span>) : ''}{(provider.services_offered.types.information || provider.services_offered.types.money || provider.services_offered.types.goods) && provider.services_offered.types.professional_services ? (<span>, Professional Services (i.e. medical appointments, legal counseling)</span>) : provider.services_offered.types.professional_services ? (<span>Professional Services (i.e. medical appointments, legal counseling)</span>) : ''}</span></Card.Text>)
+                  ?( provider.services_offered.types.information || provider.services_offered.types.money || provider.services_offered.types.goods || provider.services_offered.types.professional_services) ? (<Card.Text><span><strong className="subtitle appt">Type: </strong>{provider.services_offered.types.information ? (<div>• Information (i.e. referrals, educational materials)</div>) : ''}{provider.services_offered.types.information && provider.services_offered.types.money ? (<div>• Money (i.e. rent payment assistance, transportation vouchers)</div>) : provider.services_offered.types.money ? (<div>• Money (i.e. rent payment assistance, transportation vouchers)</div>) :''}{(provider.services_offered.types.information || provider.services_offered.types.money) && provider.services_offered.types.goods ? (<div>• Goods (i.e. food, medication)</div>) : provider.services_offered.types.goods ? (<div>• Goods (i.e. food, medication)</div>) : ''}{(provider.services_offered.types.information || provider.services_offered.types.money || provider.services_offered.types.goods) && provider.services_offered.types.professional_services ? (<div>• Professional Services (i.e. medical appointments, legal counseling)</div>) : provider.services_offered.types.professional_services ? (<div>• Professional Services (i.e. medical appointments, legal counseling)</div>) : ''}</span></Card.Text>)
                 : '' : ''}
               {provider.services_offered.service_cost !== undefined && (provider.services_offered.service_cost.free ||  provider.services_offered.service_cost.discounted)
                   ? (<Card.Text><span><strong className="subtitle appt">Cost: </strong>{provider.services_offered.service_cost.free ? (<span>Free</span>) : provider.services_offered.service_cost.discounted ? (<span>Discounted</span>) : ''}</span></Card.Text>)
