@@ -286,7 +286,7 @@ const handleMapClickedRequest = () => {
           key={provider.id}
           id={provider.id}
           action
-          onClick={(id) => handleClickedRequest(provider.id)}
+          onClick={() => doRedirect(provider.id)}
           className = 'providersList'
           
         >
@@ -320,10 +320,10 @@ const handleMapClickedRequest = () => {
               {provider.services_offered !== '' &&
                 provider.services_offered !== undefined
                   ? provider.services_offered.description !== '' &&
-                  provider.services_offered.description !== undefined ? (provider.services_offered.description.includes('●') || provider.services_offered.description.includes('•') || provider.services_offered.description.includes('*')? provider.services_offered.description.split(/['●'||'•'||'*']/).map((line)=> {return(line !== "" && line !== "\n" ? ('• '+ line.trim() +'\n') : null)}) : `${provider.services_offered.description} \n`)
+                  provider.services_offered.description !== undefined ? provider.services_offered.description.length < 250 ? (provider.services_offered.description.includes('●') || provider.services_offered.description.includes('•') || provider.services_offered.description.includes('*')? provider.services_offered.description.split(/['●'||'•'||'*']/).map((line)=> {return(line !== "" && line !== "\n" ? ('• '+ line.trim() +'\n') : null)}) : `${provider.services_offered.description} \n`): provider.services_offered.description.substring(0, 250) +'...'
                   : 'Services not listed' : 'Services not listed'} 
             </p>
-              {pid == provider.id ? <Button className='more-info' onClick={() => doRedirect(provider.id)}>MORE INFO  <i class="far fa-angle-right"></i></Button>  : null}
+              {/*pid == provider.id ? <Button className='more-info' onClick={() => doRedirect(provider.id)}>MORE INFO  <i class="far fa-angle-right"></i></Button>  : null*/}
           </div>
         </ListGroup.Item>
         </div>
@@ -353,7 +353,7 @@ const handleBlurRequest = (e) => {
 
 
 
-let breadcrumbs = <React.Fragment><Breadcrumb.Item href={`${paths.providerPath}/?name=&zip=&age=&gender=&main=&sub=`}>Provider</Breadcrumb.Item></React.Fragment>;
+let breadcrumbs = <React.Fragment><Breadcrumb.Item href={`${paths.providerPath}/?name=&zip=&age=&gender=&main=&sub=`}>Providers</Breadcrumb.Item></React.Fragment>;
 
 if(loadingComplete && loadingCompleteSub && subcatId != ''){
   breadcrumbs = (

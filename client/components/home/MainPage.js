@@ -211,7 +211,7 @@ console.log(myStyle);
         </div>
         
         </div>
-        <div className='homepage-subtitle sponsor-blurb'>The City of Gainesville is in partnership with our community partners to release this information as a benefit to the community. This information is correct at the time of posting. If you find an error or would like to comment, please do so at <a href="mailto:designgnv@cityofgainesville.org">designgnv@cityofgainesville.org</a>.</div>
+        
   </div>
 
       <div className='extra feedback-rf'>
