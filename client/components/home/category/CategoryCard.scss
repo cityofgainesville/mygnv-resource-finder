@@ -29,8 +29,8 @@
     /* align-content: center; */
     align-items: center;
   }
-  .fa-2x {
-    font-size: 1.5em;
+  .fa-3x {
+    font-size: 2em;
 }
 }
 
@@ -114,7 +114,7 @@
   .cat-card-div {
     align-items: center;
     text-align: center;
-    font-size: 18px;
+    font-size: 18px !important;
     color: $blue-cool-70v;
   }
 

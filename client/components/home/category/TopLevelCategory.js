@@ -7,7 +7,7 @@ import './TopLevelCategory.scss';
 import CategoryCard from './CategoryCard';
 
 const TopLevelCategory = (props) => {
-  const iconSize = 4;
+  const iconSize = 3;
   const numIcons = 4;
 
   const categoryRowList = [];
@@ -43,7 +43,7 @@ const TopLevelCategory = (props) => {
       categoryCol = <React.Fragment></React.Fragment>;
     }
     if(category.name != "Other" && category.name != "COVID-19"){
-      console.log(category.id);
+      console.log(category.icon_name);
     categoryCol = (
       <React.Fragment>
         {categoryCol}
