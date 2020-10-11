@@ -44,6 +44,7 @@ const TopLevelCategory = (props) => {
     }
     if(category.name != "Other" && category.name != "COVID-19"){
       console.log(category.icon_name);
+      console.log(category.name);
     categoryCol = (
       <React.Fragment>
         {categoryCol}
