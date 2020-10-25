@@ -97,6 +97,7 @@
 
 
 
+
 /* Desktop Styles */
 @media only screen and (min-width: 1025px) {
   .cat-card-border {
@@ -107,14 +108,15 @@
     width: 10em;
     height: 8em;
     margin-bottom: 1em;
-    padding: 5px 5px;
+    padding: 0 !important;
+    //padding: 5px 5px;
     color:  $blue-cool-70v;
   }
 
   .cat-card-div {
     align-items: center;
     text-align: center;
-    font-size: 18px !important;
+    //font-size: 18px !important;
     color: $blue-cool-70v;
   }
 
@@ -129,15 +131,17 @@
   
 }
 
-
-
 .cat-card-border-active {
   //@extend: 2px solid $indigo-50;
   background: $blue-cool-70v;
   border-color: none;
+  //font-size: 18px !important;
   border-radius: 8px;
+  //width: 10em;
   color: #fdfdfd !important;
 }
+
+
 
 
 
@@ -148,5 +152,6 @@
 
 .cat-card-div-active {
   color: #fdfdfd !important;
+  //width: 10em;
 }
 
