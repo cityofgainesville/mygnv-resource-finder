@@ -4,6 +4,10 @@ A React + NestJS Webapp to help Gainesville residents find resources easier.
 
 https://mygnv-2.herokuapp.com/
 
+## Mockup
+
+You can see an example of how myGNV Resource Finder should work at https://684v0o.axshare.com/#id=1wgvc4&p=homepage_-_hero_img_-_white__no_img&g=1
+
 ## Api Documentation
 
 > Api documentation can be found at https://mygnv-2.herokuapp.com/docs
@@ -25,6 +29,12 @@ https://mygnv-2.herokuapp.com/
 A script to populate a fresh database with information is located at /server/util/PopulateDB.ts
 
 For this script to run successfully, the .env file must have the MYGNV_EMAIL and MYGNV_PASSWORD fields populated with the email and password of an admin user.
+
+## Editing Maps & Cookies
+
+For the maps, edit Search.js in client > components > home. The components should have 'map' in the class name, and the innerHTML will say "MAP". There is a separate component for mobile and desktop.
+
+For cookies, edit Title.js in client > components > home. The components should have 'cookies' in the class name.    
 
 ## Auto Deploy Info
 
