@@ -4,6 +4,10 @@ A React + NestJS Webapp to help Gainesville residents find resources easier.
 
 https://mygnv-2.herokuapp.com/
 
+## Mockup
+
+You can see an example of how myGNV Resource Finder should work at https://684v0o.axshare.com/#id=1wgvc4&p=homepage_-_hero_img_-_white__no_img&g=1
+
 ## Api Documentation
 
 > Api documentation can be found at https://mygnv-2.herokuapp.com/docs
