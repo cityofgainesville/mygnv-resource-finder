@@ -26,6 +26,12 @@ A script to populate a fresh database with information is located at /server/uti
 
 For this script to run successfully, the .env file must have the MYGNV_EMAIL and MYGNV_PASSWORD fields populated with the email and password of an admin user.
 
+## Editing Maps & Cookies
+
+For the maps, edit Search.js in client > components > home. The components should have 'map' in the class name, and the innerHTML will say "MAP". There is a separate component for mobile and desktop.
+
+For cookies, edit Title.js in client > components > home. The components should have 'cookies' in the class name.    
+
 ## Auto Deploy Info
 
 Pushing to database-v2 will auto build and deploy to https://mygnv-2.herokuapp.com/
